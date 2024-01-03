@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Alternates from "../components/Layout/Setting";
 import Header from "../components/Community/Header";
 import Filter from "../components/Community/Filter";
+import { motion } from 'framer-motion';
+import { fadeIn } from '../Variants';
 import Card from "../components/Community/card";
 import { useUpdate } from "../context/communityCntxt";
 import {
@@ -88,31 +90,36 @@ const Communitychat = () => {
 
   return (
     <Alternates>
-      <div className="m-5">
+      <div className="xl:mr-24 xl:m-0 m-5">
         <Header />
         <Filter />
-        {loading ? (
-          <h1>Loading...</h1>
-        ) : allCommunities?.length !== 0 && activeTab == "ALLGROUPS" ? (
-          allCommunities?.map((comm, ind) => (
-            <>
-              <Card key={ind} comm={comm} ind={ind} />
-            </>
-          ))
-        ) : joinedCommunities?.length !== 0 && activeTab == "JOINED" ? (
-          joinedCommunities?.map((comm, ind) => (
-            <>
-              <Card key={ind} comm={comm} ind={ind} />
-            </>
-          ))
-        ) : (
-          <div className="flex justify-center items-center mt-4 gap-4 mx-auto">
-            <p className="border border-gray-300 w-full text-center rounded-lg p-2 hover:cursor-pointer">
-              No Communities
-            </p>
-          </div>
-        )}
-
+        <motion.div className="pb-12"
+        initial='hidden'
+        whileInView={'show'}
+        viewport={{ once: false, amount: 0.3 }}
+        variants={fadeIn('up', 0.3)}>
+          {loading ? (
+            <h1 className="text-3xl text-bold" >Loading...</h1>
+          ) : allCommunities?.length !== 0 && activeTab == "ALLGROUPS" ? (
+            allCommunities?.map((comm, ind) => (
+              <>
+                <Card key={ind} comm={comm} ind={ind} />
+              </>
+            ))
+          ) : joinedCommunities?.length !== 0 && activeTab == "JOINED" ? (
+            joinedCommunities?.map((comm, ind) => (
+              <>
+                <Card key={ind} comm={comm} ind={ind} />
+              </>
+            ))
+          ) : (
+            <div className="flex justify-center items-center mt-4 gap-4 mx-auto">
+              <p className="border border-gray-300 w-full text-center rounded-lg p-2 hover:cursor-pointer">
+                No Communities
+              </p>
+            </div>
+          )}
+        </motion.div>
         <div className="fixed bottom-32 right-8  z-80">
           <button
             title="Add New"

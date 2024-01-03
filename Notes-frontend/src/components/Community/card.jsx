@@ -29,15 +29,15 @@ const Card = ({ comm, ind, hello }) => {
   }
   const navigate = useNavigate();
   return (
-    <div>
+    <div className='pb-0 items-center'>
 
       <div key={ind} className="flex flex-col gap-4 mt-4 mx-auto rounded-2xl bg-white">
-        <div className="flex justify-between items-center bg-white shadow-md rounded-md p-2">
-          <div className="flex gap-4 items-center">
+        <div className="flex justify-between items-center bg-white shadow-md rounded-xl p-2 ">
+          <div className="flex flex-col lg:flex-row gap-4 items-left w-full lg:w-fit">
             <img
               src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
               alt="community"
-              className="flex-1/3 max-h-36 rounded-lg"
+              className="xl:flex-1/3 flex-1 max-h-36 rounded-2xl "  
             />
             <div className="">
               <h1 className="font-semibold text-lg">Community Name: {comm.name}</h1>

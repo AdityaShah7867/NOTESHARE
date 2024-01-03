@@ -5,11 +5,14 @@ import { getLogedinUser } from "../redux/auth/authActions";
 import { editProfile, getUserSkills, addSkills, removeSkills } from "../redux/user/userActions";
 import { AiOutlineDelete } from 'react-icons/ai';
 import Skills from "../components/Skills";
+import { useNavigate } from "react-router-dom";
+
 
 
 
 const Setting = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isEditable, setIsEditable] = useState(false);
   //get the user from the redux
   const user = useSelector((state) => state.user.user)
@@ -53,7 +56,7 @@ const Setting = () => {
     e.preventDefault();
     console.log(formData);
     dispatch(editProfile(formData))
-
+    navigate(`/profile/${user.username}`);
   };
   useEffect(() => {
     console.log(p)
@@ -228,6 +231,7 @@ const Setting = () => {
                               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mr-2"
                               type="submit"
                             >
+                              <i class="bi bi-sticky mr-1"></i>
                               Save
                             </button>
                             <button
@@ -237,6 +241,7 @@ const Setting = () => {
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full mr-2"
                               type="submit"
                             >
+                              <i class="bi bi-x-lg mr-1"></i>
                               Cancel
                             </button>
                           </>
@@ -245,6 +250,7 @@ const Setting = () => {
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mr-2"
                             onClick={toggleEdit}
                           >
+                            <i class="bi bi-pen mr-1"></i>
                             Edit
                           </button>
                         )}
