@@ -183,7 +183,7 @@ export const SideBar = () => {
             </div>
           </NavLink>
 
-          <NavLink to={"/communities"}>
+          {/* <NavLink to={"/communities"}>
             <div
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/communities" ? "bg-blue-500" : ""
                 }`}
@@ -193,7 +193,7 @@ export const SideBar = () => {
                 Communities
               </span>
             </div>
-          </NavLink>
+          </NavLink> */}
 
           {user?.role == "superuser" && (
             <>
