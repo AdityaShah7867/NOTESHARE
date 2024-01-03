@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import {io} from 'socket.io-client';
 
 const UpdateContext = createContext();
 
@@ -10,12 +11,14 @@ export const UpdateProvider = ({ children }) => {
     const [update, setUpdate] = useState(false);
     const [cuurentCommunity, setCurrentCommunity] = useState({});
 
+    const socket = io(process.env.REACT_APP_API_HOST)
+
     const triggerUpdate = () => {
         setUpdate(prev => !prev);
     };
 
     return (
-        <UpdateContext.Provider value={{allCommunities, cuurentCommunity, setCurrentCommunity, setAllCommunities, activeTab, setActiveTab, joinedCommunities, setJoinedCommunities, update, triggerUpdate}}>
+        <UpdateContext.Provider value={{socket, allCommunities, cuurentCommunity, setCurrentCommunity, setAllCommunities, activeTab, setActiveTab, joinedCommunities, setJoinedCommunities, update, triggerUpdate}}>
             {children}
         </UpdateContext.Provider>
     );
