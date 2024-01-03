@@ -52,14 +52,8 @@ const transferCoins = asyncHandler(async (req, res) => {
 
             // Save data in transfercoins model
             const newtransferCoin = new TransferCoin({
-                sender: {
-                    id: senderUser._id,
-                    username: senderUser.username,
-                },
-                receiver: {
-                    id: receiverUser._id,
-                    username: receiverUser.username,
-                },
+                sender: senderUser._id,
+                receiver: receiverUser._id,
                 coins: coins,
             });
             await newtransferCoin.save();
@@ -91,25 +85,35 @@ const getTransferCoinsHistory = asyncHandler(async (req, res) => {
 
 //get transfer coins history by user
 const getTransferCoinsHistoryByUser = asyncHandler(async (req, res) => {
-    const { userID } = req.params;
+    const userID = req.user.id;
     try {
         const user = await User.findById(userID);
         if (!user) {
-            return res.status(400).json({ message: "User does not exist" })
+            return res.status(400).json({ message: "User does not exist" });
         }
 
-        const transferCoinsHistory = await TransferCoin.find({ $or: [{ "sender.id": userID }, { "receiver.id": userID }] })
+        const transferCoinsHistory = await TransferCoin.find({ $or: [{ "sender": userID }, { "receiver": userID }] })
             .sort({ createdAt: -1 })
-            .limit(5);
+            .limit(5)
+            .populate('sender', 'username').populate('receiver', 'username')
 
-        res.status(200).json({ transferCoinsHistory: transferCoinsHistory });
+        const formattedTransferCoinHistory = transferCoinsHistory.map((transfer) => ({
+            sender: transfer.sender,
+            receiver: transfer.receiver,
+            coins: transfer.coins,
+            createdAt: transfer.createdAt,
+            received: transfer.receiver === userID ? 'Yes' : 'No'
+        }));
+
+        res.status(200).json({ transferCoinsHistory: formattedTransferCoinHistory, userID: userID });
 
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "An error occurred during the coins transfer." });
-
     }
 });
+
+
 const lottery = asyncHandler(async (req, res) => {
     try {
         const randomNumber = Math.floor(Math.random() * 30);

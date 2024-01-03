@@ -126,6 +126,7 @@ const loginUser = asyncHandler(async (req, res) => {
     try {
 
         const { email, password } = req.body;
+        console.log(`Ip address of the user is ${req.ip}`)
         if (!email || !password) {
             res.status(400).json({ message: "all fileds are required" })
         }

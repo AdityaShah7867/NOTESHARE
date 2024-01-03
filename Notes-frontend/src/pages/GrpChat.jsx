@@ -128,7 +128,7 @@ const GrpChat = () => {
 
 
         {/* Message input */}
-        <div className="bg-white shadow">
+        <div className="bg-white shadow mb-16">
           <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
             <form  onSubmit={handleSubmit} className="flex space-x-3">
               <div className="flex-1">

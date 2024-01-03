@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import DashLay from "../components/Layout/Dash";
+import Alternates from "../components/Layout/Setting";
 import { getUserInfo, getUsersLeaderBoard } from "../redux/user/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import Lottery from "../components/Lottery";
 import SendMoneyCard from "../components/SendMoney";
+import Trasnsferhistorycard from "../components/Trasnsferhistorycard";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from 'react-router-dom'
 
@@ -12,12 +14,21 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isSendCoinsModalOpen, setIsSendCoinsModalOpen] = useState(false);
+  const [istransferhistoryModalOpen, setIstransferhistoryModalOpen] = useState(false);
   const openSendCoinsModal = () => {
     setIsSendCoinsModalOpen(true);
   };
 
   const closeSendCoinsModal = () => {
     setIsSendCoinsModalOpen(false);
+  };
+
+  const opentransferhistorModal = () => {
+    setIstransferhistoryModalOpen(true);
+  };
+
+  const closetransferhistorModal = () => {
+    setIstransferhistoryModalOpen(false);
   };
 
   const user = useSelector((state) => state.user.user);
@@ -50,10 +61,12 @@ const Dashboard = () => {
 
   return (
     <div>
-      <DashLay>
+      {/* <DashLay> */}
+      <Alternates >
+        <div className="m-10 lg:mr-10 lg:mt-10 lg:m-0">
         <div>{/* send coins , Bookmarked , your notes */}</div>
 
-        <div className="flex-col lg:flex lg:flex-row gap-12 mb-4">
+        <div className="flex-col lg:flex lg:flex-row gap-12 mb-4 ">
           <div class="flex items-center  justify-center lg:w-4/12  w-full h-28 rounded-xl bg-gray-50  mt-2 pl-3">
             <i class="fa-solid fa-ranking-star text-yellow-600 fa-xl"></i>
             <h3 class="text-2xl font-semibold text-gray-900 ml-3">Rank: {userDetails.rank}</h3>
@@ -81,16 +94,29 @@ const Dashboard = () => {
           </div>
         </div>
 
-
-
         <div className="flex justify-center py-3">
-          <div className="flex flex-col items-center sm:flex-row mb-9">
-            <div className="relative flex flex-col rounded-xl bg-gradient-to-r from-yellow-100 to-yellow-500 bg-clip-border cursor-pointer text-yellow-900 shadow-md mx-4"
+          <div className="flex flex-col items-center sm:flex-row mb-5">
+            <div className="relative flex flex-col rounded-xl bg-white bg-clip-border cursor-pointer text-yellow-700 shadow-md mx-4"
               onClick={openSendCoinsModal}
             >
               <div className="p-6">
-                <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal">
+                <h5 className=" block font-sans text-xl font-semibold leading-snug tracking-normal">
                   Send Coins
+                </h5>
+
+              </div>
+            </div>
+          {/* </div> */}
+        {/* </div> */}  
+
+        {/* <div className="flex justify-center py-3"> */}
+          {/* <div className="flex flex-col items-center sm:flex-row mb-9 border-2 border-red-800"> */}
+            <div className="relative flex flex-col rounded-xl my-4 bg-white bg-clip-border cursor-pointer text-blue-700 shadow-md mx-4"
+              onClick={opentransferhistorModal}
+            >
+              <div className="p-6">
+                <h5 className=" block font-sans text-xl font-semibold leading-snug tracking-normal">
+                  Transfer History
                 </h5>
 
               </div>
@@ -98,15 +124,15 @@ const Dashboard = () => {
 
             <div onClick={() => {
               navigate('/YourNotes')
-            }} className="relative flex flex-col rounded-xl bg-gradient-to-r mx-4 my-4 from-green-200 to-green-600 bg-clip-border text-green-900 shadow-md">
+            }} className="relative flex flex-col rounded-xl mx-4   bg-white bg-clip-border text-green-700 shadow-md">
               <div className="p-6">
-                <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal">
+                <h5 className="m block font-sans text-xl font-semibold leading-snug tracking-normal">
                   Your Notes
                 </h5>
               </div>
             </div>
 
-            <div className="relative flex flex-col rounded-xl bg-gray-200 bg-clip-border my-4">
+            <div className="relative flex flex-col rounded-xl bg-gray-200 bg-clip-border my-1">
               <div className="p-6">
                 <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal">
                   <Lottery />
@@ -245,8 +271,30 @@ const Dashboard = () => {
             </div>
           )
         }
+        {
+          istransferhistoryModalOpen && (
+            <div className="fixed inset-0 flex items-center backdrop-blur-sm justify-center z-50">
+              <div className="modal-container">
+                <div className="modal bg-gray-50 p-8 rounded-lg shadow-lg sm:w-[16rem] md:w-[36rem] lg:w-[52rem]">
 
-      </DashLay >
+                  <button className="modal-close text-right top-4 right-4 text-gray-700" onClick={closetransferhistorModal}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <h2 className="text-2xl font-bold text-center">Transfer Hisory</h2>
+                  <h2 className="text-lg font-medium mb-4 text-center">Your Last 5 Transactions</h2>
+                  <div className="modal-body">
+                    <Trasnsferhistorycard />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        }
+</div>
+      </Alternates >
+      {/* </DashLay > */}
 
     </div >
   );
