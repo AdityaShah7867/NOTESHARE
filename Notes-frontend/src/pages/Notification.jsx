@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Alternates from "../components/Layout/Setting";
+import { motion } from 'framer-motion';
+import { fadeIn } from '../Variants';
 import { getTodosByUserId, createTodo, updateTodo, deleteTodo } from "../redux/todo/todoActions";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchImpDates } from "../redux/impDates/impDateActions";
@@ -40,22 +42,30 @@ const Notification = () => {
     <Alternates>
       <div className="mt-9  "></div>
       <div className="flex flex-col md:flex-row">
-        
 
-        {impDates?.length === 0 && <h1 className="text-2xl mt-3 text-red-500">No Important Dates Found</h1>}
-        
-        <div className="flex flex-col-reverse mt-9 justify-end">
-        
-          
+
+
+        <motion.div className="flex flex-col-reverse mt-9 justify-end"
+          initial='hidden'
+          whileInView={'show'}
+          viewport={{ once: false, amount: 0.3 }}
+          variants={fadeIn('right', 0.3)}>
+          {impDates?.length === 0 && <h1 className="text-2xl mt-3 text-red-500">No Important Dates Found</h1>}
+
+
           {impDates?.map((imp) => (
-            
+
             <ImpDatesCard imp={imp} />
 
           ))}
-          <h1 className="text-3xl font-bold mb-4 ml-4">Important Dates</h1>  
-        </div>
+          <h1 className="text-3xl font-bold mb-4 ml-4">Important Dates</h1>
+        </motion.div>
 
-        <div className="xl:w-2/4 border-2 mx-auto mt-9">
+        <motion.div className="xl:w-2/4 border-2 mx-auto mt-9"
+          initial='hidden'
+          whileInView={'show'}
+          viewport={{ once: false, amount: 0.3 }}
+          variants={fadeIn('left', 0.3)}>
           <div className="container border-2 bg-white rounded-xl overflow-hidden shadow-lg mx-auto p-4 text-center">
             <h1 className="text-3xl font-bold mb-4">My To-Do List</h1>
             <form onSubmit={handleAddTask}>
@@ -113,7 +123,7 @@ const Notification = () => {
               ))}
             </ul>
           </div>
-        </div>
+        </motion.div>
       </div>
     </Alternates>
   );

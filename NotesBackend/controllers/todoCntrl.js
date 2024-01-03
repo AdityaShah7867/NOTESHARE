@@ -82,9 +82,17 @@ const deleteTodo = async (req, res) => {
     const { todoID } = req.params;
     try {
         const todo = await Todo.findById(todoID);
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(400).json({ error: "User does not exist" });
+        }
+
         if (!todo) {
             return res.status(400).json({ error: "Todo does not exist" });
         }
+        user.todos.pull(todoID);
+        await user.save();
         await Todo.findByIdAndDelete(todoID);
         res.status(200).json({ message: "Todo deleted successfully", todo: todo });
     } catch (error) {

@@ -63,7 +63,7 @@ const Communitychat = () => {
       toast.warning("Description should be less than 100 characters");
       return;
     }
-    
+
     const res = await createCommunity(comData.name, comData.description);
     if (res.status === 200) {
       toast.success(res.message);
@@ -102,7 +102,6 @@ const Communitychat = () => {
         ) : joinedCommunities?.length !== 0 && activeTab == "JOINED" ? (
           joinedCommunities?.map((comm, ind) => (
             <>
-            
               <Card key={ind} comm={comm} ind={ind} />
             </>
           ))
@@ -120,7 +119,7 @@ const Communitychat = () => {
             onClick={openForm}
             className="group cursor-pointer text-4xl rounded-sm hover:rotate-90 active:scale-100 duration-200"
           >
-            {/* Your SVG icon */}
+
             <button
               title="Add New"
               class="group cursor-pointer outline-none hover:rotate-90 duration-300"

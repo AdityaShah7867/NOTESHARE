@@ -41,7 +41,6 @@ const createComment = async (req, res) => {
 const getCommentsByNoteId = async (req, res) => {
     const { noteId } = req.params;
     try {
-        console.log(noteId)
         const note = await Note.findById(noteId);
         if (!note) {
             res.status(401).json({ message: "post not found" })

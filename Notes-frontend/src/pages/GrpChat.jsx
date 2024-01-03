@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 
 const GrpChat = () => {
   const [messages, setMessages] = useState([]);
-  const {name,admin, id } = useParams();
-  const {triggerUpdate, update,socket} = useUpdate();
+  const { name, admin, id } = useParams();
+  const { triggerUpdate, update, socket } = useUpdate();
   const user = useSelector((state) => state?.user?.user);
   const [message, setMessage] = useState('');
   useEffect(() => {
@@ -42,8 +42,9 @@ const GrpChat = () => {
       setMessage('');
     }
   }
+
   useEffect(() => {
-    socket.emit('join',{id,username:user?.username});
+    socket.emit('join', { id, username: user?.username });
     socket.on('new-user', (data) => {
 
       toast.info(`${data.message}`);
@@ -52,7 +53,7 @@ const GrpChat = () => {
     socket.on('user-disconnected', (data) => {
       toast.info(`${data.message}`);
     });
-    socket.on('new-message',(data) => {
+    socket.on('new-message', (data) => {
       toast.info(`${data.message.sender._id === user._id ? 'You' : data.message.sender.username} sent a message in ${name}`);
       setMessages(prevMessages => [
         ...prevMessages,
@@ -66,7 +67,7 @@ const GrpChat = () => {
   }, [socket]);
   return (
     <ChatLay>
-      <div className="min-h-screen bg-gray-100 flex flex-col">
+      <div className="min-h-screen bg-gray-100 flex flex-col  relative">
         {/* Header */}
         <div className="bg-white shadow">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -77,20 +78,33 @@ const GrpChat = () => {
 
         {/* Chat messages */}
 
+        <div className='mb-16'>
+          {messages.map((msg, id) => (
+            <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8  ">
 
-        {messages.map((msg, id) => (
-          <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8">
-            
 
               {msg.sender._id === user._id ? (
                 <>
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-end justify-end">
-                    <div className="mr-4">
-                      <div className="bg-indigo-600 rounded-lg px-4 py-2 shadow text-white">
-                        <p className="text-lg">{msg.content}</p>
+                  <div className="flex flex-col space-y-2">
+                    <div div className="flex items-end justify-end" >
+                      <div className="mr-4">
+                        <div className="bg-indigo-600 rounded-lg px-4 py-2 shadow text-white">
+                          <p className="text-lg">{msg.content}</p>
+                        </div>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <img
+                          className="h-10 w-10 rounded-full"
+                          src={msg.sender.profile}
+                          alt="User avatar"
+                        />
                       </div>
                     </div>
+                  </div>
+                </>
+              ) : (<>
+                <div className="flex flex-col space-y-2  ">
+                  <div className="flex items-start">
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
@@ -98,39 +112,26 @@ const GrpChat = () => {
                         alt="User avatar"
                       />
                     </div>
-                  </div>
-                </div>
-                </>
-              ) : (<>
-                <div className="flex flex-col space-y-2">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src={msg.sender.profile}
-                      alt="User avatar"
-                    />
-                  </div>
-                  <div className="ml-4">
-                    <div className="bg-white rounded-lg px-4 py-2 shadow">
-                      <p className="text-sm text-gray-500">{msg.sender.username}</p>
-                      <p className="text-lg">{msg.content}</p>
+                    <div className="ml-4">
+                      <div className="bg-white rounded-lg px-4 py-2 shadow">
+                        <p className="text-sm text-gray-500">{msg.sender.username}</p>
+                        <p className="text-lg">{msg.content}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
                 </div>
 
               </>)}
 
-            </div>
+            </div >
 
-        ))}
-
+          ))}
+        </div>
 
         {/* Message input */}
-        <div className="bg-white shadow mb-16">
+        <div className="bg-white shadow  absolute bottom-0 w-full ">
           <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-            <form  onSubmit={handleSubmit} className="flex space-x-3">
+            <form onSubmit={handleSubmit} className="flex space-x-3">
               <div className="flex-1">
                 <label htmlFor="message" className="sr-only">
                   Message
@@ -155,8 +156,8 @@ const GrpChat = () => {
             </form>
           </div>
         </div>
-      </div>
-    </ChatLay>
+      </div >
+    </ChatLay >
   );
 };
 
