@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { NavLink } from "react-router-dom";
+
 import "./Sidebar.css";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../Loader";
@@ -61,7 +62,7 @@ export const SideBar = () => {
                   <p>
                     {" "}
                     {user?.username} &nbsp;{" "}
-                    <i class="fa-solid fa-coins fa-xl text-yellow-600"></i>
+                    <i className="fa-solid fa-coins fa-xl text-yellow-600"></i>
                     &nbsp; &nbsp;
                     {user?.coins}
                   </p>
@@ -102,7 +103,7 @@ export const SideBar = () => {
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/home" ? "bg-blue-500" : ""
                 } text-white`}
             >
-              <i className="bi bi-house-door-fill" />
+              <i className="bi bi-house-door"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Home
               </span>
@@ -114,7 +115,7 @@ export const SideBar = () => {
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/notification" ? "bg-blue-500" : ""
                 }`}
             >
-              <i class="bi bi-bell"></i>
+              <i className="bi bi-bell text-white"></i>
               <span className="text-[15px] ml-4 font-bold text-gray-200">
                 Important Dates
               </span>
@@ -126,9 +127,21 @@ export const SideBar = () => {
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/addnotes" ? "bg-blue-500" : ""
                 }`}
             >
-              <i class="bi bi-person-circle"></i>
+              <i className="bi bi-file-earmark-plus text-white"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Add notes
+              </span>
+            </div>
+          </NavLink>
+
+          <NavLink to={"/communities"}>
+            <div
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/communities" ? "bg-blue-500" : ""
+                }`}
+            >
+              <i className="bi bi-people text-white"></i>
+              <span className="text-[15px] ml-4 text-gray-200 font-bold">
+                Communities
               </span>
             </div>
           </NavLink>
@@ -138,7 +151,7 @@ export const SideBar = () => {
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/video" ? "bg-blue-500" : ""
                 }`}
             >
-              <i class="bi bi-person-circle"></i>
+              <i className="bi bi-camera-video text-white"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Video Room
               </span>
@@ -150,7 +163,7 @@ export const SideBar = () => {
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/dashboard" ? "bg-blue-500" : ""
                 }`}
             >
-              <i class="bi bi-piggy-bank-fill"></i>
+              <i className="bi bi-clipboard-data text-white"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Dashboard
               </span>
@@ -163,14 +176,14 @@ export const SideBar = () => {
                 : ""
                 }`}
             >
-              <i class="bi bi-gear"></i>
+              <i className="bi bi-person-circle text-white"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Profile
               </span>
             </div>
           </NavLink>
 
-          <NavLink to={"/communities"}>
+          {/* <NavLink to={"/communities"}>
             <div
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/communities" ? "bg-blue-500" : ""
                 }`}
@@ -180,13 +193,13 @@ export const SideBar = () => {
                 Communities
               </span>
             </div>
-          </NavLink>
+          </NavLink> */}
 
           {user?.role == "superuser" && (
             <>
               <NavLink to={"/admin"}>
                 <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-                  <i class="bi bi-gear"></i>
+                <i className="bi bi-person-fill-gear text-white"></i>
                   <span className="text-[15px] ml-4 text-gray-200 font-bold">
                     Admin
                   </span>
@@ -195,7 +208,7 @@ export const SideBar = () => {
 
               <NavLink to={"/dateform"}>
                 <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-                  <i class="bi bi-gear"></i>
+                <i className="bi bi-clipboard text-white"></i>
                   <span className="text-[15px] ml-4 text-gray-200 font-bold">
                     Dates
                   </span>
@@ -212,7 +225,7 @@ export const SideBar = () => {
               navigate("/otp");
             }}
           >
-            <i className="bi bi-box-arrow-in-right" />
+            <i className="bi bi-gear-wide-connected text-white"></i>
             <span className="text-[15px] ml-4 text-gray-200 font-bold">
               Reset Password
             </span>

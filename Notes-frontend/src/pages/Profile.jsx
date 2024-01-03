@@ -116,7 +116,9 @@ const Profile = () => {
                                             alt="Profile Image"
                                         />
                                         <NavLink to='/setting'>
-                                            <p className="text-right border-2 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded-lg">EDIT</p>
+                                            <p className="text-right border-2 bg-blue-500 text-white hover:bg-blue-700 p-2 px-4 rounded-lg">
+                                            <i class="bi bi-pencil-square mr-1 "></i>
+                                            EDIT</p>
                                         </NavLink>
                                     </div>
                                     <div className="text-left mt-2">
