@@ -15,8 +15,9 @@ const likeRoutes = require('./routes/likeRoutes')
 const skillsRoutes = require('./routes/skillsRoutes')
 const communityRoutes = require('./routes/communityRoutes')
 const messageRoutes = require('./routes/messageRoutes')
-
+const { Server } = require('socket.io')
 const cors = require('cors');
+const { socketCtrl } = require("./controllers/socketCntrl");
 require('dotenv').config();
 
 
@@ -28,17 +29,22 @@ app.use(express.json());
 app.use(cors())
 
 app.use(bodyParser.json())
-const start = async () => {
-    try {
-        await connectDB(process.env.MONGO_URI);
-        app.listen(port, () => {
-            console.log(`Server started on ${port}`)
-            console.log(`Mongo Connected MF!!!`)
-        });
-    } catch (err) {
-        console.log(err);
-    }
-};
+
+connectDB(process.env.MONGO_URI);
+let server = app.listen(port, () => {
+    console.log(`Server started on ${port}`)
+    console.log(`Mongo Connected MF!!!`)
+});
+
+
+const io = new Server(server, {
+    pingTimeout: 60000,
+    cors: {
+        origin: '*',
+    },
+});
+
+socketCtrl(io);
 
 //use ejs to send the res on get request
 app.set('view engine', 'ejs');
@@ -64,5 +70,4 @@ app.use('/api/v1/community', communityRoutes);
 app.use('/api/v1/messages', messageRoutes);
 
 app.use(errorHandler);
-start();
 
