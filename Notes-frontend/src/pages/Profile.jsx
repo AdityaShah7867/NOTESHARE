@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Alternates from "../components/Layout/Profile";
 import { Link, NavLink } from "react-router-dom";
-
+import { motion } from 'framer-motion';
+import { fadeIn } from '../Variants';
 import { useSelector, useDispatch } from "react-redux";
 import { getUserProfile, getUserSkills } from "../redux/user/userActions";
 import { useParams } from "react-router-dom";
@@ -99,29 +100,34 @@ const Profile = () => {
                 <div>
                     <div className="flex flex-col md:flex-row">
                         {/* Left side - 1/3 */}
-                        <div className="w-full md:w-1/3 p-4">
+                        <motion.div className="w-full md:w-1/3 p-4"
+                        initial='hidden'
+                        whileInView={'show'}
+                        viewport={{ once: false, amount: 0.3 }}
+                        variants={fadeIn('right', 0.3)}>
                             <div className="mt-5">
-                                <div className="max-w-md mx-auto bg-white px-6 py-3 rounded-xl overflow-hidden md:max-w-2xl mt-10 ">
-                                    <NavLink to='/setting'>
-                                        <p className="text-right">EDIT</p>
-                                    </NavLink>
+                                <div className="max-w-md mx-auto bg-white px-6 py-3 rounded-xl overflow-hidden md:max-w-2xl mt-5 ">
 
-                                    <div class="flex justify-start">
+
+                                    <div className="flex justify-between">
                                         <img
-                                            class="w-32 h-32 mt-8 rounded-full"
+                                            className="w-40 h-40 mt-4 rounded-full"
                                             src={user?.profile}
                                             alt="Profile Image"
                                         />
+                                        <NavLink to='/setting'>
+                                            <p className="text-right border-2 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded-lg">EDIT</p>
+                                        </NavLink>
                                     </div>
-                                    <div class="text-left mt-2">
-                                        <h2 class="text-xl font-semibold text-gray-800">
+                                    <div className="text-left mt-2">
+                                        <h2 className="text-xl font-semibold text-gray-800">
                                             {user?.username}
                                         </h2>
-                                        <p class="text-sm text-gray-600 mt-3">Email Address:</p>
+                                        <p className="text-sm text-gray-600 mt-3">Email Address:</p>
                                         <p>{user?.email}</p>
-                                        <p class="text-sm text-gray-600 mt-3">GitHub ID</p>
+                                        <p className="text-sm text-gray-600 mt-3">GitHub ID</p>
                                         <a href={`https://github.com/${user?.githubUsername}`} className="text-blue-500"> https://github.com/{user?.githubUsername}</a>
-                                        <p class="text-sm text-gray-600 mt-5">BIO</p>
+                                        <p className="text-sm text-gray-600 mt-5">BIO</p>
                                         <p className="mb-3">
                                             {user?.Bio}
                                         </p>
@@ -153,10 +159,14 @@ const Profile = () => {
                             </div>
 
 
-                        </div>
+                        </motion.div>
 
                         {/* Right side - 2/3 */}
-                        <div className="w-full md:w-2/3 p-4">
+                        <motion.div className="w-full md:w-2/3 p-4"
+                            initial='hidden'
+                            whileInView={'show'}
+                            viewport={{ once: false, amount: 0.3 }}
+                            variants={fadeIn('left', 0.3)}>
                             <div className="mt-5">
                                 <div className="w-full ">
                                     <div className="mt-5"></div>
@@ -203,7 +213,7 @@ const Profile = () => {
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </Alternates>
