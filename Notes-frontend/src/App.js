@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoutes from './utils/PrivateRoutes';
 import NotesForm from './pages/NotesForm';
 import OtpForm from './pages/OtpForm';
+import Communitychat from './pages/Communitychat';
 import Navbar from './components/Navbar';
 
 import { useEffect } from 'react';
@@ -89,6 +90,7 @@ const App = () => {
               <Route path="/addnotes" element={<NotesForm />} />
               <Route path="/admin" element={<NotesTable />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/Communities" element={<Communitychat />} />
               <Route path="/DateForm" element={<DateForm />} />
               <Route path='/ai' element={<Ai />} />
 

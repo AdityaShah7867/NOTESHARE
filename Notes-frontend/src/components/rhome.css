@@ -3,9 +3,11 @@ body{
 }
 .post-card {
     width: 320px;
-    background: lightgrey;
+    background: white;
    
-    background-color: rgb(24 27 32);
+    /* background-color: rgb(24 27 32); */
+    /* background-color: #f8fafc; */
+    background-color: white;
     border: 1px solid rgb(255, 255, 255);
     border-radius: 20px;
     color: white;
@@ -77,7 +79,8 @@ body{
     justify-content: center;
     font-weight: 900;
     border-radius: 10px;
-    background-color: transparent;
+    background-color: white;
+    /* color: red; */
     transition: all .15s ease;
   }
   
@@ -86,6 +89,6 @@ body{
   }
   
   .comment-like span svg {
-    fill: rgb(255, 255, 255);
+    fill: rgb(0, 0, 0);
     margin-right: 2px;
   }

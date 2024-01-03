@@ -46,14 +46,16 @@ const Home = () => {
 
   return (
     <Alternate>
-      <div className='w-full z-20 top-0 left-0 bg-white mt-5 ml-0 sm:ml-0 lg:-ml-16 min-h-screen mb-24'>
+      <div className='w-full z-20 top-0 left-0 bg-gray-100 mt-5 ml-0 sm:ml-0 lg:-ml-16 min-h-screen mb-24'>
         <div className='container mx-auto'>
           <Search search={search} setSearch={setSearch} /><br />
           <QuickFilter filter={filter} setFilter={setFilter} />
-          <div className='flex flex-wrap justify-center'>
+          <div className=' justify-center'>
             {
               filter === 'BookMarked' ? <h1 className='text-black text-center text-2xl mb-10'>BookMarked Notes </h1> : null
             }
+            </div>
+            <div className='flex flex-wrap justify-center'>
             {
               filteredNotes?.length === 0 ? <h1 className='text-black text-2xl'>No Notes To Display</h1> : (
                 noteLoading ? <BookCardSkeletion /> : (

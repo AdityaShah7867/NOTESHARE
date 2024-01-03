@@ -7,7 +7,7 @@ import { likeUnlikeNote } from "../redux/likes/likeActions";
 import { getCommentsByNoteId } from "../redux/comments/commentActions";
 import Loader from "./Loader/Loader";
 
-const BookCard = ({ note, setreRender }) => {
+const BookCardol = ({ note, setreRender }) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const dispatch = useDispatch();
   const currentuser = useSelector((state) => state?.user?.user);
@@ -40,65 +40,51 @@ const BookCard = ({ note, setreRender }) => {
   }, [dispatch]);
 
   return (
-
-    <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4 ">
-      <div className="post-card mx-2 mt-6 w-80   rounded-lg border  border-gray-600">
-        <div className="flex items-center">
-          <span className="title text-white mr-2 text-2xl font-semibold">
-            {note?.name}
-          </span>
-
     <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4">
-      <div className="post-card mx-2 mt-6 w-80 rounded-lg border  border-gray-300 shadow-md p-4">
-        <div className="flex items-center mb-2">
-          <h2 className="text-black text-xl font-semibold">{note?.name}</h2>
-
+      <div className="post-card mx-2 mt-6 w-80 rounded-lg border bg-white border-gray-300 shadow-md p-4">
+        <div className="flex items-center mb-4">
+          <h2 className="title text-black text-2xl font-semibold">{note?.name}</h2>
         </div>
-        <div className="flex gap-4 mb-1">
+        <div className="flex gap-4 mb-2">
           <p className="text-gray-600 text-base">Subject: {note?.subject?.name}</p>
           <p className="text-gray-600 text-base">Module: {note?.module}</p>
         </div>
 
         <p className="text-gray-700 text-lg">{note?.desc || "No description available."}</p>
-<center>
-        {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
+
+        <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
+           {/* <img src={note?.subject?.Image} alt="image" className="w-full h-full rounded-lg" /> */}
           <img
             className="w-full h-full object-cover rounded-lg"
             src="https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"
             alt="Note Image"
           />
-        </div> */}
-        <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4">
-          <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="w-full h-full rounded-lg" />
-
         </div>
-        </center>
-        <div className="flex gap-16 items-center mb-1">
+
+        <div className="flex gap-4 items-center mb-2">
           <span className="datetime text-gray-600">
-         {new Date(note?.uploadedAt).toLocaleDateString()}
+            Uploaded on: {new Date(note?.uploadedAt).toLocaleDateString()}
           </span>
 
           <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
             <img className="h-6 rounded-full" src={note.author.profile} alt="Profile" />
-            <span className="text-black"> {note.author.username}</span>
+            <span className="text-black">by {note.author.username}</span>
           </NavLink>
         </div>
-
-        <hr/>
 
         <div className="comment-like flex justify-around items-center p-2">
           <span
             onClick={() => {
               handlelike(note?._id);
             }}
-            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center bg-black text-red-500 font-bold rounded-2xl bg-transparent hover:bg-purple-300 transition duration-150"
+            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent hover:bg-purple-300 transition duration-150"
           >
             <i className="fa-regular fa-heart fa-xl mx-2"></i>
             {note?.likes?.length || 0}
           </span>
           <span
             onClick={handleCommentClick}
-            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent text-black  hover:bg-purple-300 transition duration-150"
+            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent hover:bg-purple-300 transition duration-150"
           >
             <i className="fa-regular fa-comment fa-xl mx-2"></i>
             {note?.comments?.length || 0}
@@ -106,18 +92,18 @@ const BookCard = ({ note, setreRender }) => {
 
           {note.purchased.includes(currentuser?._id) ? (
             <NavLink to={`/nviewer/${note?._id}`}>
-              <button className="border border-black px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-400 hover:text-black hover:border-white">
+              <button className="border border-black px-4 py-1 rounded-lg bg-black text-white hover:bg-white hover:text-black hover:border-white">
                 View
               </button>
             </NavLink>
           ) : (
             <button
-              className="border border-black px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-400 hover:text-black hover:border-white"
+              className="border border-black px-4 py-1 rounded-lg bg-black text-white hover:bg-white hover:text-black hover:border-white"
               onClick={() => {
                 setShowConfirmationModal(true);
               }}
             >
-              {buyNotesLoading ? <Loader /> : "Buy"}
+              {buyNotesLoading ? <Loader /> : 'Buy'}
             </button>
           )}
 
@@ -154,31 +140,23 @@ const BookCard = ({ note, setreRender }) => {
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-white p-8 border border-black rounded-lg shadow-md w-1/2">
             <p className="text-lg font-semibold text-black mb-5">
-              <span className="text-blue-500"> {note?.name} </span> note
-              Comments
+              <span className="text-blue-500"> {note?.name} </span> note Comments
             </p>
 
-            {commentsById.length === 0 && <h1 className="text-2xl">No Comments Yet</h1>}
+            {commentsById.length === 0 && (
+              <h1 className="text-2xl">No Comments Yet</h1>
+            )}
 
             {Array.isArray(commentsById) &&
               commentsById?.map((comment) => (
-                <div
-                  key={comment?._id}
-                  className="mb-4 p-2 border rounded-lg shadow-md bg-white hover:shadow-lg"
-                >
+                <div key={comment?._id} className="mb-4 p-2 border rounded-lg shadow-md bg-white hover:shadow-lg">
                   <div className="flex flex-row justify-between">
                     <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-gray-700">
-                        {comment?.user?.username}
-                      </span>
-                      <span className="text-sm font-semibold text-gray-700">
-                        {comment?.comment}
-                      </span>
+                      <span className="text-sm font-semibold text-gray-700">{comment?.user?.username}</span>
+                      <span className="text-sm font-semibold text-gray-700">{comment?.comment}</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-gray-500">
-                        {new Date(comment?.createdAt).toLocaleDateString()}
-                      </span>
+                      <span className="text-xs font-semibold text-gray-500">{new Date(comment?.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
                 </div>
@@ -199,4 +177,4 @@ const BookCard = ({ note, setreRender }) => {
   );
 };
 
-export default BookCard;
+export default BookCardol;
