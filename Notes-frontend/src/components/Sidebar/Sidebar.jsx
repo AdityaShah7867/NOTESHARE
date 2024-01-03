@@ -49,7 +49,7 @@ export const SideBar = () => {
         >
           <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
         </span>
-        <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
+        <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[275px] overflow-y-auto text-center bg-gray-900">
           <div className="text-gray-100 text-xl">
             <div className="p-2.5 mt-1 flex items-center">
               <img
