@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
+import { fadeIn } from '../Variants';
 import Navbar from '../components/Navbar';
 import BookCard from '../components/BookCard';
 import Search from '../components/Search';
@@ -55,7 +57,11 @@ const Home = () => {
               filter === 'BookMarked' ? <h1 className='text-black text-center text-2xl mb-10'>BookMarked Notes </h1> : null
             }
           </div>
-          <div className='flex flex-wrap justify-center'>
+          <motion.div className='flex flex-wrap justify-center'
+          initial='hidden'
+          whileInView={'show'}
+          viewport={{ once: false, amount: 0.3 }}
+          variants={fadeIn('up', 0.3)}>
             {
               filteredNotes?.length === 0 ? <h1 className='text-black text-2xl'>No Notes To Display</h1> : (
                 noteLoading ? <BookCardSkeletion /> : (
@@ -67,7 +73,7 @@ const Home = () => {
                 )
               )
             }
-          </div>
+          </motion.div>
         </div>
       </div>
     </Alternate>

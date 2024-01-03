@@ -18,7 +18,7 @@ const Search = ({ search, setSearch }) => {
 
   return (
     <div>
-      <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+      <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl ">
         <div class="md:flex">
           <div class="w-full p-3">
             <div class="relative">
@@ -29,7 +29,7 @@ const Search = ({ search, setSearch }) => {
                 placeholder="Search Notes.."
                 autoComplete="off"
                 onChange={(e) => setSearch(e.target.value)}
-                class="bg-white h-14 w-full px-12 rounded-lg focus:outline-none border-2 border-gray-400 hover:cursor-pointer"
+                class="bg-white h-14 w-full px-12 rounded-lg focus:outline-none border-2 border-gray-400 hover:border-blue-500 hover:border-4 hover:cursor-pointer"
                 name="search"
                 value={search}
               />
