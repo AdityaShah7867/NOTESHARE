@@ -19,6 +19,9 @@ const { Server } = require('socket.io')
 const cors = require('cors');
 const { socketCtrl } = require("./controllers/socketCntrl");
 require('dotenv').config();
+const axios = require('axios');
+const cheerio = require('cheerio');
+
 
 
 
@@ -53,6 +56,40 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
     res.render('index');
 })
+
+app.get('/books', async (req, res) => {
+    const url = 'https://pybitesbooks.com/users/bbelderbos';
+
+    try {
+        const response = await axios.get(url);
+        const $ = cheerio.load(response.data);
+        const panes = $('.mui-tabs__pane');
+
+        booksList = [];
+
+        panes.each((index, pane) => {
+            const readingDiv = $(pane);
+            const books = readingDiv.find('a');
+            console.log('books', books[0])
+
+            books.each((index, book) => {
+                const title = $(book).text().split('(')[0];
+                const bookhref = $(book).attr('href') || null;
+                const imgSrc = $(book).find('img').attr('src') || null;
+                const author = $(book).find('span.hide').text().split('(')[1].replace(')', '') || null;
+
+
+                booksList.push({ title, imgSrc, author, bookhref: `https://pybitesbooks.com${bookhref}` });
+            });
+        });
+
+        res.status(200).json({ books: booksList });
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 app.use('/uploads', express.static('uploads'));
 app.use('/api/v1/branch', branchRoutes);
