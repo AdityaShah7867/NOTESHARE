@@ -23,6 +23,14 @@ const GrpChat = () => {
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (message === '') {
+      toast.warning('Please fill all the fields');
+      return;
+    }
+    if (message.length > 500) {
+      toast.warning('Message should be less than 100 characters');
+      return;
+    }
     setMessages(prevMessages => [
       ...prevMessages,
       { content: message, sender: { _id: user?._id, username: user?.username, profile: user?.profile } }
@@ -139,6 +147,7 @@ const GrpChat = () => {
               </div>
               <button
                 type="submit"
+                disabled={message.length === 0}
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Send
