@@ -13,6 +13,9 @@ const commentRoutes = require('./routes/commentRoutes')
 const impDateRoutes = require('./routes/impDateRoutes')
 const likeRoutes = require('./routes/likeRoutes')
 const skillsRoutes = require('./routes/skillsRoutes')
+const communityRoutes = require('./routes/communityRoutes')
+const messageRoutes = require('./routes/messageRoutes')
+
 const cors = require('cors');
 require('dotenv').config();
 
@@ -57,6 +60,9 @@ app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/likes', likeRoutes);
 app.use('/api/v1/impDates', impDateRoutes);
 app.use('/api/v1/skills', skillsRoutes);
+app.use('/api/v1/community', communityRoutes);
+app.use('/api/v1/messages', messageRoutes);
+
 app.use(errorHandler);
 start();
 
