@@ -51,21 +51,21 @@ const BookCard = ({ note, setreRender }) => {
         </div>
 
         <p className="text-gray-700 text-lg">{note?.desc || "No description available."}</p>
-<center>
-        {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
+        <center>
+          {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
           <img
             className="w-full h-full object-cover rounded-lg"
             src="https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"
             alt="Note Image"
           />
         </div> */}
-        <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4">
-          <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="w-full h-full rounded-lg" />
-        </div>
+          <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4">
+            <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="w-full h-full rounded-lg" />
+          </div>
         </center>
         <div className="flex gap-16 items-center mb-1">
           <span className="datetime text-gray-600">
-         {new Date(note?.uploadedAt).toLocaleDateString()}
+            {new Date(note?.uploadedAt).toLocaleDateString()}
           </span>
 
           <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
@@ -73,7 +73,7 @@ const BookCard = ({ note, setreRender }) => {
             <span className="text-black"> {note.author.username}</span>
           </NavLink>
         </div>
-        <hr/>
+        <hr />
         <div className="comment-like flex justify-around items-center p-2">
           <span
             onClick={() => {

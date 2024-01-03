@@ -62,8 +62,6 @@ const getAllNotes = asyncHandler(async (req, res) => {
 
         const notes = await Note.find({ acceptedStatus: true }).populate('author', '-notesUploaded -notesBought').populate('subject')
 
-
-
         res.status(200).json({ message: "Notes fetched successfully", data: notes });
     } catch (error) {
         console.error(error);
@@ -452,5 +450,27 @@ const filterNote = async (req, res) => {
 
     }
 }
-module.exports = { filterNote, getBookMarkedNotes, filterPost, getAllNotes, addNotes, deleteNote, getSingleNote, getNotesAdmin, AcceptRejectNotes, getFormData, buyNote, searchNote, bookMarkNotes, getFilterdFormData };
+
+
+
+const getUserUploadedNotes = async (req, res) => {
+    const user = req.user.id;
+    try {
+
+        const userExists = await User.findById(user);
+        if (!userExists) {
+            res.status(404).json({ message: "User not found" })
+        }
+
+        const notes = await Note.find({ author: user }).populate('author', '-notesUploaded -notesBought').populate('subject')
+
+        res.status(200).json({ message: "Notes fetched successfully", data: notes });
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+module.exports = { getUserUploadedNotes, filterNote, getBookMarkedNotes, filterPost, getAllNotes, addNotes, deleteNote, getSingleNote, getNotesAdmin, AcceptRejectNotes, getFormData, buyNote, searchNote, bookMarkNotes, getFilterdFormData };
 
