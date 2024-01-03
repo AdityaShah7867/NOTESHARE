@@ -41,36 +41,39 @@ const BookCard = ({ note, setreRender }) => {
 
   return (
     <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4">
-      <div className="post-card mx-2 mt-6 w-80 rounded-lg border bg-white border-gray-300 shadow-md p-4">
-        <div className="flex items-center mb-4">
-          <h2 className="text-black text-2xl font-semibold">{note?.name}</h2>
+      <div className="post-card mx-2 mt-6 w-80 rounded-lg border  border-gray-300 shadow-md p-4">
+        <div className="flex items-center mb-2">
+          <h2 className="text-black text-xl font-semibold">{note?.name}</h2>
         </div>
-        <div className="flex gap-4 mb-2">
+        <div className="flex gap-4 mb-1">
           <p className="text-gray-600 text-base">Subject: {note?.subject?.name}</p>
           <p className="text-gray-600 text-base">Module: {note?.module}</p>
         </div>
 
         <p className="text-gray-700 text-lg">{note?.desc || "No description available."}</p>
-
-        <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
+<center>
+        {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
           <img
             className="w-full h-full object-cover rounded-lg"
             src="https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"
             alt="Note Image"
           />
+        </div> */}
+        <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4">
+          <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="w-full h-full rounded-lg" />
         </div>
-
-        <div className="flex gap-4 items-center mb-2">
+        </center>
+        <div className="flex gap-16 items-center mb-1">
           <span className="datetime text-gray-600">
-            Uploaded on: {new Date(note?.uploadedAt).toLocaleDateString()}
+         {new Date(note?.uploadedAt).toLocaleDateString()}
           </span>
 
           <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
             <img className="h-6 rounded-full" src={note.author.profile} alt="Profile" />
-            <span className="text-black">by {note.author.username}</span>
+            <span className="text-black"> {note.author.username}</span>
           </NavLink>
         </div>
-
+        <hr/>
         <div className="comment-like flex justify-around items-center p-2">
           <span
             onClick={() => {
