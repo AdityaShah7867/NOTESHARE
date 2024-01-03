@@ -428,6 +428,9 @@ const filterNote = async (req, res) => {
         const { branch, subject, module, type } = req.query;
         console.log(req.query)
         console.log('type', type)
+        console.log('type', type)
+        console.log('type', type)
+
         const notes = await Note.find({
             acceptedStatus: true,
         }).populate({ path: 'subject', populate: { path: 'branch', select: 'name' } });

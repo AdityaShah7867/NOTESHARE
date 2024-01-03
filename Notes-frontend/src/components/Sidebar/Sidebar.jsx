@@ -176,15 +176,15 @@ export const SideBar = () => {
             </div>
           </NavLink>
 
-          <NavLink to={"/setting"}>
+          <NavLink to={"/communities"}>
             <div
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === "/setting" ? "bg-blue-500" : ""
+                location.pathname === "/communities" ? "bg-blue-500" : ""
               }`}
             >
               <i class="bi bi-gear"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
-                Setting
+                Communities
               </span>
             </div>
           </NavLink>
