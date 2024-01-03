@@ -86,7 +86,7 @@ const joinCommunity = async (req, res) => {
 
 const getCommunityInWhichUserIsMember = async (req, res) => {
     try {
-        const communities = await Community.find({ members: req.user.id }).populate('creator', 'name email')
+        const communities = await Community.find({ members: req.user.id }).populate('creator', 'name email username')
         res.status(200).json({ communities });
     } catch (error) {
         res.status(500).json({ error: error.message });
