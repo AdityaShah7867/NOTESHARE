@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {createCommunity, getAllCommunities, getCommunity, updateCommunity, deleteCommunity, getCommunityInWhichUserIsMember, joinCommunity} = require('../controllers/communityCntrl');
+const {createCommunity, getAllCommunities, getCommunity, updateCommunity, deleteCommunity, getCommunityInWhichUserIsMember, joinCommunity, leaveCommunity} = require('../controllers/communityCntrl');
 
 const validateToken = require('../middlewares/validateToken');
 
@@ -11,5 +11,6 @@ router.put('/updateCommunity/:id', validateToken, updateCommunity);
 router.delete('/deleteCommunity/:id', validateToken, deleteCommunity);
 router.get('/get-your-communities', validateToken, getCommunityInWhichUserIsMember);
 router.put('/join-community/:id', validateToken, joinCommunity)
+router.put('/leave-community/:id', validateToken, leaveCommunity)
 
 module.exports = router;

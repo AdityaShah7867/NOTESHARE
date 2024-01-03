@@ -24,7 +24,7 @@ const createCommunity = async (req, res) => {
 
 const getAllCommunities = async (req, res) => {
     try {
-        const communities = await Community.find({}).populate('creator', 'name email')
+        const communities = await Community.find({}).populate('creator', 'name email username')
         res.status(200).json({ communities });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -94,7 +94,21 @@ const getCommunityInWhichUserIsMember = async (req, res) => {
 }
 
 
-
+const leaveCommunity = async (req,res) => {
+    try{
+        const {id} = req.params;
+        const community = await Community.findById(id);
+        if(!community){
+            return res.status(400).json({error:"No such community exists"});
+        }
+        community.members.pull(req.user.id);
+        await community.save();
+        res.status(200).json({community,message:`You have successfully left ${community.name} community`});
+    }catch(error){
+        res.status(500).json({error:error.message});
+    
+    }
+}
 module.exports = {
 
     createCommunity,
@@ -103,5 +117,6 @@ module.exports = {
     updateCommunity,
     deleteCommunity,
     joinCommunity,
-    getCommunityInWhichUserIsMember
+    getCommunityInWhichUserIsMember, 
+    leaveCommunity
 }

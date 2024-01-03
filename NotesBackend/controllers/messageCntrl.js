@@ -31,7 +31,7 @@ const getCommunityMessages = async (req, res) => {
             return res.status(400).json({ error: "No such community exists" });
         }
         for(const message of community.messages){
-            await message.populate('sender', 'username')
+            await message.populate('sender', 'username profile')
         }
         
         res.status(200).json({ messages: community.messages });

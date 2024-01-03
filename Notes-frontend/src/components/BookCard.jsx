@@ -40,19 +40,16 @@ const BookCard = ({ note, setreRender }) => {
   }, [dispatch]);
 
   return (
-
     <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4 ">
-      <div className="post-card mx-2 mt-6 w-80   rounded-lg border  border-gray-600">
-        <div className="flex items-center">
-          <span className="title text-white mr-2 text-2xl font-semibold">
-            {note?.name}
-          </span>
+      <div className="post-card  mt-6 w-80 rounded-lg shadow-md p-4 mx-2 ">
 
-    <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4">
-      <div className="post-card mx-2 mt-6 w-80 rounded-lg border  border-gray-300 shadow-md p-4">
-        <div className="flex items-center mb-2">
+    
+      {/* <div className={`border-t-8 mx-2 ${note.purchased.includes(currentuser?._id) ? 'border-green-400' : 'border-red-500'}`}>
+       */}
+  {/* Your content goes here */}
+  <div>
+        <div className="flex items-center mb-2 mt-2 ">
           <h2 className="text-black text-xl font-semibold">{note?.name}</h2>
-
         </div>
         <div className="flex gap-4 mb-1">
           <p className="text-gray-600 text-base">Subject: {note?.subject?.name}</p>
@@ -60,22 +57,21 @@ const BookCard = ({ note, setreRender }) => {
         </div>
 
         <p className="text-gray-700 text-lg">{note?.desc || "No description available."}</p>
-<center>
-        {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
+        <center>
+          {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
           <img
             className="w-full h-full object-cover rounded-lg"
             src="https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"
             alt="Note Image"
           />
         </div> */}
-        <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4">
-          <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="w-full h-full rounded-lg" />
-
-        </div>
+          <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4">
+            <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="w-full h-full rounded-lg" />
+          </div>
         </center>
         <div className="flex gap-16 items-center mb-1">
           <span className="datetime text-gray-600">
-         {new Date(note?.uploadedAt).toLocaleDateString()}
+            {new Date(note?.uploadedAt).toLocaleDateString()}
           </span>
 
           <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
@@ -83,9 +79,7 @@ const BookCard = ({ note, setreRender }) => {
             <span className="text-black"> {note.author.username}</span>
           </NavLink>
         </div>
-
-        <hr/>
-
+        <hr />
         <div className="comment-like flex justify-around items-center p-2">
           <span
             onClick={() => {
@@ -147,6 +141,7 @@ const BookCard = ({ note, setreRender }) => {
               </div>
             </div>
           )}
+        </div>
         </div>
       </div>
 
