@@ -1,0 +1,91 @@
+body{
+    background-color: black;
+}
+.post-card {
+    width: 320px;
+    background: lightgrey;
+   
+    background-color: rgb(24 27 32);
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    
+  }
+  
+  .post-card:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    transform: scale(1.01);
+    border:solid ;
+  }
+
+  .avatar {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    background-color: blueviolet;
+    background-image: linear-gradient(to top left, blueviolet,rgb(73, 31, 112));
+  }
+  
+  .title {
+    font-size: 20px;
+    line-height: 22px;
+    font-weight: 600;
+    margin-top: 10px;
+    color: #fff;
+    text-decoration: none;
+    transition: all .35s ease-in;
+  }
+  
+  .title:hover {
+    color: rgb(168 179 207);
+    transform: scale(1.1);
+  }
+  
+  
+  .datetime {
+    font-size: 16px;
+    color: rgb(168 179 207);
+    margin: 10px 0;
+  }
+  
+  .image-preview {
+    flex: 1;
+   height: 100%;
+    width: 100%;
+    border-radius: 0px;
+    margin-bottom: 4px;
+    /* border:white solid */
+  }
+  
+  .comment-like {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2px 0;
+  }
+  
+  .comment-like span {
+    cursor: pointer;
+    height: 40px;
+    width: 50px;
+    padding: 0 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    border-radius: 10px;
+    background-color: transparent;
+    transition: all .15s ease;
+  }
+  
+  .comment-like span:hover {
+    background-color: rgba(137, 43, 226, 0.096);
+  }
+  
+  .comment-like span svg {
+    fill: rgb(255, 255, 255);
+    margin-right: 2px;
+  }
