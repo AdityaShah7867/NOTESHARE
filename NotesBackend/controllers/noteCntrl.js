@@ -86,8 +86,7 @@ const getNotesById = async (req, res) => {
 const addNotes = asyncHandler(async (req, res) => {
     try {
         const { name, subject, module, desc, type } = req.body;
-        console.log(req.body)
-        console.log('type', type)
+
 
         //add validation
         if (!name || !subject || !module || !desc || !type) {
@@ -217,8 +216,16 @@ const deleteNote = asyncHandler(async (req, res) => {
             res.status(404).json({ message: `Unable to find note with id ${noteId}` });
             return;
         }
+        
         note.author?.notesUploaded.pull(noteId);
         await note.author.save();
+
+        const users = await User.find({ notesBookMarked: noteId, notesBought: noteId});
+        users.forEach(async (user) => {
+            user.notesBookMarked.pull(noteId);
+            user.notesBought.pull(noteId);
+            await user.save();
+        });
 
         fs.unlink(path.join(__dirname, '..', note.file), (err) => {
             if (err) {
@@ -303,7 +310,6 @@ const searchNote = async (req, res) => {
     try {
         const { search } = req.query;
         const notes = await Note.find({ acceptedStatus: true }).populate('subject author')
-        console.log('accesing search...')
         if (!search) {
             return res.status(200).json({ message: "Please enter something to search", searchData: notes })
         }
@@ -426,18 +432,13 @@ const getFilterdFormData = async (req, res) => {
 const filterNote = async (req, res) => {
     try {
         const { branch, subject, module, type } = req.query;
-        console.log(req.query)
-        console.log('type', type)
-        console.log('type', type)
-        console.log('type', type)
-
+       
         const notes = await Note.find({
             acceptedStatus: true,
         }).populate({ path: 'subject', populate: { path: 'branch', select: 'name' } });
-        console.log(branch + '' + subject)
+
         if (type) {
             const filterdData = notes.filter((note) => {
-                console.log(note)
                 return (
                     note?.type?.toLowerCase()?.includes(type?.toLowerCase() ?? '')
                 )
@@ -447,8 +448,7 @@ const filterNote = async (req, res) => {
         }
         if (branch && subject) {
             const filterdData = notes.filter((note) => {
-                console.log(note)
-                console.log(note?.subject?.name?.toLowerCase() + 'and ' + subject?.toLowerCase())
+                
                 return (
                     note?.subject?.name?.toLowerCase()?.includes(subject?.toLowerCase() ?? '')
                 )
