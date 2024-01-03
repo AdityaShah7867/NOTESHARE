@@ -6,6 +6,7 @@ const { TransferCoin } = require('../models/transfercoinModel')
 
 
 const transferCoins = asyncHandler(async (req, res) => {
+    
     const { receiverID } = req.params;
     try {
         const { coins } = req.body;

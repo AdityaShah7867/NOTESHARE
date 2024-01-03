@@ -14,6 +14,26 @@ const AWS = require('aws-sdk')
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 const fs = require('fs');
+const Sensitive = require('../models/sensitiveModel');
+const axios = require('axios');
+const { get } = require('http');
+
+
+const getPublicIP = async () => {
+    try {
+        const response = await axios.get('https://api64.ipify.org?format=json');
+        const publicIP = response.data.ip;
+
+        const getLocation = await axios.get(`https://ipinfo.io/${publicIP}/json`)
+
+        return getLocation
+
+    } catch (error) {
+        console.error('Error fetching public IP:', error.message);
+    }
+};
+
+
 
 
 const userInfo = asyncHandler(async (req, res) => {
@@ -124,9 +144,8 @@ const verifyemail = async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
 
     try {
-
+        const sensi = req;
         const { email, password } = req.body;
-        console.log(`Ip address of the user is ${req.ip}`)
         if (!email || !password) {
             res.status(400).json({ message: "all fileds are required" })
         }
@@ -136,6 +155,7 @@ const loginUser = asyncHandler(async (req, res) => {
             res.status(404).json({ message: `user with ${email} does not exist` })
         }
         const verificationToken = generateverificationToken(email);
+
         if (!user.isVerified) {
             res.status(403);
             user.verificationToken = verificationToken;
@@ -152,6 +172,42 @@ const loginUser = asyncHandler(async (req, res) => {
                 role: user.role,
                 isVerified: user.isVerified
             }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
+
+            const findIfInfoExist = await Sensitive.findOne({ user_email: user.email });
+
+            if (!findIfInfoExist) {
+
+                const ipi = await getPublicIP();
+                const ip = ipi.data;
+                const sensitiveData = new Sensitive({
+                    user_email: user.email,
+                    ip_address: ip.ip,
+                    device_info: sensi.headers['user-agent'],
+                    city: ip.city,
+                    region: ip.region,
+                    country: ip.country,
+                    location: ip.loc,
+                    organisation: ip.org,
+                    postal: ip.postal,
+                    timezone: ip.timezone,
+                });
+                await sensitiveData.save();
+            } else {
+                const ipi = await getPublicIP();
+                const ip = ipi.data;
+                findIfInfoExist.ip_address = ip.ip;
+                findIfInfoExist.city = ip.city;
+                findIfInfoExist.region = ip.region;
+                findIfInfoExist.country = ip.country;
+                findIfInfoExist.location = ip.loc;
+                findIfInfoExist.organisation = ip.org;
+                findIfInfoExist.postal = ip.postal;
+                findIfInfoExist.timezone = ip.timezone;
+                findIfInfoExist.device_info = sensi.headers['user-agent'];
+                findIfInfoExist.lastLogin = Date.now();
+                await findIfInfoExist.save();
+            }
+
             res.status(200).json({ token: accessToken, message: "User logged in", user: user });
         } else {
             res.status(401).json({ message: "Invalid credentials" })
@@ -169,13 +225,11 @@ const sendResetPasswordEmail = async (req, res) => {
 
     try {
         const { email } = req.body;
-        console.log(email)
         let user = await User.findOne({ email });
 
         if (!user) {
             return res.status(404).json({ message: 'Email does not exist' });
         } else {
-            //logic to delete exisitng otp
             const otpexist = OTP.findOne({ email: req.body.email })
             if (otpexist) {
                 await OTP.deleteMany({ email: req.body.email });
@@ -322,7 +376,7 @@ const getUsersLeaderBoard = async (req, res) => {
                 rank: index + 1,
                 username: user.username,
                 coins: user.coins,
-                id: user.id
+                id: user._id
             };
         });
 
@@ -346,8 +400,7 @@ const editProfile = async (req, res) => {
 
         // Upload the image to AWS if a file is provided
         if (req.file) {
-            console.log("File present")
-            
+
             const fileKey = `${uuidv4()}-${req.file.originalname}`;
             const params = {
                 Bucket: process.env.AWS_BUCKET_NAME,
@@ -357,15 +410,13 @@ const editProfile = async (req, res) => {
             };
             const data = await s3.upload(params).promise();
             user.profile = data.Location;
-            console.log("File uploaded successfully")
-        }else{
-            console.log("No file provided")
+        } else {
         }
 
-        user.username = username?username:user.username;
-        user.githubUsername = githubUsername?githubUsername:user.githubUsername;
-        user.Bio = Bio?Bio:user.Bio;
-        user.Department = Department?Department:user.Department;
+        user.username = username ? username : user.username;
+        user.githubUsername = githubUsername ? githubUsername : user.githubUsername;
+        user.Bio = Bio ? Bio : user.Bio;
+        user.Department = Department ? Department : user.Department;
 
         await user.save();
 
