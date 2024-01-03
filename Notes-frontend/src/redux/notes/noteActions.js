@@ -6,6 +6,31 @@ const authToken = localStorage.getItem('authtoken');
 const host = process.env.REACT_APP_API_HOST;
 
 
+export const filterdNotes = createAsyncThunk(
+    'notes/filterdNotes',
+    async (queryString, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`${host}/api/v1/notes/filterNote?${queryString}`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.status === 200) {
+                console.log(response.data);
+                return response.data;
+            } else {
+                console.error('Error:', response.data);
+                return rejectWithValue(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return rejectWithValue(error.response?.data?.message);
+        }
+    }
+)
+
+
 export const getFilteredFormData = createAsyncThunk(
     'notes/getFilteredFormData',
     async (_, { rejectWithValue }) => {
