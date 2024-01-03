@@ -76,14 +76,14 @@ const BookCard = ({ note, setreRender }) => {
             onClick={() => {
               handlelike(note?._id);
             }}
-            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent hover:bg-purple-300 transition duration-150"
+            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center bg-black text-red-500 font-bold rounded-2xl bg-transparent hover:bg-purple-300 transition duration-150"
           >
             <i className="fa-regular fa-heart fa-xl mx-2"></i>
             {note?.likes?.length || 0}
           </span>
           <span
             onClick={handleCommentClick}
-            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent hover:bg-purple-300 transition duration-150"
+            className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent text-black  hover:bg-purple-300 transition duration-150"
           >
             <i className="fa-regular fa-comment fa-xl mx-2"></i>
             {note?.comments?.length || 0}
@@ -91,13 +91,13 @@ const BookCard = ({ note, setreRender }) => {
 
           {note.purchased.includes(currentuser?._id) ? (
             <NavLink to={`/nviewer/${note?._id}`}>
-              <button className="border border-black px-4 py-1 rounded-lg bg-red-400 text-white hover:bg-white hover:text-black hover:border-white">
+              <button className="border border-black px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-400 hover:text-black hover:border-white">
                 View
               </button>
             </NavLink>
           ) : (
             <button
-              className="border border-black px-4 py-1 rounded-lg bg-red-400 text-white hover:bg-white hover:text-black hover:border-white"
+              className="border border-black px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-400 hover:text-black hover:border-white"
               onClick={() => {
                 setShowConfirmationModal(true);
               }}
