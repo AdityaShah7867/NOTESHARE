@@ -10,6 +10,7 @@ import Loader from "../components/Loader";
 const Profile = () => {
 
     const [showLoader, setShowLoader] = useState(true);
+    const [skills, setSkills] = useState([])
 
     const dispatch = useDispatch();
 
@@ -20,7 +21,6 @@ const Profile = () => {
     }, [dispatch])
 
 
-    const skills = useSelector((state) => state?.user?.user?.skills);
 
     const [repositories, setRepositories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -49,21 +49,32 @@ const Profile = () => {
                 console.log(error);
 
             }
+        } else {
+            setRepositories(null)
         }
 
     }
 
-
     useEffect(() => {
         fetchRepos();
+    }, [user, username]);
 
-    }, [user]);
+    const fetchSkillsByUsername = async () => {
+        const response = await fetch(`http://localhost:4000/api/v1/skills/getSkills/${username}`)
+        const data = await response.json()
+        console.log('data', data)
+        setSkills(data.skills)
+    }
+
 
 
 
     useEffect(() => {
         dispatch(getUserProfile(username));
+        fetchSkillsByUsername();
     }, [dispatch, username]);
+
+
 
 
     useEffect(() => {
@@ -72,11 +83,15 @@ const Profile = () => {
         }, 2000);
 
         return () => clearTimeout(timeout);
+
     }, [username]);
+
+
 
     if (showLoader) {
         return <Loader />;
     }
+
 
     return (
         <>
@@ -118,7 +133,7 @@ const Profile = () => {
                                             Skills:
                                         </label>
                                         <div className="flex flex-wrap">
-                                            {skills.map((skill, index) => (
+                                            {skills?.map((skill, index) => (
                                                 <div
                                                     key={index}
                                                     className="bg-blue-100 text-blue-700 px-3 py-2 rounded-full m-1"
@@ -145,7 +160,7 @@ const Profile = () => {
                             <div className="mt-5">
                                 <div className="w-full ">
                                     <div className="mt-5"></div>
-                                    {repositories.map((repo) => (
+                                    {repositories?.map((repo) => (
                                         <div
                                             className="bg-white p-4 rounded-lg shadow-lg mb-4"
                                             key={repo.id}
