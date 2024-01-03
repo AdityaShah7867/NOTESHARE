@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+import { useUpdate } from '../../context/communityCntxt';
 
 
 const Filter = () => {
-    const [activeTab, setActiveTab] = useState("ALLGROUPS");
+  const {activeTab, setActiveTab, triggerUpdate} = useUpdate()
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
       };
