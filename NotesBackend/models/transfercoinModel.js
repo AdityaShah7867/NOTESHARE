@@ -2,25 +2,16 @@ const mongoose = require('mongoose');
 
 const TransferCoinHistory = new mongoose.Schema({
     sender: {
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-        username: {
-            type: String,
-            required: true,
-        }
+
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
 
     },
     receiver: {
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-        username: {
-            type: String,
-            required: true,
-        }
+
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+
     },
     coins: {
         type: Number,

@@ -5,7 +5,7 @@ const validateToken = require('../middlewares/validateToken');
 
 router.post('/transfercoins/:receiverID', validateToken, transferCoins)
 router.get('/getAllTransferCoins', validateToken, getTransferCoinsHistory)
-router.get('/getTransferCoinsByUser/:userID', validateToken, getTransferCoinsHistoryByUser)
+router.get('/getTransferCoinsByUser', validateToken, getTransferCoinsHistoryByUser)
 router.post('/lottery', validateToken, lottery)
 
 

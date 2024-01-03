@@ -21,7 +21,7 @@ const Video = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 p-6  bg-white shadow-xl border-2 rounded-lg mx-5  ">
                             <div className="md:rounded-lg md:flex md:justify-center md:items-center md:flex-col">
                                 {/* You can insert an image here if needed */}
-                                <img src={IMG} alt="" className='' style={{width:'50%'}}/>
+                                <img src={IMG} alt="" className='' style={{ width: '50%' }} />
                             </div>
                             <div className="md:mt-0 flex flex-col justify-center md:ml-9">
                                 <div className="mb-4">
