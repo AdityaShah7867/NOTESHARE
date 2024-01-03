@@ -54,8 +54,8 @@ const Home = () => {
             {
               filter === 'BookMarked' ? <h1 className='text-black text-center text-2xl mb-10'>BookMarked Notes </h1> : null
             }
-            </div>
-            <div className='flex flex-wrap justify-center'>
+          </div>
+          <div className='flex flex-wrap justify-center'>
             {
               filteredNotes?.length === 0 ? <h1 className='text-black text-2xl'>No Notes To Display</h1> : (
                 noteLoading ? <BookCardSkeletion /> : (

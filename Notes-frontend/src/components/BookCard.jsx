@@ -40,9 +40,15 @@ const BookCard = ({ note, setreRender }) => {
   }, [dispatch]);
 
   return (
-    <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4">
-      <div className="post-card mx-2 mt-6 w-80 rounded-lg border  border-gray-300 shadow-md p-4">
-        <div className="flex items-center mb-2">
+    <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4 ">
+      <div className="post-card  mt-6 w-80 rounded-lg shadow-md p-4 mx-2 ">
+
+    
+      {/* <div className={`border-t-8 mx-2 ${note.purchased.includes(currentuser?._id) ? 'border-green-400' : 'border-red-500'}`}>
+       */}
+  {/* Your content goes here */}
+  <div>
+        <div className="flex items-center mb-2 mt-2 ">
           <h2 className="text-black text-xl font-semibold">{note?.name}</h2>
         </div>
         <div className="flex gap-4 mb-1">
@@ -136,6 +142,7 @@ const BookCard = ({ note, setreRender }) => {
             </div>
           )}
         </div>
+        </div>
       </div>
 
       {showCommentModal && (
@@ -171,7 +178,6 @@ const BookCard = ({ note, setreRender }) => {
                   </div>
                 </div>
               ))}
-
             <div className="flex justify-end mt-4">
               <button
                 className="px-4 py-2 mr-2 border rounded-lg bg-red-500 text-white"
