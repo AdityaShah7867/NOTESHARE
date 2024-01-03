@@ -3,8 +3,8 @@ import ChatLay from '../components/Layout/ChatLay';
 
 const GrpChat = () => {
   return (
-    <View>
-    <div className="min-h-screen pt-4 -mt-2 bg-gray-100 flex flex-col">
+    <ChatLay>
+     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Header */}
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -15,7 +15,42 @@ const GrpChat = () => {
 
       {/* Chat messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
-        {/* TODO: Render chat messages here */}
+        <div className="flex flex-col space-y-4">
+          {/* Received message */}
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <img
+                className="h-10 w-10 rounded-full"
+                src="https://via.placeholder.com/150"
+                alt="User avatar"
+              />
+            </div>
+            <div className="ml-4">
+              <div className="bg-white rounded-lg px-4 py-2 shadow">
+                <p className="text-sm text-gray-500">John Doe</p>
+                <p className="text-lg">Hello, how are you?</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Sent message */}
+          <div className="flex items-end justify-end">
+            <div className="mr-4">
+              <div className="bg-indigo-600 rounded-lg px-4 py-2 shadow text-white">
+                <p className="text-lg">I'm doing great, thanks for asking!</p>
+              </div>
+            </div>
+            <div className="flex-shrink-0">
+              <img
+                className="h-10 w-10 rounded-full"
+                src="https://via.placeholder.com/150"
+                alt="User avatar"
+              />
+            </div>
+          </div>
+
+          {/* TODO: Render more chat messages here */}
+        </div>
       </div>
 
       {/* Message input */}
@@ -44,7 +79,7 @@ const GrpChat = () => {
         </div>
       </div>
     </div>
-    </View>
+    </ChatLay>
   );
 };
 

@@ -30,8 +30,8 @@ import Dashboard from './pages/DashBoard';
 import { initialCall } from './redux/auth/authActions';
 import Loader from './components/Loader';
 import Ai from './pages/Ai';
-import GrpChat from './pages/GrpChat';
 import YourNotes from './pages/YourNotes';
+import GrpChat from './pages/GrpChat';
 
 const App = () => {
   const dispatch = useDispatch();
