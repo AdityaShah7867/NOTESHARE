@@ -99,9 +99,8 @@ export const SideBar = () => {
 
           <NavLink to={"/home"}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === "/home" ? "bg-blue-500" : ""
-              } text-white`}
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/home" ? "bg-blue-500" : ""
+                } text-white`}
             >
               <i className="bi bi-house-door-fill" />
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
@@ -112,9 +111,8 @@ export const SideBar = () => {
 
           <NavLink to={"/notification"}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === "/notification" ? "bg-blue-500" : ""
-              }`}
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/notification" ? "bg-blue-500" : ""
+                }`}
             >
               <i class="bi bi-bell"></i>
               <span className="text-[15px] ml-4 font-bold text-gray-200">
@@ -125,9 +123,8 @@ export const SideBar = () => {
 
           <NavLink to={"/addnotes"}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === "/addnotes" ? "bg-blue-500" : ""
-              }`}
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/addnotes" ? "bg-blue-500" : ""
+                }`}
             >
               <i class="bi bi-person-circle"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
@@ -138,9 +135,8 @@ export const SideBar = () => {
 
           <NavLink to={"/video"}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === "/video" ? "bg-blue-500" : ""
-              }`}
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/video" ? "bg-blue-500" : ""
+                }`}
             >
               <i class="bi bi-person-circle"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
@@ -151,9 +147,8 @@ export const SideBar = () => {
 
           <NavLink to={"/dashboard"}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === "/dashboard" ? "bg-blue-500" : ""
-              }`}
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/dashboard" ? "bg-blue-500" : ""
+                }`}
             >
               <i class="bi bi-piggy-bank-fill"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
@@ -163,11 +158,10 @@ export const SideBar = () => {
           </NavLink>
           <NavLink to={`/profile/${user?.username}`}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === `/profile/${user?.username}`
-                  ? "bg-blue-500"
-                  : ""
-              }`}
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === `/profile/${user?.username}`
+                ? "bg-blue-500"
+                : ""
+                }`}
             >
               <i class="bi bi-gear"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
@@ -178,9 +172,8 @@ export const SideBar = () => {
 
           <NavLink to={"/communities"}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${
-                location.pathname === "/communities" ? "bg-blue-500" : ""
-              }`}
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/communities" ? "bg-blue-500" : ""
+                }`}
             >
               <i class="bi bi-gear"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
