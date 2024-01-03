@@ -51,6 +51,19 @@ const Communitychat = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (comData.name === "" || comData.description === "") {
+      toast.warning("Please fill all the fields");
+      return;
+    }
+    if (comData.name.length > 20) {
+      toast.warning("Name should be less than 20 characters");
+      return;
+    }
+    if (comData.description.length > 100) {
+      toast.warning("Description should be less than 100 characters");
+      return;
+    }
+    
     const res = await createCommunity(comData.name, comData.description);
     if (res.status === 200) {
       toast.success(res.message);
