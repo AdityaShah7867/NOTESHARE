@@ -31,6 +31,7 @@ import { initialCall } from './redux/auth/authActions';
 import Loader from './components/Loader';
 import Ai from './pages/Ai';
 import YourNotes from './pages/YourNotes';
+import GrpChat from './pages/GrpChat';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -93,7 +94,8 @@ const App = () => {
               <Route path="/Communities" element={<Communitychat />} />
               <Route path="/DateForm" element={<DateForm />} />
               <Route path='/ai' element={<Ai />} />
-
+              <Route path='/grp' element={<GrpChat />} />
+              
 
 
             </Route>
