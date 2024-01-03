@@ -86,7 +86,6 @@ const Communitychat = () => {
                 ) : joinedCommunities?.length !== 0 && activeTab == "JOINED" ? (
                     joinedCommunities?.map((comm, ind) => (
 
-                        console.log(comm),
                         <>
                             <p>{activeTab}</p>
                             <Card key={ind} comm={comm} ind={ind} />
