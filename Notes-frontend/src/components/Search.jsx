@@ -13,7 +13,7 @@ const Search = ({ search, setSearch }) => {
     setIsFilterModalOpen(false);
   };
 
-  
+
 
 
   return (
@@ -30,7 +30,8 @@ const Search = ({ search, setSearch }) => {
                 autoComplete="off"
                 onChange={(e) => setSearch(e.target.value)}
                 class="bg-white h-14 w-full px-12 rounded-lg focus:outline-none border-2 border-gray-400 hover:cursor-pointer"
-                name=""
+                name="search"
+                value={search}
               />
 
               {/* <button class="absolute top-4 right-16 border-l pl-4"
@@ -39,10 +40,10 @@ const Search = ({ search, setSearch }) => {
               </button> */}
 
               <span className="absolute top-4 right-5 border-l pl-4">
-                {/* <i
+                <i
                   className="fa fa-filter text-gray-500 hover:text-green-500 hover:cursor-pointer"
                   onClick={openFilterModal}
-                ></i> */}
+                ></i>
               </span>
 
             </div>
