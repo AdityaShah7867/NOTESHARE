@@ -4,11 +4,12 @@ import { useParams } from 'react-router-dom';
 import { fetchCommMessages, sendMessage } from '../helpers/commFn';
 import { useSelector } from 'react-redux';
 import { useUpdate } from '../context/communityCntxt';
+import { toast } from 'react-toastify';
 
 const GrpChat = () => {
   const [messages, setMessages] = useState([]);
   const {name,admin, id } = useParams();
-  const {triggerUpdate, update,cuurentCommunity} = useUpdate();
+  const {triggerUpdate, update,socket} = useUpdate();
   const user = useSelector((state) => state?.user?.user);
   const [message, setMessage] = useState('');
   useEffect(() => {
@@ -19,16 +20,42 @@ const GrpChat = () => {
       }
     }
     fetchMessages();
-  }, [update]);
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { content: message, sender: { _id: user?._id, username: user?.username, profile: user?.profile } }
+    ]);
+    socket.emit('send-message', { message, id, username: user?.username, profile: user?.profile, _id: user?._id });
     const res = await sendMessage(message, id);
+
     if (res.status === 200) {
       setMessage('');
-      setMessages([...messages, res.data]);
-      triggerUpdate();
     }
   }
+  useEffect(() => {
+    socket.emit('join',{id,username:user?.username});
+    socket.on('new-user', (data) => {
+
+      toast.info(`${data.message}`);
+
+    });
+    socket.on('user-disconnected', (data) => {
+      toast.info(`${data.message}`);
+    });
+    socket.on('new-message',(data) => {
+      toast.info(`${data.message.sender._id === user._id ? 'You' : data.message.sender.username} sent a message in ${name}`);
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { content: data.message.content, sender: { _id: data.message.sender._id, username: data.message.sender.username, profile: data.message.sender.profile } }
+      ]);
+    })
+    return () => {
+      socket.emit('leave', id);
+      socket.off();
+    }
+  }, [socket]);
   return (
     <ChatLay>
       <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -47,7 +74,7 @@ const GrpChat = () => {
           <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8">
             
 
-              {msg.sender._id === user._id || msg.sender._id === undefined ? (
+              {msg.sender._id === user._id ? (
                 <>
                 <div className="flex flex-col space-y-2">
                   <div className="flex items-end justify-end">
