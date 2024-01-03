@@ -10,7 +10,7 @@ const getAllSubjects = asyncHandler(async (req, res) => {
 
 const addSubjects = asyncHandler(async (req, res) => {
     try {
-        const { name, branch, sem, teacher } = req.body;
+        const { name, branch, sem, teacher, Image } = req.body;
         if (!name || !branch || !sem) {
             res.status(400);
             throw new Error("All fields are mandatory");
@@ -30,7 +30,8 @@ const addSubjects = asyncHandler(async (req, res) => {
         const newSub = await Subject.create({
             name,
             branch,
-            sem
+            sem,
+            Image
         });
 
         branchModel.subjects.push(newSub);

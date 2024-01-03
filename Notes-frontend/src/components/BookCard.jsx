@@ -49,7 +49,7 @@ const BookCard = ({ note, setreRender }) => {
 
   return (
     <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4 ">
-      <div className="post-card mx-2 mt-6 w-80   rounded-lg border bg-black border-gray-600">
+      <div className="post-card mx-2 mt-6 w-80   rounded-lg border  border-gray-600">
         <div className="flex items-center">
           <span className="title text-white mr-2 text-2xl font-semibold">
             {note?.name}
@@ -69,7 +69,7 @@ const BookCard = ({ note, setreRender }) => {
         </p>
 
 
-        <div className="image-preview max-h-36 max-w-36 rounded-full mb-4">
+        <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4">
           <img src={note?.subject?.Image} alt="image" className="w-full h-full rounded-lg" />
         </div>
         <div className="flex  gap-4 items-center">
@@ -81,9 +81,7 @@ const BookCard = ({ note, setreRender }) => {
             <img className="h-6" src={note.author.profile} alt="" />
             <span className="text-white ">by {note.author.username}</span>
           </NavLink>
-
         </div>
-
         <div className="comment-like flex justify-around items-center p-2">
           <span onClick={() => {
             handlelike(note?._id)

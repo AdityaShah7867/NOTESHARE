@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Lottery from "../components/Lottery";
 import SendMoneyCard from "../components/SendMoney";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isSendCoinsModalOpen, setIsSendCoinsModalOpen] = useState(false);
   const openSendCoinsModal = () => {
     setIsSendCoinsModalOpen(true);
@@ -94,7 +96,9 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="relative flex flex-col rounded-xl bg-gradient-to-r mx-4 my-4 from-green-200 to-green-600 bg-clip-border text-green-900 shadow-md">
+            <div onClick={() => {
+              navigate('/YourNotes')
+            }} className="relative flex flex-col rounded-xl bg-gradient-to-r mx-4 my-4 from-green-200 to-green-600 bg-clip-border text-green-900 shadow-md">
               <div className="p-6">
                 <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal">
                   Your Notes

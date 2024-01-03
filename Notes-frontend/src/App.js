@@ -29,6 +29,7 @@ import Dashboard from './pages/DashBoard';
 import { initialCall } from './redux/auth/authActions';
 import Loader from './components/Loader';
 import Ai from './pages/Ai';
+import YourNotes from './pages/YourNotes';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const App = () => {
               }
             >
               <Route path="/setting" element={<Setting />} />
+              <Route path="/YourNotes" element={<YourNotes />} />
               <Route path="/notification" element={<Notification />} />
               <Route path="/home" element={<Home />} />
               <Route path="/notes" element={<NotesTable />} />

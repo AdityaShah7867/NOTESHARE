@@ -69,8 +69,29 @@ const removeSkills = async (req, res) => {
     }
 }
 
+
+const getSkillsByUsername = async (req, res) => {
+    const { username } = req.params;
+    try {
+        const user = await User.findOne({
+            username: username
+        })
+
+        if (!user) {
+            return res.status(400).json({ error: "User does not exist" });
+        }
+
+        const skills = user.skills;
+        return res.status(200).json({ skills: skills });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+
 module.exports = {
     createSkills,
     getSkills,
-    removeSkills
+    removeSkills,
+    getSkillsByUsername
 }
