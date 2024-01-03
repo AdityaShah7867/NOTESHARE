@@ -85,10 +85,12 @@ const getNotesById = async (req, res) => {
 
 const addNotes = asyncHandler(async (req, res) => {
     try {
-        const { name, subject, module, desc } = req.body;
+        const { name, subject, module, desc, type } = req.body;
+        console.log(req.body)
+        console.log('type', type)
 
         //add validation
-        if (!name || !subject || !module || !desc) {
+        if (!name || !subject || !module || !desc || !type) {
             return res.status(400).json({ message: "Please enter all the fields" })
         }
 
@@ -103,6 +105,7 @@ const addNotes = asyncHandler(async (req, res) => {
             subject,
             module,
             desc,
+            type,
             author: req.user.id,
             file: req.file.path,
             fileMimeType: req.file.mimetype,
@@ -300,6 +303,7 @@ const searchNote = async (req, res) => {
     try {
         const { search } = req.query;
         const notes = await Note.find({ acceptedStatus: true }).populate('subject author')
+        console.log('accesing search...')
         if (!search) {
             return res.status(200).json({ message: "Please enter something to search", searchData: notes })
         }
@@ -307,12 +311,10 @@ const searchNote = async (req, res) => {
         const filterdData = notes.filter((note) => {
 
             return (
-                note.name.toLowerCase().includes(search.toLowerCase()) ||
-                note.desc.toLowerCase().includes(search.toLowerCase()) ||
-                note.subject.name.toLowerCase().includes(search.toLowerCase())
+                note?.name.toLowerCase().includes(search.toLowerCase()) ||
+                note?.subject?.name.toLowerCase().includes(search.toLowerCase())
             );
 
-
         })
 
         res.status(200).json({ message: "Notes fetched successfully", searchData: filterdData });
@@ -323,31 +325,32 @@ const searchNote = async (req, res) => {
 }
 
 
-const filterPost = async (req, res) => {
-    try {
-        const { branch, module, subject } = req.query;
-        console.log(branch, module, subject)
-        const notes = await Note.find().populate('subject')
+// const filterPost = async (req, res) => {
+//     try {
+//         const { branch, module, subject } = req.query;
+//         console.log(branch, module, subject);
+//         const notes = await Note.find().populate('subject');
 
-        const filterdData = notes.filter((note) => {
-            return (
-                note.subject.name.toLowerCase().includes(subject.toLowerCase()) ||
-                note.subject.module.toLowerCase().includes(module.toLowerCase()) ||
-                note.subject.branch.toLowerCase().includes(branch.toLowerCase())
+//         console.log('accesing filter notes')
 
-            )
+//         console.log(notes)
 
-        })
+//         const filteredData = notes.filter((note) => {
+//             return (
+//                 note?.subject?.name.toLowerCase().includes(subject.toLowerCase()) ||
+//                 note?.subject?.module.toLowerCase().includes(module.toLowerCase()) ||
+//                 note?.subject?.branch.toLowerCase().includes(branch.toLowerCase())
+//             );
+//         });
 
-        res.status(200).json({ message: "Notes fetched successfully", searchData: filterdData });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
+//         res.status(200).json({ message: "Notes fetched successfully", filteredData: filteredData });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: "Internal Server Error" });
+//     }
+// };
 
-    }
-}
-
-// http://localhost:4000/api/v1/notes/search?search=EEB -> this is how the route will look like
+// http://localhost:4000/api/v1/notes/search?search=EEB -> this is how /the route will look like
 
 const bookMarkNotes = async (req, res) => {
     try {
@@ -423,9 +426,29 @@ const getFilterdFormData = async (req, res) => {
 const filterNote = async (req, res) => {
     try {
         const { branch, subject, module, type } = req.query;
-        const notes = await Note.find().populate({ path: 'subject', populate: { path: 'branch', select: 'name' } });
+        console.log(req.query)
+        console.log('type', type)
+        console.log('type', type)
+        console.log('type', type)
+
+        const notes = await Note.find({
+            acceptedStatus: true,
+        }).populate({ path: 'subject', populate: { path: 'branch', select: 'name' } });
+        console.log(branch + '' + subject)
+        if (type) {
+            const filterdData = notes.filter((note) => {
+                console.log(note)
+                return (
+                    note?.type?.toLowerCase()?.includes(type?.toLowerCase() ?? '')
+                )
+            })
+            res.status(200).json({ message: "Notes fetched successfully", searchData: filterdData, qty: filterdData.length, notes: notes });
+            return;
+        }
         if (branch && subject) {
             const filterdData = notes.filter((note) => {
+                console.log(note)
+                console.log(note?.subject?.name?.toLowerCase() + 'and ' + subject?.toLowerCase())
                 return (
                     note?.subject?.name?.toLowerCase()?.includes(subject?.toLowerCase() ?? '')
                 )
@@ -472,5 +495,5 @@ const getUserUploadedNotes = async (req, res) => {
     }
 }
 
-module.exports = { getUserUploadedNotes, filterNote, getBookMarkedNotes, filterPost, getAllNotes, addNotes, deleteNote, getSingleNote, getNotesAdmin, AcceptRejectNotes, getFormData, buyNote, searchNote, bookMarkNotes, getFilterdFormData };
+module.exports = { getUserUploadedNotes, filterNote, getBookMarkedNotes, getAllNotes, addNotes, deleteNote, getSingleNote, getNotesAdmin, AcceptRejectNotes, getFormData, buyNote, searchNote, bookMarkNotes, getFilterdFormData };
 
