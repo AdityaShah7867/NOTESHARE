@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { getFilteredFormData } from '../redux/notes/noteActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { modules } from '../constants/constants'
+import axios from 'axios'
+import { filterdNotes } from '../redux/notes/noteActions'
 
 const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
     const dispatch = useDispatch();
@@ -12,16 +14,25 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
         type: ''
     })
 
-
     const { FilterdFormData } = useSelector((state) => state?.note) || []
 
     const filterdSubject = FilterdFormData?.subject?.filter((subject) => subject?.branch?.name === filterFormData.branch);
 
-    const handleFilter = (e) => {
+    const handleFilter = async (e) => {
         e.preventDefault()
         console.log(filterFormData)
+
+        const { branch, subject, module, type } = filterFormData;
+        const queryString = `?branch=${branch}&subject=${subject}&module=${module}&type=${type}`;
+
+        http://localhost:4000/api/v1/notes/filterNote?type=Assignment?branch=&subject=&module=&type=Assignment
+
+        dispatch(filterdNotes(queryString))
+
+
         closeFilterModal()
     }
+
 
 
     const onChange = (e) => {
@@ -36,7 +47,7 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
 
     }, [dispatch])
 
-
+    const type = ["Assignment", "Notes", "Question Paper", "Syllabus", "Other"];
 
 
     return (
@@ -178,11 +189,11 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
                                 >
                                     <option value="">Select Type</option>
                                     {
-
+                                        type.map((type) => (
+                                            <option value={type}>{type}</option>
+                                        ))
                                     }
-                                    <option value="type1">Type ass</option>
-                                    <option value="type2">Type exp</option>
-                                    {/* Add more options as needed */}
+
                                 </select>
                             </div>
                             <div className="mt-3 text-center sm:mt-0">
