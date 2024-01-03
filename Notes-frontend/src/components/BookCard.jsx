@@ -100,7 +100,7 @@ const BookCard = ({ note, setreRender }) => {
 
           {note.purchased.includes(currentuser?._id) ? (
             <NavLink to={`/nviewer/${note?._id}`}>
-              <button className="border border-black px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-400 hover:text-black hover:border-white">
+              <button className="border border-black px-4 py-1 rounded-lg bg-green-500 text-white hover:bg-green-400 hover:text-black hover:border-white">
                 View
               </button>
             </NavLink>

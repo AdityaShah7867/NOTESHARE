@@ -83,14 +83,13 @@ const Communitychat = () => {
         ) : allCommunities?.length !== 0 && activeTab == "ALLGROUPS" ? (
           allCommunities?.map((comm, ind) => (
             <>
-              <p>{activeTab}</p>
               <Card key={ind} comm={comm} ind={ind} />
             </>
           ))
         ) : joinedCommunities?.length !== 0 && activeTab == "JOINED" ? (
           joinedCommunities?.map((comm, ind) => (
             <>
-              <p>{activeTab}</p>
+            
               <Card key={ind} comm={comm} ind={ind} />
             </>
           ))

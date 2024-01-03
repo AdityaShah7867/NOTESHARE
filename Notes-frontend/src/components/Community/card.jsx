@@ -45,13 +45,15 @@ const Card = ({ comm, ind, hello }) => {
                 <p className="text-sm">Description: {comm.description}</p>
                 <div className='flex justify-between'>
                 <p className="text-sm">Members: {comm.members.length}</p>
+                </div>
+                <div className='gap-4 mt-2'>
                 {comm.members.includes(user._id) ?(<>
-                  <button onClick={() => handleLeave(comm._id)} className="bg-red-500 hover:bg-black text-white font-bold py-2 px-4 rounded"> Leave </button>
+                  <button onClick={() => handleLeave(comm._id)} className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded"> Leave </button>
                   <button onClick={() => {
                     navigate(`/grp/${comm.name}/${comm.creator.username}/${comm._id}`);
                     setCurrentCommunity(comm);
 
-                  }} className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Chat </button>
+                  }} className="bg-green-500 hover:bg-blue- ml-2 hover:bg-green-400 text-white font-bold py-2 px-4 rounded"> Chat </button>
                 </>)
                 : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleSubmit(comm._id)}> Join </button> }
                 
