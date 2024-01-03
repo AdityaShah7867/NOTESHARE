@@ -101,6 +101,7 @@ const BookCard = ({ note, setreRender }) => {
             {note.purchased.includes(currentuser?._id) ? (
               <NavLink to={`/nviewer/${note?._id}`}>
                 <button className="border  px-4 py-1 rounded-lg bg-green-500 text-white hover:bg-green-600  hover:border-white">
+                <i className="bi bi-eye mr-1"></i>
                   View
                 </button>
               </NavLink>
@@ -111,6 +112,7 @@ const BookCard = ({ note, setreRender }) => {
                   setShowConfirmationModal(true);
                 }}
               >
+                <i className="bi bi-wallet mr-1"></i>
                 {buyNotesLoading ? <Loader /> : "Buy"}
               </button>
             )}

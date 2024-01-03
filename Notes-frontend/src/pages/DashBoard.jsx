@@ -102,11 +102,12 @@ const Dashboard = () => {
 
             <div className="flex justify-center py-3">
               <div className="flex flex-col items-center sm:flex-row mb-5 text-center">
-                <div className="relative flex flex-col rounded-xl w-[200px] bg-white bg-clip-border cursor-pointer text-black shadow-md mx-4"
+                <div className="relative flex flex-col rounded-xl w-[225px] bg-white bg-clip-border cursor-pointer text-black shadow-md mx-4"
                   onClick={openSendCoinsModal}
                 >
                   <div className="p-6">
                     <h5 className=" block font-sans text-xl font-semibold leading-snug tracking-normal text-center">
+                    <i class="bi bi-coin mr-1"></i>
                       Send Coins
                     </h5>
 
@@ -117,11 +118,12 @@ const Dashboard = () => {
 
                 {/* <div className="flex justify-center py-3"> */}
                 {/* <div className="flex flex-col items-center sm:flex-row mb-9 border-2 border-red-800"> */}
-                <div className="relative flex flex-col rounded-xl my-4 w-[200px] bg-white bg-clip-border cursor-pointer text-black shadow-md mx-4"
+                <div className="relative flex flex-col rounded-xl my-4 w-[225px] bg-white bg-clip-border cursor-pointer text-black shadow-md mx-4"
                   onClick={opentransferhistorModal}
                 >
                   <div className="p-6">
                     <h5 className=" block font-sans text-xl font-semibold leading-snug tracking-normal">
+                    <i class="bi bi-clock-history mr-1"></i>
                       Transfer History
                     </h5>
 
@@ -130,9 +132,10 @@ const Dashboard = () => {
 
                 <div onClick={() => {
                   navigate('/YourNotes')
-                }} className="relative flex flex-col rounded-xl mx-4 w-[200px] bg-white bg-clip-border text-black shadow-md">
+                }} className="relative flex flex-col rounded-xl mx-4 w-[225px] bg-white bg-clip-border text-black shadow-md">
                   <div className="p-6">
                     <h5 className="m block font-sans text-xl font-semibold leading-snug tracking-normal">
+                    <i class="bi bi-archive mr-1"></i>
                       Your Notes
                     </h5>
                   </div>
