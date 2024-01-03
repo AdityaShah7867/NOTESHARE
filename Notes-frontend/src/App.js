@@ -95,7 +95,7 @@ const App = () => {
               <Route path="/DateForm" element={<DateForm />} />
               <Route path='/ai' element={<Ai />} />
               <Route path='/grp/:name/:admin/:id' element={<GrpChat />} />
-              
+
 
 
             </Route>

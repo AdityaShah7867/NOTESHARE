@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 
 const Header = () => {
 
-    const [searchText, setSearchText] = useState("");
-    
+  const [searchText, setSearchText] = useState("");
+
   return (
     <div>
-        <div>
+      <div>
         <div className="mx-auto bg-gray-200 rounded-md p-2 mt-10">
           <h1 className="font-semibold text-3xl text-center ">Communities</h1>
         </div>
@@ -23,7 +23,7 @@ const Header = () => {
             {/* Your SVG icon */}
           </button>
         </div>
-        </div>
+      </div>
     </div>
   )
 }
