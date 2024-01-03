@@ -9,21 +9,19 @@ const Room = () => {
     const { roomId } = useParams();
 
     const Mymeeting = async (element) => {
-        const appID = 1792340178;
+        const appID = 1706977774;
 
-        const serverSecret = "11e25d072a125632cf37fa93ed2ec990";
+        const serverSecret = "a514619e54b3795e3c52ab6e879da78e";
 
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomId, Date.now().toString(), user?.username || 'username');
         const zp = ZegoUIKitPrebuilt.create(kitToken);
         zp.joinRoom({
             container: element,
-
             scenario: {
                 mode: ZegoUIKitPrebuilt.VideoConference,
             },
         });
     };
-
 
     return (
         <MainLayout>
