@@ -3,9 +3,10 @@ body{
 }
 .post-card {
     width: 320px;
-    background: lightgrey;
+    background: white;
    
     /* background-color: rgb(24 27 32); */
+    /* background-color: #f8fafc; */
     background-color: white;
     border: 1px solid rgb(255, 255, 255);
     border-radius: 20px;
