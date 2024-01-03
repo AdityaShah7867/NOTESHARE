@@ -25,6 +25,10 @@ const noteSchema = mongoose.Schema({
         type: Number,
         required: [false, "Module must be provided"]
     },
+    type: {
+        type: String,
+        required: true
+    },
     purchased: [{
         type: mongoose.Types.ObjectId,
         ref: "User"
