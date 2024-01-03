@@ -7,8 +7,8 @@ import { useUpdate } from '../context/communityCntxt';
 
 const GrpChat = () => {
   const [messages, setMessages] = useState([]);
-  const { id } = useParams();
-  const {triggerUpdate, update} = useUpdate();
+  const {name,admin, id } = useParams();
+  const {triggerUpdate, update,cuurentCommunity} = useUpdate();
   const user = useSelector((state) => state?.user?.user);
   const [message, setMessage] = useState('');
   useEffect(() => {
@@ -35,8 +35,8 @@ const GrpChat = () => {
         {/* Header */}
         <div className="bg-white shadow">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold leading-tight text-gray-900">Group Name</h1>
-            <p className="mt-1 text-lg text-gray-600">Admin Name</p>
+            <h1 className="text-3xl font-bold leading-tight text-gray-900">{name}</h1>
+            <p className="mt-1 text-lg text-gray-600">Created by: {admin}</p>
           </div>
         </div>
 
@@ -59,7 +59,7 @@ const GrpChat = () => {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src="https://via.placeholder.com/150"
+                        src={msg.sender.profile}
                         alt="User avatar"
                       />
                     </div>
@@ -72,7 +72,7 @@ const GrpChat = () => {
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src="https://via.placeholder.com/150"
+                      src={msg.sender.profile}
                       alt="User avatar"
                     />
                   </div>

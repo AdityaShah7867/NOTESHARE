@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Card = ({ comm, ind, hello }) => {
   const user = useSelector((state) => state?.user?.user)
-  const {triggerUpdate} = useUpdate()
+  const {triggerUpdate,cuurentCommunity, setCurrentCommunity} = useUpdate()
   const handleSubmit = async (id) => {
     const res = await joinCommunity(id)
     if (res.status === 200) {
@@ -21,6 +21,7 @@ const Card = ({ comm, ind, hello }) => {
     const res = await leaveCommunity(id)
     if (res.status === 200) {
       toast.success(res.message)
+      
       triggerUpdate()
     } else {
       toast.warning('Something went wrong')
@@ -46,7 +47,11 @@ const Card = ({ comm, ind, hello }) => {
                 <p className="text-sm">Members: {comm.members.length}</p>
                 {comm.members.includes(user._id) ?(<>
                   <button onClick={() => handleLeave(comm._id)} className="bg-red-500 hover:bg-black text-white font-bold py-2 px-4 rounded"> Leave </button>
-                  <button onClick={() => navigate(`/grp/${comm._id}`)} className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Chat </button>
+                  <button onClick={() => {
+                    navigate(`/grp/${comm.name}/${comm.creator.username}/${comm._id}`);
+                    setCurrentCommunity(comm);
+
+                  }} className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Chat </button>
                 </>)
                 : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleSubmit(comm._id)}> Join </button> }
                 

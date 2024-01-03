@@ -8,13 +8,14 @@ export const UpdateProvider = ({ children }) => {
     const [joinedCommunities, setJoinedCommunities] = useState([]);
     const [activeTab, setActiveTab] = useState("ALLGROUPS");
     const [update, setUpdate] = useState(false);
+    const [cuurentCommunity, setCurrentCommunity] = useState({});
 
     const triggerUpdate = () => {
         setUpdate(prev => !prev);
     };
 
     return (
-        <UpdateContext.Provider value={{allCommunities, setAllCommunities, activeTab, setActiveTab, joinedCommunities, setJoinedCommunities, update, triggerUpdate}}>
+        <UpdateContext.Provider value={{allCommunities, cuurentCommunity, setCurrentCommunity, setAllCommunities, activeTab, setActiveTab, joinedCommunities, setJoinedCommunities, update, triggerUpdate}}>
             {children}
         </UpdateContext.Provider>
     );
