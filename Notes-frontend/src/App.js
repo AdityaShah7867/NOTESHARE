@@ -32,6 +32,8 @@ import Loader from './components/Loader';
 import Ai from './pages/Ai';
 import YourNotes from './pages/YourNotes';
 import GrpChat from './pages/GrpChat';
+import GetBooks from './pages/GetBooks';
+import Chatbot from './components/AiBot/ChatBot';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -60,6 +62,7 @@ const App = () => {
       <Router>
         <ToastContainer />
 
+        <Chatbot/>
         <div >
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -80,6 +83,7 @@ const App = () => {
                 </>
               }
             >
+
               <Route path="/setting" element={<Setting />} />
               <Route path="/YourNotes" element={<YourNotes />} />
               <Route path="/notification" element={<Notification />} />
@@ -93,9 +97,8 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/Communities" element={<Communitychat />} />
               <Route path="/DateForm" element={<DateForm />} />
-              <Route path='/ai' element={<Ai />} />
               <Route path='/grp/:name/:admin/:id' element={<GrpChat />} />
-
+              <Route path='/books' element={<GetBooks />} />
 
 
             </Route>
