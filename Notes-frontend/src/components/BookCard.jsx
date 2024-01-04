@@ -64,11 +64,13 @@ const BookCard = ({ note, setreRender }) => {
           />
         </div> */}
             <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4 ">
-              <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="w-full h-full rounded-lg" />
+              <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="max-w-58 max-h-44 rounded-lg" />
+              {/* <img src="https://tms-outsource.com/blog/wp-content/uploads/2023/04/android-ide.jpg" alt="image" className="max-w-58 max-h-44 rounded-lg" /> */}
+
             </div>
           </center>
-          <hr />
-          <hr />
+          {/* <hr /> */}
+          {/* <hr /> */}
           <div className="flex gap-16 items-center mb-1 mt-4 ">
             <span className="datetime text-black">
               {new Date(note?.uploadedAt).toLocaleDateString()}

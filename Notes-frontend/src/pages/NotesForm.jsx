@@ -243,7 +243,7 @@ const NotesForm = () => {
                 type="submit"
                 className="w-full bg-blue-500 text-gray-100 p-4 rounded-full font-semibold focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
               >
-                {noteAddLoading ? "Loading..." : "Add Note"}
+                {noteAddLoading ? "Loading..." : "Submit Note"}
               </button>
             </div>
           </form>

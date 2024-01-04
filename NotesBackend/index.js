@@ -21,6 +21,8 @@ const { socketCtrl } = require("./controllers/socketCntrl");
 require('dotenv').config();
 const axios = require('axios');
 const cheerio = require('cheerio');
+const { client, checkConnection } = require('./redis-client')
+
 
 
 
@@ -38,6 +40,8 @@ let server = app.listen(port, () => {
     console.log(`Server started on ${port}`)
     console.log(`Mongo Connected MF!!!`)
 });
+
+checkConnection();
 
 
 const io = new Server(server, {
@@ -60,6 +64,8 @@ app.get('/', (req, res) => {
 app.get('/books', async (req, res) => {
     const url = 'https://pybitesbooks.com/users/bbelderbos';
 
+
+
     try {
         const response = await axios.get(url);
         const $ = cheerio.load(response.data);
@@ -70,7 +76,6 @@ app.get('/books', async (req, res) => {
         panes.each((index, pane) => {
             const readingDiv = $(pane);
             const books = readingDiv.find('a');
-            console.log('books', books[0])
 
             books.each((index, book) => {
                 const title = $(book).text().split('(')[0];
@@ -83,12 +88,58 @@ app.get('/books', async (req, res) => {
             });
         });
 
+        await client.set('books', JSON.stringify(booksList), 'EX', 60 * 60 * 24);
+
         res.status(200).json({ books: booksList });
     } catch (error) {
         console.error('Error fetching data:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+app.get('/scrape', async (req, res) => {
+    try {
+
+        const casheValue = await client.get('books')
+        if (casheValue) {
+            console.log('from cache')
+            return res.status(200).json({ data: JSON.parse(casheValue) });
+        }
+        let numberOfPages = 83;
+        let scrapedData = [];
+        for (let i = 0; i < numberOfPages; i++) {
+            const url = `https://www.freetechbooks.com/topics?page=${i}`;
+            const response = await axios.get(url);
+
+            if (response.status === 200) {
+                const $ = cheerio.load(response.data);
+
+                $('.col-xs-12').each((index, element) => {
+                    const book = {};
+
+                    const headingElement = $(element).find('.media-heading a');
+                    book.href = headingElement.attr('href');
+                    book.title = headingElement.text().trim();
+                    book.description = $(element).find('.media-body p').text().trim();
+                    book.imageSrc = $(element).find('img.media-object').attr('src');
+                    scrapedData.push(book);
+                });
+            } else {
+                console.error(`Failed to fetch the page ${url}. Status code: ${response.status}`);
+            }
+        }
+
+        await client.set('books', JSON.stringify(scrapedData), 'EX', 60 * 60 * 24);
+
+
+        res.status(200).json({ data: scrapedData, qty: scrapedData.length });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 
 app.use('/uploads', express.static('uploads'));

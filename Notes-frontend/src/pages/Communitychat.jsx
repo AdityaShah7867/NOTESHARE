@@ -90,7 +90,7 @@ const Communitychat = () => {
 
   return (
     <Alternates>
-      <div className="xl:mr-24 xl:m-0 m-5">
+      <div className="xl:mr-24 xl:m-0 m-5 min-h-screen">
         <Header />
         <Filter />
         <motion.div className="pb-12"
