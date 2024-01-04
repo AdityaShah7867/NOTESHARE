@@ -39,7 +39,7 @@ const GameHomePage = () => {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('https://w0.peakpx.com/wallpaper/132/903/HD-wallpaper-pixel-game-art-background-2d-pixel-art.jpg')" }}>
+        <div className="min-h-screen flex items-center justify-center bg-cover bg-center -mt-10" style={{ backgroundImage: "url('https://w0.peakpx.com/wallpaper/132/903/HD-wallpaper-pixel-game-art-background-2d-pixel-art.jpg')" }}>
             <div className="max-w-md w-full bg-white p-8 rounded-md shadow-md">
                 <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-6">Enter Details To Start</h2>
 
