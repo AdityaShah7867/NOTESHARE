@@ -78,7 +78,7 @@ const GrpChat = () => {
 
         {/* Chat messages */}
 
-        <div className='mb-16'>
+        <div className='mb-16 pb-16 lg:pb-0 lg:mb-0 overflow-scroll h-[500px] lg:h-[1000px] xl:h-[600px]'>
           {messages.map((msg, id) => (
             <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8  ">
 

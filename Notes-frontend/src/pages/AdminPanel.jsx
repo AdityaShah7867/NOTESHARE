@@ -77,7 +77,7 @@ const NotesTable = () => {
                               <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
                                 <img
                                   className="rounded-full"
-                                  src=""
+                                  src={note?.author?.profile}
                                   width={40}
                                   height={40}
                                   alt="Alex Shatov"

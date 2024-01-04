@@ -65,7 +65,7 @@ const Dashboard = () => {
     <div>
       {/* <DashLay> */}
       <Alternates >
-        <div className="m-10 lg:mr-10 lg:mt-10 lg:m-0">
+        <div className="m-10 lg:mr-10 lg:mt-10 lg:m-0 min-h-screen">
           <motion.div initial='hidden'
             whileInView={'show'}
             viewport={{ once: false, amount: 0.3 }}

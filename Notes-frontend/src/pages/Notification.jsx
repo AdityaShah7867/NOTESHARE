@@ -40,8 +40,8 @@ const Notification = () => {
 
   return (
     <Alternates>
-      <div className="mt-9  "></div>
-      <div className="flex flex-col md:flex-row">
+      <div className="mt-9 "></div>
+      <div className="flex flex-col md:flex-row min-h-screen">
 
 
 
