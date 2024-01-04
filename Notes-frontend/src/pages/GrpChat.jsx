@@ -77,7 +77,7 @@ const GrpChat = () => {
 
   return (
     <ChatLay>
-      <div className="min-h-screen bg-gray-100 flex flex-col  relative">
+      <div className="min-h-screen bg-gray-100 flex flex-col  ">
         {/* Header */}
         <div className="bg-white shadow">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -88,7 +88,7 @@ const GrpChat = () => {
 
         {/* Chat messages */}
 
-        <div className='mb-16 pb-16 lg:pb-0 lg:mb-0 overflow-scroll max-h-[80%]'>
+        <div className='mb-24  pb-28  lg:mb-0 overflow-scroll max-h-[80%]'>
           {
             messagesLoading ? (
               <MessagesLoader />
@@ -144,9 +144,8 @@ const GrpChat = () => {
 
         </div>
 
-        {/* Message input */}
-        <div className="bg-white shadow  absolute bottom-0 w-full mb-16 xl:mb-0">
-          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white shadow   bottom-0 w-full mb-16 xl:mb-0 fixed mt-2">
+          <div className="max-w-7xl  py-4 px-4 sm:px-6 lg:px-8">
             <form onSubmit={handleSubmit} className="flex space-x-3">
               <div className="flex-1">
                 <label htmlFor="message" className="sr-only">
@@ -165,8 +164,7 @@ const GrpChat = () => {
               <button
                 type="submit"
                 disabled={message.length === 0}
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
+                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Send
               </button>
             </form>
