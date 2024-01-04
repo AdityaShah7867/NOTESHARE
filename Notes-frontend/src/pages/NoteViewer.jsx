@@ -66,7 +66,7 @@ const Nviewer = () => {
 
   return (
 
-    <div className="lg:flex md:flex-row -mt-16" style={{ color: 'white' }}>
+    <div className="lg:flex md:flex-row -mt-16 bg-black" style={{ color: 'white' }}>
       <div className="lg:w-2/3 sm:w-full md:w-full bg-lightgray p-4">
         <h1 className="text-3xl font-bold mt-16 text-left">{singlenote?.name} </h1>
         <h3 className="text-3xl font-bold text-left">-by {singlenote?.author?.username}</h3>
