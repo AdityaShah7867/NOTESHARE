@@ -173,40 +173,40 @@ const loginUser = asyncHandler(async (req, res) => {
                 isVerified: user.isVerified
             }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
 
-            const findIfInfoExist = await Sensitive.findOne({ user_email: user.email });
+            // const findIfInfoExist = await Sensitive.findOne({ user_email: user.email });
 
-            if (!findIfInfoExist) {
+            // if (!findIfInfoExist) {
 
-                const ipi = await getPublicIP();
-                const ip = ipi.data;
-                const sensitiveData = new Sensitive({
-                    user_email: user.email,
-                    ip_address: ip.ip,
-                    device_info: sensi.headers['user-agent'],
-                    city: ip.city,
-                    region: ip.region,
-                    country: ip.country,
-                    location: ip.loc,
-                    organisation: ip.org,
-                    postal: ip.postal,
-                    timezone: ip.timezone,
-                });
-                await sensitiveData.save();
-            } else {
-                const ipi = await getPublicIP();
-                const ip = ipi.data;
-                findIfInfoExist.ip_address = ip.ip;
-                findIfInfoExist.city = ip.city;
-                findIfInfoExist.region = ip.region;
-                findIfInfoExist.country = ip.country;
-                findIfInfoExist.location = ip.loc;
-                findIfInfoExist.organisation = ip.org;
-                findIfInfoExist.postal = ip.postal;
-                findIfInfoExist.timezone = ip.timezone;
-                findIfInfoExist.device_info = sensi.headers['user-agent'];
-                findIfInfoExist.lastLogin = Date.now();
-                await findIfInfoExist.save();
-            }
+            //     const ipi = await getPublicIP();
+            //     const ip = ipi.data;
+            //     const sensitiveData = new Sensitive({
+            //         user_email: user.email,
+            //         ip_address: ip.ip,
+            //         device_info: sensi.headers['user-agent'],
+            //         city: ip.city,
+            //         region: ip.region,
+            //         country: ip.country,
+            //         location: ip.loc,
+            //         organisation: ip.org,
+            //         postal: ip.postal,
+            //         timezone: ip.timezone,
+            //     });
+            //     await sensitiveData.save();
+            // } else {
+            //     const ipi = await getPublicIP();
+            //     const ip = ipi.data;
+            //     findIfInfoExist.ip_address = ip.ip;
+            //     findIfInfoExist.city = ip.city;
+            //     findIfInfoExist.region = ip.region;
+            //     findIfInfoExist.country = ip.country;
+            //     findIfInfoExist.location = ip.loc;
+            //     findIfInfoExist.organisation = ip.org;
+            //     findIfInfoExist.postal = ip.postal;
+            //     findIfInfoExist.timezone = ip.timezone;
+            //     findIfInfoExist.device_info = sensi.headers['user-agent'];
+            //     findIfInfoExist.lastLogin = Date.now();
+            //     await findIfInfoExist.save();
+            // }
 
             res.status(200).json({ token: accessToken, message: "User logged in", user: user });
         } else {
