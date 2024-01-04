@@ -18,7 +18,7 @@ const GetBooks = () => {
 
   const fetchBooksByScarping = async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/scrape`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/scrape`);
 
       if (res.status === 200) {
         setBooksData(res.data.data);
