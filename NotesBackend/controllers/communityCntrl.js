@@ -4,7 +4,8 @@ const AWS = require('aws-sdk')
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
-
+const {User} = require('../models/userModel');
+const Message = require('../models/messagesModel');
 
 
 
@@ -26,15 +27,20 @@ const createCommunity = async (req, res) => {
         if (!name || !description) {
             return res.status(400).json({ error: "Please enter all the fields" });
         }
+        const user = await User.findById(req.user.id);
 
+        if(user.communities_created.length >= 78){
+            return res.status(400).json({error:"You can create atmost 3 communities"})
+        }
         
         const existing_community = await Community.findOne({ name });
 
-        let hashedPassword = password;  // Use let instead of const
+        let hashedPassword; 
+        if (password.length >=6 ) {
 
-        if (password) {
             const salt = await bcrypt.genSalt(10);
             hashedPassword = await bcrypt.hash(password, salt);
+
         }
 
         if (existing_community) {
@@ -45,10 +51,13 @@ const createCommunity = async (req, res) => {
             name,
             description,
             creator: req.user.id,
-            password: hashedPassword ? hashedPassword : null,
+            password: password.length  < 6 ? null : hashedPassword,
         });
         community.members.push(req.user.id);
         await community.save();
+
+        user.communities_created.push(community.id);
+        await user.save();
 
         if(req.file){
             const fileKey = `${uuidv4()}-${req.file.originalname}`;
@@ -109,8 +118,13 @@ const updateCommunity = async (req, res) => {
 const deleteCommunity = async (req, res) => {
     try {
         const { id } = req.params;
-        const community = await Community.findByIdAndDelete(id);
-        res.status(200).json({ community });
+        const community = await Community.findById(id);
+        const messages = await Message.deleteMany({ community: id });
+        const user = await User.findById(req.user.id);
+        user.communities_created.pull(id);
+        await user.save();
+        await Community.findByIdAndDelete(id);
+        res.status(200).json({ message: `You have successfully deleted ${community.name} community` });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -123,8 +137,12 @@ const joinCommunity = async (req, res) => {
         const { password } = req.body;
        
         const community = await Community.findById(id);
+
         if (!community) {
-            return res.status(400).json({ error: "No such community exists" });
+            return res.status(400).json({ message: "No such community exists" });
+        }
+        if (community.members.includes(req.user.id)) {
+            return res.status(400).json({ message: "You are already a member of this community" });
         }
         if(password){
             const isMatch = await bcrypt.compare(password, community.password);
@@ -134,6 +152,8 @@ const joinCommunity = async (req, res) => {
             community.members.push(req.user.id);
             await community.save();
             return res.status(200).json({ community,message: `You have successfully joined ${community.name} community` });
+        }else if(!password && community.password){
+            return res.status(400).json({ message: "Please enter the password" });
         }else{
             community.members.push(req.user.id);
             await community.save();
