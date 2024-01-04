@@ -144,7 +144,7 @@ export const userSlice = createSlice({
 
         builder.addCase(addSkills.fulfilled, (state, action) => {
             state.userDetailsLoading = false;
-            console.log(action.payload)
+
             state.skills = action.payload.skills;
         })
 

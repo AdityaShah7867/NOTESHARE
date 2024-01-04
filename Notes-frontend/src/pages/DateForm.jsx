@@ -20,7 +20,7 @@ const NotesForm = () => {
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    console.log(formdata)
+
 
     dispatch(createImpDate(formdata))
   }

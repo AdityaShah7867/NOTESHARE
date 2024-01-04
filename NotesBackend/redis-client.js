@@ -1,6 +1,6 @@
 // const { Redis } = require('ioredis')
 
-// const client = new Redis();
+const client = new Redis(process.env.REDIS_URL);
 
 // const checkConnection = () => {
 //     // client.on('connect', () => {

@@ -100,7 +100,6 @@ app.get('/books', async (req, res) => {
 
 app.get('/scrape', async (req, res) => {
     try {
-
         const casheValue = await client.get('books')
         if (casheValue) {
             console.log('from cache')

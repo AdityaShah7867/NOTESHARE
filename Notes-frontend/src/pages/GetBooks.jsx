@@ -11,21 +11,20 @@ const GetBooks = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [booksData, setBooksData] = useState([])
 
-  const filteredBooks = booksData.filter(book =>
+  const filteredBooks = booksData?.filter(book =>
     book?.title?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
     book?.author?.toLowerCase().includes(searchQuery?.toLowerCase())
   );
 
   const fetchBooksByScarping = async () => {
     try {
-      const res = await axios.get(`${host}/books`);
+      const res = await axios.get(`http://localhost:4000/scrape`);
 
       if (res.status === 200) {
-        setBooksData(res.data.books);
+        setBooksData(res.data.data);
       }
 
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -49,18 +48,18 @@ const GetBooks = () => {
       </center>
 
       <div className="grid grid-cols-1 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {filteredBooks.map((book) => (
+        {filteredBooks?.map((book) => (
           <div key={book.id} className="border p-4 rounded-md shadow-md" onClick={() => {
-            window.open(book.bookhref, "_blank");
+            window.open(book.href, "_blank");
           }}>
             <img
-              src={book.imgSrc}
+              src={book.imageSrc}
               alt={book.title}
-              loading="lazy" // Add lazy loading attribute
+              loading="lazy"
               className="w-full max-w-54 max-h-80 object-cover mb-2 rounded-md"
             />
-            <h3 className="text-lg font-semibold mb-1">{book.title}</h3>
-            <p className="text-gray-600">{book.author}</p>
+            <h3 className="text-xs font-semibold mb-1">{book.title}</h3>
+            <p className="text-gray-600 text-xs">{book.description}</p>
           </div>
         ))}
       </div>

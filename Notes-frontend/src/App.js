@@ -39,6 +39,7 @@ const App = () => {
   const dispatch = useDispatch();
   const userLoggedIn = useSelector((state) => state?.user?.isAuthenticated)
   const initialLoading = useSelector((state) => state?.user?.initialCallLoading)
+  const user = useSelector((state) => state.user.user)
   useEffect(() => {
     dispatch(getLogedinUser())
   }, [dispatch])
@@ -61,8 +62,11 @@ const App = () => {
 
       <Router>
         <ToastContainer />
+        {
+          user ?
+            <Chatbot /> : null
+        }
 
-        <Chatbot/>
         <div >
           <Routes>
             <Route path="/" element={<Landing />} />

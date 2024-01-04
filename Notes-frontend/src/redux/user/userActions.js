@@ -23,7 +23,7 @@ export const removeSkills = createAsyncThunk(
             }
             )
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data;
             }
@@ -54,7 +54,7 @@ export const getUserSkills = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -81,7 +81,7 @@ export const addSkills = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data;
             }
@@ -111,7 +111,7 @@ export const getUserInfo = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -135,7 +135,7 @@ export const getUserProfile = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -155,7 +155,7 @@ export const getUsersLeaderBoard = createAsyncThunk(
             const response = await axios.get(`${host}/api/v1/users/getUsersLeaderBoard`)
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -186,7 +186,7 @@ export const getUsersLeaderBoard = createAsyncThunk(
 //             })
 
 //             if (response.status === 200) {
-//                 console.log(response.data);
+//               
 //                 toast.success('Profile Updated Successfully');
 //                 return response.data;
 
@@ -230,7 +230,7 @@ export const editProfile = createAsyncThunk(
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);
+
                 toast.success('Profile Updated Successfully');
                 return data;
             } else {
@@ -257,7 +257,7 @@ export const seachUser = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -281,7 +281,7 @@ export const lottery = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data;
             }
