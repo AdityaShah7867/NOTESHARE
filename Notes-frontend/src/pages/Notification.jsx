@@ -48,7 +48,7 @@ const Notification = () => {
         <motion.div className="flex flex-col-reverse mt-9 justify-end"
           initial='hidden'
           whileInView={'show'}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           variants={fadeIn('right', 0.3)}>
           {impDates?.length === 0 && <h1 className="text-2xl mt-3 text-red-500">No Important Dates Found</h1>}
 
@@ -64,7 +64,7 @@ const Notification = () => {
         <motion.div className="xl:w-2/4 border-2 mx-auto mt-9"
           initial='hidden'
           whileInView={'show'}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           variants={fadeIn('left', 0.3)}>
           <div className="container border-2 bg-white rounded-xl overflow-hidden shadow-lg mx-auto p-4 text-center">
             <h1 className="text-3xl font-bold mb-4">My To-Do List</h1>

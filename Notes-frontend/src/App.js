@@ -34,12 +34,32 @@ import YourNotes from './pages/YourNotes';
 import GrpChat from './pages/GrpChat';
 import GetBooks from './pages/GetBooks';
 import Chatbot from './components/AiBot/ChatBot';
+import GameHomePage from './pages/GameHomePage';
+import GamePage from './pages/GamePage';
+import GameList from './pages/GameList';
+
+
 
 const App = () => {
   const dispatch = useDispatch();
   const userLoggedIn = useSelector((state) => state?.user?.isAuthenticated)
   const initialLoading = useSelector((state) => state?.user?.initialCallLoading)
   const user = useSelector((state) => state.user.user)
+  let currentUrl = ''
+
+  useEffect(() => {
+
+    currentUrl = window.location.href;
+
+    if (currentUrl.toLocaleLowerCase().includes('/room')) {
+      console.log('room')
+    }
+    console.log('Current URL:', currentUrl);
+  }, [window.location]);
+
+
+
+
   useEffect(() => {
     dispatch(getLogedinUser())
   }, [dispatch])
@@ -57,15 +77,18 @@ const App = () => {
   }
 
 
+
+
+
   return (
     <>
 
       <Router>
         <ToastContainer />
-        {
+        {/* {
           user ?
             <Chatbot /> : null
-        }
+        } */}
 
         <div >
           <Routes>
@@ -103,9 +126,13 @@ const App = () => {
               <Route path="/DateForm" element={<DateForm />} />
               <Route path='/grp/:name/:admin/:id' element={<GrpChat />} />
               <Route path='/books' element={<GetBooks />} />
+              <Route path='/gameslist' element={<GameList />} />
+
 
 
             </Route>
+
+
 
             <Route
               path="/"
@@ -122,6 +149,9 @@ const App = () => {
               }
             >
               <Route path="/nviewer/:noteId" element={<Nviewer />} />
+
+              <Route path='/game' element={<GameHomePage />} />
+              <Route path="/room/:username/:roomCode" element={<GamePage />} />
             </Route>
 
 
