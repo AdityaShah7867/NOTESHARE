@@ -12,8 +12,4 @@ async function hasFn() {
     return await bcrypt.hash(pwd, 10);
 }
 
-hasFn().then((res) => {
-    console.log(res);
-}).catch((err) => {
-    console.log(err);
-})
+

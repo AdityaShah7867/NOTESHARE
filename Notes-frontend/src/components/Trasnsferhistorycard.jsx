@@ -24,7 +24,6 @@ const Trasnsferhistorycard = () => {
                 setHistory(response.data.transferCoinsHistory)
             }
         } catch (error) {
-            console.log(error)
         }
     }
 
