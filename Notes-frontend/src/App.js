@@ -34,6 +34,7 @@ import YourNotes from './pages/YourNotes';
 import GrpChat from './pages/GrpChat';
 import GetBooks from './pages/GetBooks';
 import Chatbot from './components/AiBot/ChatBot';
+import GameList from './pages/GameList';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -103,6 +104,7 @@ const App = () => {
               <Route path="/DateForm" element={<DateForm />} />
               <Route path='/grp/:name/:admin/:id' element={<GrpChat />} />
               <Route path='/books' element={<GetBooks />} />
+              <Route path='/gameslist' element={<GameList />} />
 
 
             </Route>
