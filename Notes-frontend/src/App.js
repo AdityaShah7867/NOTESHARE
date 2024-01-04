@@ -85,10 +85,10 @@ const App = () => {
 
       <Router>
         <ToastContainer />
-        {/* {
+        {
           user ?
             <Chatbot /> : null
-        } */}
+        }
 
         <div >
           <Routes>

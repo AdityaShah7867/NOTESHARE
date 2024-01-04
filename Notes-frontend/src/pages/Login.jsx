@@ -20,6 +20,14 @@ const Login = () => {
   const navigate = useNavigate();
 
 
+  const user = useSelector((state) => state?.user?.user)
+
+  useEffect(() => {
+    if (user) {
+      navigate('/home')
+    }
+  }, [user])
+
   const handleViewPassword = () => {
     setseepassword(!seepassword);
     if (seepassword) {
