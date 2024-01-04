@@ -50,7 +50,7 @@ export const getAllCommunities = async () => {
             return response.data.communities;
         } else {
             toast.error(response.data.message);
-            return response.data.message;
+            return {status: 400, data: null, message: response.data.message};
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
@@ -72,7 +72,7 @@ export const getYourCommunities = async () => {
             return response.data.communities;
         } else {
             toast.error(response.data.message);
-            return response.data.message;
+            return {status: 400, data: null, message: response.data.message};
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
@@ -121,7 +121,7 @@ export const leaveCommunity = async (id) => {
             return {message: response.data.message, status: 200};
         } else {
             toast.error(response.data.message);
-            return response.data.message;
+            return {message: response.data.message, status: 400};
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
@@ -143,7 +143,7 @@ export const fetchCommMessages = async (id) => {
             return {messages: response.data.messages, status: 200};
         } else {
             toast.error("Error in fetching messages");
-            return response.data.message;
+            return {messages: null, status: 400};
         }
     } catch (error) {
        return error.response?.data?.message;
@@ -171,7 +171,7 @@ export const sendMessage = async (content, community) => {
             return {status:200, data: response.data.message_, message: response.data.message};
         } else {
             toast.error(response.data.message);
-            return response.data.message;
+            return {status:400, data: null, message: response.data.message};
         }
     } catch (error) {
         toast.error(error.response?.data?.message);

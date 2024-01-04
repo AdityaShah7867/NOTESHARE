@@ -87,14 +87,15 @@ const GrpChat = () => {
 
   return (
     <ChatLay>
-      <div className="min-h-screen bg-gray-100 flex flex-col  ">
+      <div className="min-h-screen bg-gray-100 flex flex-col border-2 m-5">
         {/* Header */}
         <div className="bg-white shadow">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold leading-tight text-gray-900">{name}</h1>
             <p className="mt-1 text-lg text-gray-600">Created by: {admin}</p>
+
           </div>
-          <div className="absolute top-3 right-2">
+          <div className="absolute top-8 right-10">
             <button
               onClick={openSettingmodal}
             >
@@ -103,15 +104,66 @@ const GrpChat = () => {
           </div>
           {SettingmodalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg flex gap-2">
-                <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1'>
-                  <i class="bi bi-sticky mr-1"></i>
-                  Save</button>
-                <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1'>
-                  <i class="bi bi-x-lg mr-1"></i>
-                  Close</button>
-                <button onClick={closeSettingmodal} className='border bg-red-500 border-black rounded-lg p-1'>
-                  <i class="bi bi-trash mr-1"></i>Delete</button>
+              <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col gap-2">
+                <p className='text-center font-bold text-xl'>Community Settings</p>
+                <div>
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Name
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="password"
+                        id="name"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
+                        placeholder="Community Name"
+                      />
+                    </div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Password
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
+                        placeholder="Community Password"
+                      />
+                    </div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Bio
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="bio"
+                        id="name"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
+                        placeholder="Community Password"
+                      />
+                    </div>
+                    <div className='mt-1 mb-3'>
+                      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Group Icon</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                      // onChange={handlePictureChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className='flex gap-3'>
+                  <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1 font-semibold'>
+                    <i class="bi bi-sticky mr-1"></i>
+                    Save</button>
+                  <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1 font-semibold'>
+                    <i class="bi bi-x-lg mr-1"></i>
+                    Close</button>
+                  <button onClick={closeSettingmodal} className='border bg-red-500 border-black rounded-lg p-1 font-semibold'>
+                    <i class="bi bi-trash mr-1"></i>Delete community</button>
+                </div>
               </div>
             </div>
           )}
