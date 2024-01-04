@@ -76,11 +76,7 @@ const Communitychat = () => {
       return;
     }
 
-    if(comData.password.length < 6){
-      toast.warning("Password should be atleast 6 characters");
-      return;
-    }
-
+   
     const res = await createCommunity(comData.name, comData.description, comData.password, comData.image);
     if (res.status === 200) {
       setIspassVisible(false)

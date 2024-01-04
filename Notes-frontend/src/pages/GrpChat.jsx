@@ -11,8 +11,11 @@ import MessagesLoader from '../components/MessagesLoader';
 
 const GrpChat = () => {
   const [messages, setMessages] = useState([]);
-  const { name, admin, id } = useParams();
+ 
   const { socket, cuurentCommunity } = useUpdate();
+  const id = cuurentCommunity?._id;
+  const name = cuurentCommunity?.name;
+  const admin = cuurentCommunity?.creator?.username;
   const user = useSelector((state) => state?.user?.user);
   const [message, setMessage] = useState('');
   const [messagesLoading, setMessagesLoading] = useState(false);
