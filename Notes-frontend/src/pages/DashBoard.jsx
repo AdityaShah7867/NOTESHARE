@@ -68,7 +68,7 @@ const Dashboard = () => {
         <div className="m-10 lg:mr-10 lg:mt-10 lg:m-0 min-h-screen">
           <motion.div initial='hidden'
             whileInView={'show'}
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={fadeIn('down', 0.3)}>
             {/* send coins , Bookmarked , your notes */}
 
@@ -157,7 +157,7 @@ const Dashboard = () => {
               <motion.div className="flex flex-col justify-center  "
                 initial='hidden'
                 whileInView={'show'}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 variants={fadeIn('up', 0.3)}>
                 {/* Table */}
                 <div className="w-full rounded-lg mx-auto bg-slate-100 shadow-lg border border-gray-200">

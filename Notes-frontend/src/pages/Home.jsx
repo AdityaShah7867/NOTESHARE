@@ -59,7 +59,7 @@ const Home = () => {
           <motion.div className='flex flex-wrap justify-center'
             initial='hidden'
             whileInView={'show'}
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={fadeIn('up', 0.3)}>
             {
               filteredNotes?.length === 0 ? <h1 className='text-black text-2xl'>No Notes To Display</h1> : (
