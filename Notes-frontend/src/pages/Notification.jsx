@@ -81,6 +81,7 @@ const Notification = () => {
                   className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
                   type="submit"
                 >
+                  <i class="bi bi-calendar-plus mr-1"></i>
                   Add
                 </button>
               </div>
@@ -116,6 +117,7 @@ const Notification = () => {
                         await dispatch(getTodosByUserId());
                       }}
                     >
+                      <i class="bi bi-trash mr-1"></i>
                       Delete
                     </button>
                   </div>
