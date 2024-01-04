@@ -31,7 +31,7 @@ const GetBooks = () => {
 
 
   useEffect(() => {
-    fetchBooksByScarping();
+    // fetchBooksByScarping();
   }, [])
 
   return (

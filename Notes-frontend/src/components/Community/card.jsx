@@ -34,12 +34,10 @@ const Card = ({ comm, ind, hello }) => {
   }
 
   const handleSubmit = async (id) => {
-    const res = await joinCommunity(id)
+    const res = await joinCommunity(id,password)
     if (res.status === 200) {
       toast.success(res.message)
       triggerUpdate()
-    } else {
-      toast.warning('Something went wrong')
     }
   }
   const handleLeave = async (id) => {
@@ -60,7 +58,7 @@ const Card = ({ comm, ind, hello }) => {
         <div className="flex justify-between items-center bg-white shadow-md rounded-xl p-2 ">
           <div className="flex flex-col lg:flex-row gap-4 items-left w-full lg:w-fit">
             <img
-              src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+              src={comm?.image ? comm.image : "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"}
               alt="community"
               className="xl:flex-1/3 flex-1 max-h-36 rounded-2xl "
             />
@@ -84,17 +82,20 @@ const Card = ({ comm, ind, hello }) => {
                     <i class="bi bi-broadcast-pin mr-1"></i>
                     Chat </button>
                 </>)
-                  : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={openjoinmodal}>
-                    <i class="bi bi-lock mr-1"></i>
-                    <i class="bi bi-unlock mr-1"></i>
+                  : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
+                  onClick={openjoinmodal}
+                    >
+                    {comm?.password  ?( <><i class="bi bi-lock mr-1 "></i> Join</> ): ( <><i class="bi bi-unlock mr-1"></i>Join</> ) }
+                   
 
-                    Join </button>}
+                    </button>}
 
                 {joinmodalOpen && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
                     <div className="bg-white p-6 rounded-lg shadow-lg flex-row gap-2">
-                      <div className='mb-4 w-[250px] xl:w-[400px]'>
+                      {comm?.password ? (<>
+                        <div className='mb-4 w-[250px] xl:w-[400px]'>
                         <label
                           htmlFor="floating_text"
                           className="block text-gray-700 dark:text-gray-700 transform duration-300 font-bold text-xl"
@@ -111,6 +112,7 @@ const Card = ({ comm, ind, hello }) => {
                           onChange={handleInputChange}
                         />
                       </div>
+                      </>):(<><h3 className='my-4 text-xl'>Are you sure you want to join {comm.name}?</h3></>)}
                       <div className='flex gap-3'>
                         <button onClick={() => handleSubmit(comm._id)} className='border border-black rounded-lg bg-green-500 hover:bg-blue- ml-2 hover:bg-green-400 text-white font-bold py-2 px-4'>
                           <i class="bi bi-box-arrow-in-right mr-1"></i>

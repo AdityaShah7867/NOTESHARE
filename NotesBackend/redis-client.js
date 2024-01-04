@@ -1,18 +1,19 @@
-const { Redis } = require('ioredis')
+// const { Redis } = require('ioredis')
 
-const client = new Redis();
+// const client = new Redis();
 
-const checkConnection = () => {
-    client.on('connect', () => {
-        console.log('Redis client connected');
-    });
+// const checkConnection = () => {
+//     // client.on('connect', () => {
+//     //     console.log('Redis client connected');
+//     // });
 
-    client.on('error', (err) => {
-        console.log(`Something went wrong ${err}`);
-    });
-}
+//     // client.on('error', (err) => {
+//     //     console.log(`Something went wrong ${err}`);
+//     // });
+//     console.log('Redis client is commented out');
+// }
 
-module.exports = {
-    client,
-    checkConnection
-}
+// module.exports = {
+//     client,
+//     checkConnection
+// }

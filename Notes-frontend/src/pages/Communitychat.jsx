@@ -32,6 +32,7 @@ const Communitychat = () => {
     name: "",
     description: "",
     password: "",
+    image: null,
   });
 
   const handleInputChange = (e) => {
@@ -39,13 +40,7 @@ const Communitychat = () => {
     setCreateCommunityData({ ...comData, [name]: value });
   };
 
-  // const handleIconChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setFormData({
-  //     ...formData,
-  //     groupIcon: file,
-  //   });
-  // };
+  
 
   useEffect(() => {
     setLoading(true);
@@ -76,7 +71,7 @@ const Communitychat = () => {
       return;
     }
 
-    const res = await createCommunity(comData.name, comData.description);
+    const res = await createCommunity(comData.name, comData.description, comData.password, comData.image);
     if (res.status === 200) {
     setIspassVisible(false)
       toast.success(res.message);
@@ -86,7 +81,10 @@ const Communitychat = () => {
       toast.warning("Something went wrong");
     }
   };
-
+  const handlePictureChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setCreateCommunityData({ ...comData, image: selectedFile });
+  };
   const openForm = () => {
     setIsFormVisible(true);
   };
@@ -207,7 +205,7 @@ const Communitychat = () => {
                   <input
                     type="file"
                     accept="image/*"
-                  // onChange={handleIconChange}
+                    onChange={handlePictureChange}
                   />
                 </div>
                 <div className="mb-4 flex items-center">
