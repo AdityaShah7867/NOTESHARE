@@ -43,12 +43,10 @@ const Profile = () => {
                     `https://api.github.com/users/${githubUsername}/repos?sort=created&direction=desc`
                 )
                 const data = await response.json()
-                const firstThreeRepos = data.slice(0, 5);
+                const firstThreeRepos = data.slice(0, 10);
                 setRepositories(firstThreeRepos);
                 setLoading(false);
             } catch (error) {
-
-
             }
         } else {
             setRepositories(null)

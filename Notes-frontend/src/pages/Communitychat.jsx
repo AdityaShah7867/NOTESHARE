@@ -94,10 +94,10 @@ const Communitychat = () => {
         <Header />
         <Filter />
         <motion.div className="pb-12"
-        initial='hidden'
-        whileInView={'show'}
-        viewport={{ once: false, amount: 0.3 }}
-        variants={fadeIn('up', 0.3)}>
+          initial='hidden'
+          whileInView={'show'}
+          viewport={{ once: false, amount: 0.3 }}
+          variants={fadeIn('up', 0.3)}>
           {loading ? (
             <h1 className="text-3xl text-bold" >Loading...</h1>
           ) : allCommunities?.length !== 0 && activeTab == "ALLGROUPS" ? (
