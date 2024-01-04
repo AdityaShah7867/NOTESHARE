@@ -23,6 +23,17 @@ const communitySchema = new mongoose.Schema({
     latestMessage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
+    },
+
+    password: {
+        type: String,
+        required: false,
+        default: null
+    },
+
+    image: {
+        type: String,
+        default: null
     }
 
 

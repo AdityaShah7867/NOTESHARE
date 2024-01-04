@@ -15,10 +15,10 @@ export const likeUnlikeNote = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.log('error');
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {

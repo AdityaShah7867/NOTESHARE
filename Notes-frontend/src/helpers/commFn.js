@@ -3,33 +3,38 @@ import { toast } from 'react-toastify';
 const host = process.env.REACT_APP_API_HOST;
 const token = localStorage.getItem('authtoken');
 
-export const createCommunity = async (name, description) => {
+export const createCommunity = async (name, description, password, image) => {
     try {
-        const response = await axios.post(
-            `${host}/api/v1/community/create`,
-            {
-                name,
-                description
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+        let pass = password ? password : null;
+        let img = image ? image : null;
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('password', pass);
+        formData.append('image', img);
 
-                },
-            }
-        );
+        const response = await fetch(`${host}/api/v1/community/create`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData, // Use FormData directly as the body
+        });
+
+        const data = await response.json();
+
         if (response.status === 200) {
-           
-            return {status:200, data: response.data.community, message: response.data.message};
+            return { status: 200, data: data.community, message: data.message };
         } else {
-            toast.error(response.data.message);
-            return response.data.message;
+            toast.error(data.message);
+            return { status: 400, data: null, message: data.message };
         }
     } catch (error) {
-        toast.error(error.response?.data?.message);
-        return error.response?.data?.message;
+        toast.error(error?.data?.message);
+        return error?.data?.message;
     }
-}
+};
+
 
 export const getAllCommunities = async () => {
     try {
@@ -75,11 +80,14 @@ export const getYourCommunities = async () => {
     }
 }
 
-export const joinCommunity = async (id) => {
+export const joinCommunity = async (id,password) => {
     try {
+        let pass = password?password:null;
         const response = await axios.put(
             `${host}/api/v1/community/join-community/${id}`,
-            {},
+            {
+                password: pass
+            },
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -90,7 +98,7 @@ export const joinCommunity = async (id) => {
             return {message: response.data.message, status: 200};
         } else {
             toast.error(response.data.message);
-            return response.data.message;
+            return {message: response.data.message, status: 400};
         }
     } catch (error) {
         toast.error(error.response?.data?.message);

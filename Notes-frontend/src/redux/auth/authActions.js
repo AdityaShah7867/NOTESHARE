@@ -15,10 +15,10 @@ export const initialCall = createAsyncThunk(
                 `${host}/api/v1/users/initialCall`,
             );
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data.user;
             } else {
-                console.log('error');
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }
@@ -44,11 +44,11 @@ export const register = createAsyncThunk(
                 }
             );
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data.user;
             } else {
-                console.log('error');
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }
@@ -71,14 +71,14 @@ export const login = createAsyncThunk(
                 }
             );
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 localStorage.setItem('authtoken', response.data.token);
                 return response.data.user;
 
             } else {
-                console.log('error');
-                console.log(response)
+
+
                 toast.error(response.message);
                 return rejectWithValue(response.data.message);
             }
@@ -101,11 +101,11 @@ export const sendResetPasswordEmail = createAsyncThunk(
                 }
             );
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response;
             } else {
-                console.log('error');
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }
@@ -129,11 +129,11 @@ export const resetPassword = createAsyncThunk(
                 }
             );
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response;
             } else {
-                console.log('error');
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }
@@ -161,12 +161,12 @@ export const getLogedinUser = createAsyncThunk(
             if (response.status === 200) {
                 return response.data.user;
             } else {
-                console.log('error');
+
 
                 return rejectWithValue(response.data.message)
             }
         } catch (error) {
-            console.log(error);
+
             toast.error(error.response?.data?.message);
             return rejectWithValue(error.response?.data?.message);
 

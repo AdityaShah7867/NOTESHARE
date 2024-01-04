@@ -25,7 +25,6 @@ const GetBooks = () => {
       }
 
     } catch (error) {
-      console.log(error);
     }
   }
 

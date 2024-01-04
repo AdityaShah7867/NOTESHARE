@@ -18,7 +18,7 @@ export const createTodo = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -46,7 +46,7 @@ export const getTodos = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -73,7 +73,7 @@ export const getTodosByUserId = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             }
             else {
@@ -98,7 +98,7 @@ export const updateTodo = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message)
                 return response.data;
 
@@ -126,7 +126,7 @@ export const deleteTodo = createAsyncThunk(
             })
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message)
                 return response.data;
             }

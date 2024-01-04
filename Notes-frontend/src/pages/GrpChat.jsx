@@ -5,6 +5,9 @@ import { fetchCommMessages, sendMessage } from '../helpers/commFn';
 import { useSelector } from 'react-redux';
 import { useUpdate } from '../context/communityCntxt';
 import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
+import GroupDiscussionLayout from '../components/Layout/Nviewer';
+import MessagesLoader from '../components/MessagesLoader';
 
 const GrpChat = () => {
   const [messages, setMessages] = useState([]);
@@ -12,11 +15,14 @@ const GrpChat = () => {
   const { triggerUpdate, update, socket } = useUpdate();
   const user = useSelector((state) => state?.user?.user);
   const [message, setMessage] = useState('');
+  const [messagesLoading, setMessagesLoading] = useState(false);
   useEffect(() => {
     const fetchMessages = async () => {
+      setMessagesLoading(true);
       const res = await fetchCommMessages(id);
       if (res.status === 200) {
         setMessages(res.messages);
+        setMessagesLoading(false);
       }
     }
     fetchMessages();
@@ -65,70 +71,164 @@ const GrpChat = () => {
       socket.off();
     }
   }, [socket]);
+
+  const [SettingmodalOpen, setSettingmodalOpen] = useState(false);
+
+  const openSettingmodal = () => {
+    setSettingmodalOpen(true);
+  }
+
+  const closeSettingmodal = () => {
+    setSettingmodalOpen(false);
+  }
+
+
+
+
   return (
     <ChatLay>
-      <div className="min-h-screen bg-gray-100 flex flex-col  relative">
+      <div className="min-h-screen bg-gray-100 flex flex-col border-2 m-5">
         {/* Header */}
         <div className="bg-white shadow">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold leading-tight text-gray-900">{name}</h1>
             <p className="mt-1 text-lg text-gray-600">Created by: {admin}</p>
+
           </div>
+          <div className="absolute top-8 right-10">
+            <button
+              onClick={openSettingmodal}
+            >
+              <p className="text-xl hover:text-black text-gray-500"><i className="fa-solid fa-gear"></i></p>
+            </button>
+          </div>
+          {SettingmodalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col gap-2">
+                <p className='text-center font-bold text-xl'>Community Settings</p>
+                <div>
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Name
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="password"
+                        id="name"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
+                        placeholder="Community Name"
+                      />
+                    </div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Password
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
+                        placeholder="Community Password"
+                      />
+                    </div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Bio
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="bio"
+                        id="name"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
+                        placeholder="Community Password"
+                      />
+                    </div>
+                    <div className='mt-1 mb-3'>
+                      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Group Icon</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                      // onChange={handlePictureChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className='flex gap-3'>
+                  <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1 font-semibold'>
+                    <i class="bi bi-sticky mr-1"></i>
+                    Save</button>
+                  <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1 font-semibold'>
+                    <i class="bi bi-x-lg mr-1"></i>
+                    Close</button>
+                  <button onClick={closeSettingmodal} className='border bg-red-500 border-black rounded-lg p-1 font-semibold'>
+                    <i class="bi bi-trash mr-1"></i>Delete community</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Chat messages */}
 
-        <div className='mb-16 pb-16 lg:pb-0 lg:mb-0 overflow-scroll h-[500px] lg:h-[1000px] xl:h-[600px]'>
-          {messages.map((msg, id) => (
-            <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8  ">
-              {msg.sender._id === user._id ? (
-                <>
-                  <div className="flex flex-col space-y-2">
-                    <div div className="flex items-end justify-end" >
-                      <div className="mr-4">
-                        <div className="bg-indigo-600 rounded-lg px-4 py-2 shadow text-white">
-                          <p className="text-lg">{msg.content}</p>
+        <div className='mb-24  pb-28  lg:mb-0 overflow-scroll max-h-[80%]'>
+          {
+            messagesLoading ? (
+              <MessagesLoader />
+            ) : <div>
+              {messages.map((msg, id) => (
+                <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8  ">
+                  {msg.sender._id === user._id ? (
+                    <>
+                      <div className="flex flex-col space-y-2">
+                        <div div className="flex items-end justify-end" >
+                          <div className="mr-4">
+                            <div className="bg-indigo-600 rounded-lg px-4 py-2 shadow text-white">
+                              <p className="text-lg">{msg.content}</p>
+                            </div>
+                          </div>
+                          <div className="flex-shrink-0">
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={msg.sender.profile}
+                              alt="User avatar"
+                            />
+                          </div>
                         </div>
                       </div>
-                      <div className="flex-shrink-0">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src={msg.sender.profile}
-                          alt="User avatar"
-                        />
+                    </>
+                  ) : (<>
+                    <div className="flex flex-col space-y-2  ">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0">
+                          <img
+                            className="h-10 w-10 rounded-full"
+                            src={msg.sender.profile}
+                            alt="User avatar"
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <div className="bg-white rounded-lg px-4 py-2 shadow">
+                            <p className="text-sm text-gray-500">{msg.sender.username}</p>
+                            <p className="text-lg">{msg.content}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </>
-              ) : (<>
-                <div className="flex flex-col space-y-2  ">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={msg.sender.profile}
-                        alt="User avatar"
-                      />
-                    </div>
-                    <div className="ml-4">
-                      <div className="bg-white rounded-lg px-4 py-2 shadow">
-                        <p className="text-sm text-gray-500">{msg.sender.username}</p>
-                        <p className="text-lg">{msg.content}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-              </>)}
+                  </>)}
 
-            </div >
+                </div >
 
-          ))}
+              ))}
+            </div>
+          }
+
+
         </div>
 
-        {/* Message input */}
-        <div className="bg-white shadow  absolute bottom-0 w-full ">
-          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white shadow   bottom-0 w-full mb-16 xl:mb-0 fixed mt-2">
+          <div className="max-w-7xl  py-4 px-4 sm:px-6 lg:px-8">
             <form onSubmit={handleSubmit} className="flex space-x-3">
               <div className="flex-1">
                 <label htmlFor="message" className="sr-only">
@@ -147,8 +247,7 @@ const GrpChat = () => {
               <button
                 type="submit"
                 disabled={message.length === 0}
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
+                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Send
               </button>
             </form>

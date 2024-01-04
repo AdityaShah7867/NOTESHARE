@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 
 const Communitychat = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isPassVisible, setIspassVisible] = useState(false);
   const { activeTab, setActiveTab } = useUpdate();
   const [searchText, setSearchText] = useState("");
   const {
@@ -30,12 +31,16 @@ const Communitychat = () => {
   const [comData, setCreateCommunityData] = useState({
     name: "",
     description: "",
+    password: "",
+    image: null,
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCreateCommunityData({ ...comData, [name]: value });
   };
+
+  
 
   useEffect(() => {
     setLoading(true);
@@ -66,8 +71,9 @@ const Communitychat = () => {
       return;
     }
 
-    const res = await createCommunity(comData.name, comData.description);
+    const res = await createCommunity(comData.name, comData.description, comData.password, comData.image);
     if (res.status === 200) {
+    setIspassVisible(false)
       toast.success(res.message);
       triggerUpdate();
       closeForm();
@@ -75,16 +81,21 @@ const Communitychat = () => {
       toast.warning("Something went wrong");
     }
   };
-
+  const handlePictureChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setCreateCommunityData({ ...comData, image: selectedFile });
+  };
   const openForm = () => {
     setIsFormVisible(true);
   };
 
   const closeForm = () => {
+    setIspassVisible(false)
     setIsFormVisible(false);
   };
 
   const handleCancel = () => {
+    setIspassVisible(false)
     closeForm();
   };
 
@@ -94,10 +105,10 @@ const Communitychat = () => {
         <Header />
         <Filter />
         <motion.div className="pb-12"
-        initial='hidden'
-        whileInView={'show'}
-        viewport={{ once: false, amount: 0.3 }}
-        variants={fadeIn('up', 0.3)}>
+          initial='hidden'
+          whileInView={'show'}
+          viewport={{ once: false, amount: 0.3 }}
+          variants={fadeIn('up', 0.3)}>
           {loading ? (
             <h1 className="text-3xl text-bold" >Loading...</h1>
           ) : allCommunities?.length !== 0 && activeTab == "ALLGROUPS" ? (
@@ -151,13 +162,13 @@ const Communitychat = () => {
         {isFormVisible && (
           <div className="fixed inset-0 flex items-center justify-center w-full bg-black bg-opacity-50 z-50">
             <div className="mx-auto p-4 bg-white shadow-md rounded-md w-4/5">
-              <h2 className="text-lg font-semibold mb-4">Create Community</h2>
+              <h2 className="text-xl font-bold mb-4 text-center">Create Community</h2>
 
               <form onSubmit={handleSubmit}>
-                <div className="mb-6">
+                <div className="mb-4">
                   <label
                     htmlFor="GrpName"
-                    className="block text-sm text-gray-500 dark:text-gray-400 transform -translate-y-3 duration-300"
+                    className="block text-sm text-gray-700 dark:text-gray-700 transform -translate-y-3 duration-300"
                   >
                     GROUP NAME
                   </label>
@@ -171,10 +182,10 @@ const Communitychat = () => {
                     required
                   />
                 </div>
-                <div className="mb-6">
+                <div className="mb-4">
                   <label
                     htmlFor="floating_text"
-                    className="block text-sm text-gray-500 dark:text-gray-400 transform -translate-y-3 duration-300"
+                    className="block text-sm text-gray-700 dark:text-gray-700 transform -translate-y-3 duration-300"
                   >
                     BIO
                   </label>
@@ -188,13 +199,67 @@ const Communitychat = () => {
                     onChange={handleInputChange}
                   />
                 </div>
+                <div className="mb-2">
+
+                  <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Group Icon</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePictureChange}
+                  />
+                </div>
+                <div className="mb-4 flex items-center">
+                  <div>
+                    <label class="relative inline-flex items-center cursor-pointer " >
+                      <input class="sr-only peer" value={isPassVisible} type="checkbox" onClick={() => setIspassVisible(!isPassVisible)} />
+                      <div class="group peer ring-0 bg-gray-50 border-2 border-gray-900 rounded-full outline-none duration-700 after:duration-200 w-20 h-7  shadow-md peer-checked:bg-gradient-to-r  peer-focus:outline-none  after:content-[''] after:rounded-full after:absolute after:bg-gray-900 after:outline-none after:h-6 after:w-6 after:top-1 after:left-1  peer-checked:after:translate-x-12 peer-hover:after:scale-95">
+
+                        <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="absolute  top-1 left-12 fill-green-600 w-6 h-6">
+                          <path d="M50,18A19.9,19.9,0,0,0,30,38v8a8,8,0,0,0-8,8V74a8,8,0,0,0,8,8H70a8,8,0,0,0,8-8V54a8,8,0,0,0-8-8H38V38a12,12,0,0,1,23.6-3,4,4,0,1,0,7.8-2A20.1,20.1,0,0,0,50,18Z" class="svg-fill-primary">
+                          </path>
+                        </svg>
+
+                        <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="absolute top-1 left-1 fill-red-600  w-6 h-6">
+                          <path fill-rule="evenodd" d="M30,46V38a20,20,0,0,1,40,0v8a8,8,0,0,1,8,8V74a8,8,0,0,1-8,8H30a8,8,0,0,1-8-8V54A8,8,0,0,1,30,46Zm32-8v8H38V38a12,12,0,0,1,24,0Z">
+                          </path>
+                        </svg>
+                      </div>
+                    </label>
+                  </div>
+                  <label className="ml-2 text-xl text-gray-800">Password Protected</label>
+                </div>
+                {
+                  isPassVisible ? (
+                    <motion.div className="mb-6"
+                      initial='hidden'
+                      whileInView={'show'}
+                      viewport={{ once: false, amount: 0 }}
+                      variants={fadeIn('down', 0.)}>
+                      <label
+                        htmlFor="floating_text"
+                        className="block text-sm text-gray-700 dark:text-gray-700 transform -translate-y-3 duration-300"
+                      >
+                        PASSWORD
+                      </label>
+                      <input
+                        type="text"
+                        name="password"
+                        id="floating_text"
+                        className="block w-full text-sm text-black border-b-2 border-gray-300 focus:outline-none"
+                        placeholder=" "
+                        required
+                        onChange={handleInputChange}
+                      />
+                    </motion.div>
+                  ) : null
+                }
 
                 <div className="flex space-x-2">
                   <button
                     type="submit"
                     className="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600"
                   >
-                    Save
+                    Create
                   </button>
                   <button
                     type="button"

@@ -26,7 +26,7 @@ export const SideBar = () => {
   };
 
   const handleSearchBlur = () => {
-    console.log(username);
+
     setUsername("");
   };
 
