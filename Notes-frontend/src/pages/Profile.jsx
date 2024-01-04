@@ -149,12 +149,12 @@ const Profile = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-blue-600 hover:bg-blue-700 flex gap-2 text-white py-2 px-4 m-5 rounded">
+                                {/* <div className="bg-blue-600 hover:bg-blue-700 flex gap-2 text-white py-2 px-4 m-5 rounded">
                                     <a href="https://cv-host.netlify.app" target="_blank" className="flex gap-2 text-center justify-center mx-auto">
                                         <h1 className="text-xl">Create Your Resume</h1>
                                         <h1 className="text-xs mt-2">(by resume builder)</h1>
                                     </a>
-                                </div>
+                                </div> */}
                             </div>
 
 
