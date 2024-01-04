@@ -30,7 +30,7 @@ const createCommunity = async (req, res) => {
         }
         const user = await User.findById(req.user.id);
 
-        if(user.communities_created.length >= 78){
+        if(user.communities_created.length >= 3){
             return res.status(400).json({error:"You can create atmost 3 communities"})
         }
         if(password !== "null" && password.trim().length < 6){
