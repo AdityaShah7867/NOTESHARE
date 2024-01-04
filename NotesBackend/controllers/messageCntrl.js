@@ -24,7 +24,6 @@ const createMessage = async (req, res) => {
 
 
 
-
 const getCommunityMessages = async (req, res) => {
 
     try {
