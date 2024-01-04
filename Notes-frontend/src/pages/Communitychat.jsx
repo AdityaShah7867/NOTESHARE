@@ -107,7 +107,7 @@ const Communitychat = () => {
         <motion.div className="pb-12"
           initial='hidden'
           whileInView={'show'}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           variants={fadeIn('up', 0.3)}>
           {loading ? (
             <h1 className="text-3xl text-bold" >Loading...</h1>
@@ -233,7 +233,7 @@ const Communitychat = () => {
                     <motion.div className="mb-6"
                       initial='hidden'
                       whileInView={'show'}
-                      viewport={{ once: false, amount: 0 }}
+                      viewport={{ once: true, amount: 0 }}
                       variants={fadeIn('down', 0.)}>
                       <label
                         htmlFor="floating_text"
