@@ -18,7 +18,7 @@ const PrivateRoutes = () => {
             Authorization: `Bearer ${authToken}`,
           },
         });
-        console.log(response.status)
+
 
         if (response.status === 200) {
           setIsAuthenticated(true);

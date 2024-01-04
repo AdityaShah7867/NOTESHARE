@@ -43,12 +43,10 @@ const Profile = () => {
                     `https://api.github.com/users/${githubUsername}/repos?sort=created&direction=desc`
                 )
                 const data = await response.json()
-                const firstThreeRepos = data.slice(0, 5);
+                const firstThreeRepos = data.slice(0, 10);
                 setRepositories(firstThreeRepos);
                 setLoading(false);
             } catch (error) {
-                console.log(error);
-
             }
         } else {
             setRepositories(null)
@@ -63,7 +61,6 @@ const Profile = () => {
     const fetchSkillsByUsername = async () => {
         const response = await fetch(`http://localhost:4000/api/v1/skills/getSkills/${username}`)
         const data = await response.json()
-        console.log('data', data)
         setSkills(data.skills)
     }
 
@@ -101,10 +98,10 @@ const Profile = () => {
                     <div className="flex flex-col md:flex-row">
                         {/* Left side - 1/3 */}
                         <motion.div className="w-full md:w-1/3 p-4"
-                        initial='hidden'
-                        whileInView={'show'}
-                        viewport={{ once: false, amount: 0.3 }}
-                        variants={fadeIn('right', 0.3)}>
+                            initial='hidden'
+                            whileInView={'show'}
+                            viewport={{ once: false, amount: 0.3 }}
+                            variants={fadeIn('right', 0.3)}>
                             <div className="mt-5">
                                 <div className="max-w-md mx-auto bg-white px-6 py-3 rounded-xl overflow-hidden md:max-w-2xl mt-5 ">
 
@@ -117,8 +114,8 @@ const Profile = () => {
                                         />
                                         <NavLink to='/setting'>
                                             <p className="text-right border-2 bg-blue-500 text-white hover:bg-blue-700 p-2 px-4 rounded-lg">
-                                            <i class="bi bi-pencil-square mr-1 "></i>
-                                            EDIT</p>
+                                                <i class="bi bi-pencil-square mr-1 "></i>
+                                                EDIT</p>
                                         </NavLink>
                                     </div>
                                     <div className="text-left mt-2">

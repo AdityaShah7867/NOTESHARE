@@ -26,7 +26,7 @@ export const SideBar = () => {
   };
 
   const handleSearchBlur = () => {
-    console.log(username);
+
     setUsername("");
   };
 
@@ -199,7 +199,7 @@ export const SideBar = () => {
             <>
               <NavLink to={"/admin"}>
                 <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-                <i className="bi bi-person-fill-gear text-white"></i>
+                  <i className="bi bi-person-fill-gear text-white"></i>
                   <span className="text-[15px] ml-4 text-gray-200 font-bold">
                     Admin
                   </span>
@@ -208,7 +208,7 @@ export const SideBar = () => {
 
               <NavLink to={"/dateform"}>
                 <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-                <i className="bi bi-clipboard text-white"></i>
+                  <i className="bi bi-clipboard text-white"></i>
                   <span className="text-[15px] ml-4 text-gray-200 font-bold">
                     Dates
                   </span>

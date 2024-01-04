@@ -5,6 +5,9 @@ import { fetchCommMessages, sendMessage } from '../helpers/commFn';
 import { useSelector } from 'react-redux';
 import { useUpdate } from '../context/communityCntxt';
 import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
+import GroupDiscussionLayout from '../components/Layout/Nviewer';
+import MessagesLoader from '../components/MessagesLoader';
 
 const GrpChat = () => {
   const [messages, setMessages] = useState([]);
@@ -12,11 +15,14 @@ const GrpChat = () => {
   const { triggerUpdate, update, socket } = useUpdate();
   const user = useSelector((state) => state?.user?.user);
   const [message, setMessage] = useState('');
+  const [messagesLoading, setMessagesLoading] = useState(false);
   useEffect(() => {
     const fetchMessages = async () => {
+      setMessagesLoading(true);
       const res = await fetchCommMessages(id);
       if (res.status === 200) {
         setMessages(res.messages);
+        setMessagesLoading(false);
       }
     }
     fetchMessages();
@@ -65,6 +71,10 @@ const GrpChat = () => {
       socket.off();
     }
   }, [socket]);
+
+
+
+
   return (
     <ChatLay>
       <div className="min-h-screen bg-gray-100 flex flex-col  relative">
@@ -78,56 +88,64 @@ const GrpChat = () => {
 
         {/* Chat messages */}
 
-        <div className='mb-16 pb-16 lg:pb-0 lg:mb-0 overflow-scroll h-[500px] lg:h-[1000px] xl:h-[600px]'>
-          {messages.map((msg, id) => (
-            <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8  ">
-              {msg.sender._id === user._id ? (
-                <>
-                  <div className="flex flex-col space-y-2">
-                    <div div className="flex items-end justify-end" >
-                      <div className="mr-4">
-                        <div className="bg-indigo-600 rounded-lg px-4 py-2 shadow text-white">
-                          <p className="text-lg">{msg.content}</p>
+        <div className='mb-16 pb-16 lg:pb-0 lg:mb-0 overflow-scroll max-h-[80%]'>
+          {
+            messagesLoading ? (
+              <MessagesLoader />
+            ) : <div>
+              {messages.map((msg, id) => (
+                <div className="flex-1  px-4 py-6 sm:px-6 lg:px-8  ">
+                  {msg.sender._id === user._id ? (
+                    <>
+                      <div className="flex flex-col space-y-2">
+                        <div div className="flex items-end justify-end" >
+                          <div className="mr-4">
+                            <div className="bg-indigo-600 rounded-lg px-4 py-2 shadow text-white">
+                              <p className="text-lg">{msg.content}</p>
+                            </div>
+                          </div>
+                          <div className="flex-shrink-0">
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={msg.sender.profile}
+                              alt="User avatar"
+                            />
+                          </div>
                         </div>
                       </div>
-                      <div className="flex-shrink-0">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src={msg.sender.profile}
-                          alt="User avatar"
-                        />
+                    </>
+                  ) : (<>
+                    <div className="flex flex-col space-y-2  ">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0">
+                          <img
+                            className="h-10 w-10 rounded-full"
+                            src={msg.sender.profile}
+                            alt="User avatar"
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <div className="bg-white rounded-lg px-4 py-2 shadow">
+                            <p className="text-sm text-gray-500">{msg.sender.username}</p>
+                            <p className="text-lg">{msg.content}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </>
-              ) : (<>
-                <div className="flex flex-col space-y-2  ">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={msg.sender.profile}
-                        alt="User avatar"
-                      />
-                    </div>
-                    <div className="ml-4">
-                      <div className="bg-white rounded-lg px-4 py-2 shadow">
-                        <p className="text-sm text-gray-500">{msg.sender.username}</p>
-                        <p className="text-lg">{msg.content}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-              </>)}
+                  </>)}
 
-            </div >
+                </div >
 
-          ))}
+              ))}
+            </div>
+          }
+
+
         </div>
 
         {/* Message input */}
-        <div className="bg-white shadow  absolute bottom-0 w-full ">
+        <div className="bg-white shadow  absolute bottom-0 w-full mb-16 xl:mb-0">
           <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
             <form onSubmit={handleSubmit} className="flex space-x-3">
               <div className="flex-1">

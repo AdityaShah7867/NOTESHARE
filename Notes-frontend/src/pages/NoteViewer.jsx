@@ -25,7 +25,6 @@ const Nviewer = () => {
     dispatch(getSingleNote(
       noteId
     ))
-    console.log(singlenote)
     return () => {
       clearTimeout(loading)
     }

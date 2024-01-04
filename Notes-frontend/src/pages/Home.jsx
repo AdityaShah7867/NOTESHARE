@@ -36,7 +36,6 @@ const Home = () => {
   }, [dispatch, search]);
 
   useEffect(() => {
-    console.log(filter)
     if (filter === 'BookMarked') {
       dispatch(getBookMarkedNotes());
     } else if (filter === 'ALL') {
@@ -58,10 +57,10 @@ const Home = () => {
             }
           </div>
           <motion.div className='flex flex-wrap justify-center'
-          initial='hidden'
-          whileInView={'show'}
-          viewport={{ once: false, amount: 0.3 }}
-          variants={fadeIn('up', 0.3)}>
+            initial='hidden'
+            whileInView={'show'}
+            viewport={{ once: false, amount: 0.3 }}
+            variants={fadeIn('up', 0.3)}>
             {
               filteredNotes?.length === 0 ? <h1 className='text-black text-2xl'>No Notes To Display</h1> : (
                 noteLoading ? <BookCardSkeletion /> : (
