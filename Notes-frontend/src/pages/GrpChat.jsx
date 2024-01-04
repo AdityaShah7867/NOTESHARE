@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ChatLay from '../components/Layout/ChatLay';
-import { useParams } from 'react-router-dom';
-import { fetchCommMessages, sendMessage } from '../helpers/commFn';
+import { useNavigate, useParams } from 'react-router-dom';
+import { deleteCommunity, fetchCommMessages, sendMessage, updateCommunityData } from '../helpers/commFn';
 import { useSelector } from 'react-redux';
 import { useUpdate } from '../context/communityCntxt';
 import { toast } from 'react-toastify';
@@ -12,7 +12,7 @@ import MessagesLoader from '../components/MessagesLoader';
 const GrpChat = () => {
   const [messages, setMessages] = useState([]);
   const { name, admin, id } = useParams();
-  const { triggerUpdate, update, socket } = useUpdate();
+  const { socket, cuurentCommunity } = useUpdate();
   const user = useSelector((state) => state?.user?.user);
   const [message, setMessage] = useState('');
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -82,8 +82,61 @@ const GrpChat = () => {
     setSettingmodalOpen(false);
   }
 
+  const [cmDeatils, setCmDetails] = useState({
+    name: '',
+    password: '',
+    description: '',
+    image: '',
+  });
+
+  const handleInputChange = (e) => {
+    setCmDetails({
+      ...cmDeatils,
+      [e.target.name]: e.target.value
+    })
+  }
+  const handlePictureChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setCmDetails({ ...cmDeatils, image: selectedFile });
+  };
+
+  const navigate = useNavigate();
 
 
+
+const [loading, setLoading] = useState(false);
+
+const updateTheCommunity = async () => {
+  setLoading(true);
+ 
+
+  const res = await updateCommunityData(cuurentCommunity._id, cmDeatils).finally(() => {
+    setLoading(false);
+  });
+  if (res.status === 200) {
+    toast.success(res.message);
+    closeSettingmodal();
+    navigate('/communities');
+  } else {
+    toast.error(res.message);
+  }
+}
+
+const deleteTheCommunity = async () => {
+  setLoading(true);
+  const res = await deleteCommunity(cuurentCommunity._id).finally(() => {
+    setLoading(false);
+  })
+
+  if (res.status === 200) {
+    toast.success(res.message);
+    closeSettingmodal();
+    navigate('/communities');
+    
+  } else {
+    toast.error(res.message);
+  }
+}
 
   return (
     <ChatLay>
@@ -95,13 +148,15 @@ const GrpChat = () => {
             <p className="mt-1 text-lg text-gray-600">Created by: {admin}</p>
 
           </div>
-          <div className="absolute top-8 right-10">
+          {cuurentCommunity?.creator?._id === user?._id && (<>
+            <div className="absolute top-8 right-10">
             <button
               onClick={openSettingmodal}
             >
               <p className="text-xl hover:text-black text-gray-500"><i className="fa-solid fa-gear"></i></p>
             </button>
           </div>
+          </>)}
           {SettingmodalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col gap-2">
@@ -114,34 +169,43 @@ const GrpChat = () => {
                     <div className="mt-1">
                       <input
                         type="text"
-                        name="password"
+                        name="name"
                         id="name"
+                        value={cmDeatils.name}
+                        onChange={handleInputChange}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
                         placeholder="Community Name"
                       />
                     </div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    {cuurentCommunity?.password && (
+                    <>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                       Password
                     </label>
                     <div className="mt-1">
                       <input
                         type="text"
-                        name="name"
+                        name="password"
                         id="name"
+                        value={cmDeatils.password}
+                        onChange={handleInputChange}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
                         placeholder="Community Password"
                       />
                     </div>
+                    </>)}
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                       Bio
                     </label>
                     <div className="mt-1">
                       <input
                         type="text"
-                        name="bio"
+                        name="description"
+                        value={cmDeatils.description}
+                        onChange={handleInputChange}
                         id="name"
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md mb-2"
-                        placeholder="Community Password"
+                        placeholder="Community Bio"
                       />
                     </div>
                     <div className='mt-1 mb-3'>
@@ -149,19 +213,19 @@ const GrpChat = () => {
                       <input
                         type="file"
                         accept="image/*"
-                      // onChange={handlePictureChange}
+                        onChange={handlePictureChange}
                       />
                     </div>
                   </div>
                 </div>
                 <div className='flex gap-3'>
-                  <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1 font-semibold'>
+                  <button disabled={loading} onClick={() => updateTheCommunity()} className='border border-black rounded-lg p-1 font-semibold'>
                     <i class="bi bi-sticky mr-1"></i>
                     Save</button>
                   <button onClick={closeSettingmodal} className='border border-black rounded-lg p-1 font-semibold'>
                     <i class="bi bi-x-lg mr-1"></i>
                     Close</button>
-                  <button onClick={closeSettingmodal} className='border bg-red-500 border-black rounded-lg p-1 font-semibold'>
+                  <button disabled={loading} onClick={() => deleteTheCommunity()} className='border bg-red-500 border-black rounded-lg p-1 font-semibold'>
                     <i class="bi bi-trash mr-1"></i>Delete community</button>
                 </div>
               </div>

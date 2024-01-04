@@ -40,7 +40,7 @@ const Communitychat = () => {
     setCreateCommunityData({ ...comData, [name]: value });
   };
 
-  
+
 
   useEffect(() => {
     setLoading(true);
@@ -71,14 +71,22 @@ const Communitychat = () => {
       return;
     }
 
+    if (comData.password.length > 20) {
+      toast.warning("Password should be less than 20 characters");
+      return;
+    }
+
+    if(comData.password.length < 6){
+      toast.warning("Password should be atleast 6 characters");
+      return;
+    }
+
     const res = await createCommunity(comData.name, comData.description, comData.password, comData.image);
     if (res.status === 200) {
-    setIspassVisible(false)
+      setIspassVisible(false)
       toast.success(res.message);
       triggerUpdate();
       closeForm();
-    } else {
-      toast.warning("Something went wrong");
     }
   };
   const handlePictureChange = (e) => {

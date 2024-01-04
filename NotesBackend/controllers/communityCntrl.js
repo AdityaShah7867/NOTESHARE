@@ -32,6 +32,10 @@ const createCommunity = async (req, res) => {
         if(user.communities_created.length >= 78){
             return res.status(400).json({error:"You can create atmost 3 communities"})
         }
+
+        if(password && password.length < 6){
+            return res.status(400).json({error:"Password must be atleast 6 characters long"})
+        }
         
         const existing_community = await Community.findOne({ name });
 
@@ -104,14 +108,38 @@ const getCommunity = async (req, res) => {
 const updateCommunity = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, description } = req.body;
-        if (!name || !description) {
-            return res.status(400).json({ error: "Please enter all the fields" });
+        const { name, description, password, image } = req.body;
+        
+        const community = await Community.findById(id);
+        if(!community){
+            return res.status(400).json({error:"No such community exists"});
         }
-        const community = await Community.findByIdAndUpdate(id, { name, description }, { new: true });
-        res.status(200).json({ community });
+        if(req.file){
+            const fileKey = `${uuidv4()}-${req.file.originalname}`;
+            const params = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileKey,
+                Body: fs.createReadStream(req.file.path),
+                ContentType: req.file.mimetype
+            };
+            const data = await s3.upload(params).promise();
+            community.image = data.Location;
+            await community.save();
+        }
+        community.name = name? name : community.name;
+        community.description = description? description : community.description;
+        if(password){
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            community.password = hashedPassword;
+        }
+        if(password.length < 6){
+            return res.status(400).json({message: "Password must be atleast 6 characters long"})
+        }
+        await community.save();
+        res.status(200).json({ community, message: `You have successfully updated ${community.name} community` });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 }
 

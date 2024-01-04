@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Card = ({ comm, ind, hello }) => {
   const user = useSelector((state) => state?.user?.user)
-  const { triggerUpdate, cuurentCommunity, setCurrentCommunity } = useUpdate()
+  const { triggerUpdate, setCurrentCommunity } = useUpdate()
   const [joinmodalOpen, setjoinmodalOpen] = useState(false);
   const [leavemodalOpen, setLeavemodalOpen] = useState(false);
 
@@ -34,7 +34,7 @@ const Card = ({ comm, ind, hello }) => {
   }
 
   const handleSubmit = async (id) => {
-    const res = await joinCommunity(id,password)
+    const res = await joinCommunity(id, password)
     if (res.status === 200) {
       toast.success(res.message)
       triggerUpdate()
@@ -75,20 +75,21 @@ const Card = ({ comm, ind, hello }) => {
                     <i class="bi bi-box-arrow-left mr-1"></i>
                     Leave </button>
                   <button onClick={() => {
-                    navigate(`/grp/${comm.name}/${comm.creator.username}/${comm._id}`);
                     setCurrentCommunity(comm);
+
+                    navigate(`/grp/${comm.name}/${comm.creator.username}/${comm._id}`);
 
                   }} className="bg-green-500 hover:bg-blue- ml-2 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">
                     <i class="bi bi-broadcast-pin mr-1"></i>
                     Chat </button>
                 </>)
-                  : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
-                  onClick={openjoinmodal}
-                    >
-                    {comm?.password  ?( <><i class="bi bi-lock mr-1 "></i> Join</> ): ( <><i class="bi bi-unlock mr-1"></i>Join</> ) }
-                   
+                  : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={openjoinmodal}
+                  >
+                    {comm?.password ? (<><i class="bi bi-lock mr-1 "></i> Join</>) : (<><i class="bi bi-unlock mr-1"></i>Join</>)}
 
-                    </button>}
+
+                  </button>}
 
                 {joinmodalOpen && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -96,23 +97,23 @@ const Card = ({ comm, ind, hello }) => {
                     <div className="bg-white p-6 rounded-lg shadow-lg flex-row gap-2">
                       {comm?.password ? (<>
                         <div className='mb-4 w-[250px] xl:w-[400px]'>
-                        <label
-                          htmlFor="floating_text"
-                          className="block text-gray-700 dark:text-gray-700 transform duration-300 font-bold text-xl"
-                        >
-                          PASSWORD
-                        </label>
-                        <input
-                          type="text"
-                          name="password"
-                          id="floating_text"
-                          className="block w-full text-sm text-black border-b-2 border-gray-300 focus:outline-none"
-                          placeholder=" "
-                          required
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      </>):(<><h3 className='my-4 text-xl'>Are you sure you want to join {comm.name}?</h3></>)}
+                          <label
+                            htmlFor="floating_text"
+                            className="block text-gray-700 dark:text-gray-700 transform duration-300 font-bold text-xl"
+                          >
+                            PASSWORD
+                          </label>
+                          <input
+                            type="text"
+                            name="password"
+                            id="floating_text"
+                            className="block w-full text-sm text-black border-b-2 border-gray-300 focus:outline-none"
+                            placeholder=" "
+                            required
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </>) : (<><h3 className='my-4 text-xl'>Are you sure you want to join {comm.name}?</h3></>)}
                       <div className='flex gap-3'>
                         <button onClick={() => handleSubmit(comm._id)} className='border border-black rounded-lg bg-green-500 hover:bg-blue- ml-2 hover:bg-green-400 text-white font-bold py-2 px-4'>
                           <i class="bi bi-box-arrow-in-right mr-1"></i>
@@ -135,7 +136,7 @@ const Card = ({ comm, ind, hello }) => {
                       <p className='text-2xl text-center mb-4 font-bold'>Are You Sure!!!</p>
                       <div className='flex gap-3'>
                         <button onClick={() => handleLeave(comm._id)} className='border border-black rounded-lg bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded"'>
-                        <i class="bi bi-box-arrow-left mr-1"></i>
+                          <i class="bi bi-box-arrow-left mr-1"></i>
                           Leave</button>
                         <button onClick={closeleavemodal} className='border border-black rounded-lg bg-green-500 hover:bg-blue- ml-2 hover:bg-green-400 text-white font-bold py-2 px-4'>
                           <i class="bi bi-x-lg mr-1"></i>

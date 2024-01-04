@@ -50,7 +50,7 @@ export const getAllCommunities = async () => {
             return response.data.communities;
         } else {
             toast.error(response.data.message);
-            return {status: 400, data: null, message: response.data.message};
+            return { status: 400, data: null, message: response.data.message };
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
@@ -72,7 +72,7 @@ export const getYourCommunities = async () => {
             return response.data.communities;
         } else {
             toast.error(response.data.message);
-            return {status: 400, data: null, message: response.data.message};
+            return { status: 400, data: null, message: response.data.message };
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
@@ -80,9 +80,9 @@ export const getYourCommunities = async () => {
     }
 }
 
-export const joinCommunity = async (id,password) => {
+export const joinCommunity = async (id, password) => {
     try {
-        let pass = password?password:null;
+        let pass = password ? password : null;
         const response = await axios.put(
             `${host}/api/v1/community/join-community/${id}`,
             {
@@ -95,10 +95,10 @@ export const joinCommunity = async (id,password) => {
             }
         );
         if (response.status === 200) {
-            return {message: response.data.message, status: 200};
+            return { message: response.data.message, status: 200 };
         } else {
             toast.error(response.data.message);
-            return {message: response.data.message, status: 400};
+            return { message: response.data.message, status: 400 };
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
@@ -118,10 +118,10 @@ export const leaveCommunity = async (id) => {
             }
         );
         if (response.status === 200) {
-            return {message: response.data.message, status: 200};
+            return { message: response.data.message, status: 200 };
         } else {
             toast.error(response.data.message);
-            return {message: response.data.message, status: 400};
+            return { message: response.data.message, status: 400 };
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
@@ -140,13 +140,13 @@ export const fetchCommMessages = async (id) => {
             }
         );
         if (response.status === 200) {
-            return {messages: response.data.messages, status: 200};
+            return { messages: response.data.messages, status: 200 };
         } else {
             toast.error("Error in fetching messages");
-            return {messages: null, status: 400};
+            return { messages: null, status: 400 };
         }
     } catch (error) {
-       return error.response?.data?.message;
+        return error.response?.data?.message;
 
     }
 }
@@ -167,14 +167,78 @@ export const sendMessage = async (content, community) => {
             }
         );
         if (response.status === 200) {
-           
-            return {status:200, data: response.data.message_, message: response.data.message};
+
+            return { status: 200, data: response.data.message_, message: response.data.message };
         } else {
             toast.error(response.data.message);
-            return {status:400, data: null, message: response.data.message};
+            return { status: 400, data: null, message: response.data.message };
         }
     } catch (error) {
         toast.error(error.response?.data?.message);
         return error.response?.data?.message;
     }
+}
+
+export const updateCommunityData = async (id, dataToUpdate) => {
+    try {
+
+        let pass = dataToUpdate.password ? dataToUpdate.password : null;
+        let img = dataToUpdate.image ? dataToUpdate.image : null;
+
+        const formData = new FormData();
+        formData.append('name', dataToUpdate.name);
+        formData.append('description', dataToUpdate.description);
+        if (pass) {
+            formData.append('password', pass);
+        }
+        if (img) {
+
+            formData.append('image', img);
+        }
+
+        const response = await fetch(`${host}/api/v1/community/updateCommunity/${id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData, 
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+            return { status: 200, data: data.community, message: data.message };
+        } else {
+            toast.error(data.message);
+            return { status: 400, data: null, message: data.message };
+        }
+
+    } catch (error) {
+        toast.error(error.response?.data?.message);
+        return error.response?.data?.message;
+    }
+}
+
+export const deleteCommunity = async (id) => {
+
+    try {
+        const response = await axios.delete(
+            `${host}/api/v1/community/deleteCommunity/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200) {
+            return { message: response.data.message, status: 200 };
+        } else {
+            toast.error(response.data.message);
+            return { message: response.data.message, status: 400 };
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.message);
+        return error.response?.data?.message;
+    }
+
 }
