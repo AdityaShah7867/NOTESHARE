@@ -77,7 +77,7 @@ const Card = ({ comm, ind, hello }) => {
                   <button onClick={() => {
                     setCurrentCommunity(comm);
 
-                    navigate(`/grp/${comm.name}/${comm.creator.username}/${comm._id}`);
+                    navigate(`/community-chat`);
 
                   }} className="bg-green-500 hover:bg-blue- ml-2 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">
                     <i class="bi bi-broadcast-pin mr-1"></i>

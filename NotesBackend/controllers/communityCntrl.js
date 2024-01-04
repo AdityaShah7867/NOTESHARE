@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const {User} = require('../models/userModel');
 const Message = require('../models/messagesModel');
+const { type } = require('os');
 
 
 
@@ -32,9 +33,8 @@ const createCommunity = async (req, res) => {
         if(user.communities_created.length >= 78){
             return res.status(400).json({error:"You can create atmost 3 communities"})
         }
-
-        if(password && password.length < 6){
-            return res.status(400).json({error:"Password must be atleast 6 characters long"})
+        if(password !== "null" && password.trim().length < 6){
+            return res.status(400).json({message:"Password must be atleast 6 characters long"})
         }
         
         const existing_community = await Community.findOne({ name });
@@ -133,7 +133,7 @@ const updateCommunity = async (req, res) => {
             const hashedPassword = await bcrypt.hash(password, salt);
             community.password = hashedPassword;
         }
-        if(password.length < 6){
+        if(password != "null" && password.length < 6){
             return res.status(400).json({message: "Password must be atleast 6 characters long"})
         }
         await community.save();

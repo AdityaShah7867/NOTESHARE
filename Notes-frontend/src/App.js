@@ -124,7 +124,7 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/Communities" element={<Communitychat />} />
               <Route path="/DateForm" element={<DateForm />} />
-              <Route path='/grp/:name/:admin/:id' element={<GrpChat />} />
+              <Route path='/community-chat' element={<GrpChat />} />
               <Route path='/books' element={<GetBooks />} />
               <Route path='/gameslist' element={<GameList />} />
 
