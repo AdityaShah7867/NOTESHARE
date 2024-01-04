@@ -1,5 +1,6 @@
 import React from 'react';
 import ChatLay from '../components/Layout/ChatLay';
+import { NavLink } from 'react-router-dom';
 
 const GameList = () => {
   // Mock data for game details
@@ -12,6 +13,7 @@ const GameList = () => {
 
   return (
     <ChatLay>
+        <NavLink to='/game'>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-16 lg:grid-cols-4 gap-4">
         {games.map((game) => (
           <div key={game.id} className="bg-gray-50 p-4 rounded-md shadow-md">
@@ -22,6 +24,7 @@ const GameList = () => {
           </div>
         ))}
       </div>
+      </NavLink>
     </ChatLay>
   );
 };

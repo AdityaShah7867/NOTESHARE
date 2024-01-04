@@ -1,7 +1,12 @@
 import { createContext, useContext, useState } from 'react';
-import {io} from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 const UpdateContext = createContext();
+
+const useSocket = () => {
+    return useContext(UpdateContext);
+}
+
 
 export const UpdateProvider = ({ children }) => {
 
@@ -17,11 +22,17 @@ export const UpdateProvider = ({ children }) => {
         setUpdate(prev => !prev);
     };
 
+
+
     return (
-        <UpdateContext.Provider value={{socket, allCommunities, cuurentCommunity, setCurrentCommunity, setAllCommunities, activeTab, setActiveTab, joinedCommunities, setJoinedCommunities, update, triggerUpdate}}>
+        <UpdateContext.Provider value={{ socket, allCommunities, cuurentCommunity, setCurrentCommunity, setAllCommunities, activeTab, setActiveTab, joinedCommunities, setJoinedCommunities, update, triggerUpdate }}>
             {children}
         </UpdateContext.Provider>
     );
 };
 
 export const useUpdate = () => useContext(UpdateContext);
+
+export {
+    useSocket
+}
