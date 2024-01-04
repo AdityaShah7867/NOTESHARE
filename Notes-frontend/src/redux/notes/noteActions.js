@@ -17,14 +17,14 @@ export const filterdNotes = createAsyncThunk(
                 },
             });
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.error('Error:', response.data);
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
-            console.error('Error:', error);
+
             return rejectWithValue(error.response?.data?.message);
         }
     }
@@ -42,14 +42,14 @@ export const getFilteredFormData = createAsyncThunk(
                 },
             });
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.error('Error:', response.data);
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
-            console.error('Error:', error);
+
             return rejectWithValue(error.response?.data?.message);
         }
     }
@@ -67,10 +67,10 @@ export const getBookMarkedNotes = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.log('error');
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
@@ -117,10 +117,10 @@ export const searchNote = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.log('error');
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
@@ -142,10 +142,10 @@ export const getNotes = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.log('error');
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
@@ -168,10 +168,10 @@ export const getSingleNote = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.log('error');
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
@@ -196,10 +196,10 @@ export const getFormData = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.log('error');
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
@@ -225,16 +225,16 @@ export const addNote = createAsyncThunk(
             });
 
             if (response.status === 201) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data;
             } else {
-                console.error('Error:', response.data);
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
-            console.error('Error:', error);
+
             return rejectWithValue(error.response?.data?.message);
         }
     }
@@ -255,10 +255,10 @@ export const getNotesAdmin = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 return response.data;
             } else {
-                console.log('error');
+
                 return rejectWithValue(response.data.message);
             }
         } catch (error) {
@@ -283,11 +283,11 @@ export const AcceptRejectNotes = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data;
             } else {
-                console.log('error');
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }
@@ -313,11 +313,11 @@ export const deleteNote = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data;
             } else {
-                console.log('error');
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }
@@ -342,11 +342,11 @@ export const buyNote = createAsyncThunk(
             });
 
             if (response.status === 200) {
-                console.log(response.data);
+
                 toast.success(response.data.message);
                 return response.data;
             } else {
-                console.log('error');
+
                 toast.error(response.data.message);
                 return rejectWithValue(response.data.message);
             }

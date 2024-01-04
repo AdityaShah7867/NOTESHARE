@@ -90,7 +90,6 @@ const NotesForm = () => {
       file: null,
     });
     await dispatch(getNotes());
-    console.log(formdata);
   };
 
 

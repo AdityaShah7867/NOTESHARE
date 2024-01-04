@@ -20,7 +20,6 @@ const YourNotes = () => {
             setUserNotes(res.data.data)
 
         } catch (error) {
-            console.log(error)
         }
     }
 
@@ -32,23 +31,23 @@ const YourNotes = () => {
 
     return (
         <ChatLay>
-        <div>
-            <center >
-            <h1 className='text-4xl justify-center mt-8 '>YOUR UPLOADED NOTES</h1>
-            </center>
-            <div className='flex flex-wrap justify-center mt-12 '>
-                
-                {
-                    UserNotes?.length === 0 ? <h1 className='text-black text-2xl'>No Notes To Display</h1> : (
-                        UserNotes?.map((note, index) => (
-                            <NewCard key={index} note={note} />
-                        ))
-                    )
-                }
-            </div>
+            <div>
+                <center >
+                    <h1 className='text-4xl justify-center mt-8 '>YOUR UPLOADED NOTES</h1>
+                </center>
+                <div className='flex flex-wrap justify-center mt-12 '>
 
-        </div>
-        </ChatLay>        
+                    {
+                        UserNotes?.length === 0 ? <h1 className='text-black text-2xl'>No Notes To Display</h1> : (
+                            UserNotes?.map((note, index) => (
+                                <NewCard key={index} note={note} />
+                            ))
+                        )
+                    }
+                </div>
+
+            </div>
+        </ChatLay>
     )
 }
 
