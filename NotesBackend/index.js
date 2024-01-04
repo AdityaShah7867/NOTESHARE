@@ -41,7 +41,7 @@ let server = app.listen(port, () => {
     console.log(`Mongo Connected MF!!!`)
 });
 
-// checkConnection();
+checkConnection();
 
 
 const io = new Server(server, {

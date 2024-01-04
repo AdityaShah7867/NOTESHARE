@@ -102,7 +102,7 @@ const Profile = () => {
                             whileInView={'show'}
                             viewport={{ once: false, amount: 0.3 }}
                             variants={fadeIn('right', 0.3)}>
-                            <div className="mt-5">
+                            <div className="mt-5 ">
                                 <div className="max-w-md mx-auto bg-white px-6 py-3 rounded-xl overflow-hidden md:max-w-2xl mt-5 ">
 
 

@@ -158,6 +158,18 @@ export const SideBar = () => {
             </div>
           </NavLink>
 
+          <NavLink to={"/books"}>
+            <div
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/video" ? "bg-blue-500" : ""
+                }`}
+            >
+              <i className="bi bi-camera-video text-white"></i>
+              <span className="text-[15px] ml-4 text-gray-200 font-bold">
+                Book Library
+              </span>
+            </div>
+          </NavLink>
+
           <NavLink to={"/dashboard"}>
             <div
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/dashboard" ? "bg-blue-500" : ""
