@@ -86,7 +86,14 @@ const userSchema = mongoose.Schema(
         },
         lastPlayedLottery: {
             type: Date
-        }
+        },
+
+        communities_created: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: "Community",
+            }
+        ],
     },
     { timestamps: true }
 );
