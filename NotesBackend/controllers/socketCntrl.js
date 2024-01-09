@@ -7,9 +7,30 @@ const socketCtrl = (io) => {
 };
 
 
-const ArrayOfContent = [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fermentum et sollicitudin ac orci phasellus egestas tellus."
-]
+
+
+function generateRandomSentence() {
+    const subjects = ['The cat', 'A dog', 'My friend', 'A bird', 'The sun'];
+    const verbs = ['runs', 'jumps', 'sings', 'flies', 'sleeps'];
+    const objects = ['on the roof', 'in the garden', 'under the tree', 'with joy', 'through the clouds'];
+    const adjectives = ['happy', 'colorful', 'playful', 'gentle', 'majestic'];
+
+    const subject = subjects[Math.floor(Math.random() * subjects.length)];
+    const verb = verbs[Math.floor(Math.random() * verbs.length)];
+    const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const object = objects[Math.floor(Math.random() * objects.length)];
+
+    const sentence = `${subject} ${verb} ${adjective} and ${verb} ${adjective} ${object}. ${subject} ${verb} ${adjective} ${object} ${subject} ${verb} ${adjective} ${object}.`;
+
+    return sentence;
+}
+
+let randomSentence = generateRandomSentence();
+
+
+
+
+
 
 
 const roomUsers = {};
@@ -51,8 +72,8 @@ const handleConnection = (socket, io, userId) => {
         if (roomUsers[roomCode].length === 2) {
             console.log('game:start')
             const randomIndex = Math.floor(Math.random() * ArrayOfContent.length);
-            socket.emit('game:start', ArrayOfContent[randomIndex])
-            io.to(roomCode).emit('game:start', ArrayOfContent[randomIndex]);
+            socket.emit('game:start', randomSentence)
+            io.to(roomCode).emit('game:start', randomSentence);
         }
 
 
