@@ -11,3 +11,52 @@
       display: none; /* This will hide the element on screens with a width of 769px or more (desktop devices) */
     }
   }
+
+  .sidebar {
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+    }
+    
+    #sidebar-toggle-button {
+      display: none; /* Hide the toggle button on desktop view */
+    }
+    
+    #sidebar-toggle-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      color: white;
+    }
+  
+  
+    
+    
+  
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+  
+        width: 250px;
+      }
+      .closeS{
+        position: fixed;
+        margin-left: 0px;
+        height: 55px;
+        z-index: 10;
+      }
+    
+      .sidebar.active {
+        transform: translateX(0);
+      }
+    
+      #sidebar-toggle-button {
+        display: block; /* Show the toggle button on mobile view */
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: white;
+      }
+    }
+    
+  
+   

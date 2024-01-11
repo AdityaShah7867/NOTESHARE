@@ -15,6 +15,7 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
+  const [showMore, setShowMore] = useState(false);
   const [username, setUsername] = useState("");
   const location = useLocation();
 
@@ -24,6 +25,11 @@ export const SideBar = () => {
     localStorage.removeItem("authtoken");
     window.location.reload();
   };
+
+  const handlemore = () => {
+    setShowMore(!showMore)
+    console.log("more")
+  }
 
   const handleSearchBlur = () => {
 
@@ -174,7 +180,7 @@ export const SideBar = () => {
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/games" ? "bg-blue-500" : ""
                 }`}
             >
-             <i class="bi bi-joystick text-white"></i>
+              <i class="bi bi-joystick text-white"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Games
               </span>
@@ -455,7 +461,7 @@ export const SideBar = () => {
               </NavLink>
 
               {/* New Submission Button */}
-              <NavLink to={"/notification"}>
+              <NavLink to={"/notification"} >
                 <a
                   href="#"
                   className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
@@ -492,6 +498,17 @@ export const SideBar = () => {
                   </span>
                 </a>
               </NavLink>
+              <div className={`sidebar-toggle ${showMore ? 'active' : ''}`}>
+                <button id="sidebar-toggle-button" onClick={handlemore}>
+                  &nbsp; &nbsp; &nbsp; &nbsp; <i className="fa-solid fa-coins fa-xl text-green-600"></i>
+                </button>
+              </div>
+              <div className={`sidebar closeS text-white fixed top-0 w-1/6 p-4 h-screen border-slate-300 border-2 rounded-lg ${showMore ? 'active' : ''}`} style={{ backgroundColor: '#030303' }}>
+                <button className="close-sidebar-button" onClick={handlemore}>
+                <i className="fa-solid fa-coins fa-xl text-yellow-600"></i>
+                </button>
+                {/* Rest of your sidebar content */}
+              </div>
             </div>
           </section>
         </div>
