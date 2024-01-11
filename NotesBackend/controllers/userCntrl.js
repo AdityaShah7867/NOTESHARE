@@ -78,9 +78,9 @@ const registerUser = asyncHandler(async (req, res) => {
             return;
         }
 
-        if (!isEmailEdu(email)) {
-            res.status(404).json({ message: "Only vcet id is accepted" })
-        }
+        // if (!isEmailEdu(email)) {
+        //     res.status(404).json({ message: "Only vcet id is accepted" })
+        // }
 
         // Convert the email to lowercase for case-insensitive comparison
         const lowercaseEmail = email.toLowerCase();
