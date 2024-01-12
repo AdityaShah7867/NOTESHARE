@@ -281,6 +281,45 @@ export const SideBar = () => {
             className="block fixed inset-x-0 bottom-0 z-10 bg-white shadow"
           >
             <div id="tabs" className="flex justify-between mx-5">
+              <div className={`sidebar-toggle  ${showMore ? 'active' : ''}`}>
+                <button id="sidebar-toggle-button" className="-mr-5 " onClick={handlemore}>
+                  <div className="mt-2  flex flex-col justify-center items-center">
+                  {/* &nbsp; &nbsp; &nbsp; &nbsp; */}
+                    <i class="fa-solid fa-bars text-black text-2xl"></i>
+                    <p className="text-black">More</p>
+                  </div>
+                </button>
+              </div>
+              <div className={`sidebar closeS text-white items-start fixed flex flex-col top-0 w-1/6 p-4 h-screen border-slate-300 border-2 rounded-lg ${showMore ? 'active' : ''}`} style={{ backgroundColor: '#ffff' }}>
+                <button className="close-sidebar-button mb-1" onClick={handlemore}>
+                  <i className="fa-solid fa-times fa-xl text-yellow-600 font-bold"></i>
+                </button>
+                {/* Rest of your sidebar content */}
+                <NavLink to={"/notification"}>
+                  <a href="#" className="text-black flex items-center gap-4">
+                    <i class="fa-solid fa-list-ul"></i>
+                    <p className="font-semibold">Important dates / To-do</p>
+                  </a>
+                </NavLink>
+                <NavLink to={"/video"}>
+                  <a href="#" className="text-black flex items-center gap-4">
+                    <i className="bi bi-camera-video "></i>
+                    <p className="font-semibold">Video Room</p>
+                  </a>
+                </NavLink>
+                <NavLink to={"/books"}>
+                  <a href="#" className="text-black flex items-center gap-4">
+                    <i class="bi bi-book "></i>
+                    <p className="font-semibold">Book Library</p>
+                  </a>
+                </NavLink>
+                <NavLink to={"/gameslist"}>
+                  <a href="#" className="text-black flex items-center gap-4">
+                    <i class="bi bi-joystick "></i>
+                    <p className="font-semibold">Games</p>
+                  </a>
+                </NavLink>
+              </div>
               <NavLink to={"/home"}>
                 <div className="w-full focus:text-teal-500 hover:text-teal-500  justify-center inline-block text-center pt-2 pb-1">
                   <svg
@@ -308,12 +347,14 @@ export const SideBar = () => {
                 </div>
               </NavLink>
 
-              <NavLink to={"/video"}>
+              <NavLink to={"/communities"}>
                 <a
                   href="#"
                   className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
                 >
-                  <svg
+                  <i className="bi bi-people text-black text-2xl"></i>
+
+                  {/* <svg
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -334,8 +375,8 @@ export const SideBar = () => {
                         stroke-linejoin="round"
                       ></path>{" "}
                     </g>
-                  </svg>
-                  <span className="tab tab-kategori block  text-xs">Video</span>
+                  </svg> */}
+                  <span className="tab tab-kategori block  text-xs">Communities</span>
                 </a>
               </NavLink>
 
@@ -461,7 +502,7 @@ export const SideBar = () => {
               </NavLink>
 
               {/* New Submission Button */}
-              <NavLink to={"/notification"} >
+              {/* <NavLink to={"/notification"} >
                 <a
                   href="#"
                   className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
@@ -497,18 +538,8 @@ export const SideBar = () => {
                     To-Do
                   </span>
                 </a>
-              </NavLink>
-              <div className={`sidebar-toggle ${showMore ? 'active' : ''}`}>
-                <button id="sidebar-toggle-button" onClick={handlemore}>
-                  &nbsp; &nbsp; &nbsp; &nbsp; <i className="fa-solid fa-coins fa-xl text-green-600"></i>
-                </button>
-              </div>
-              <div className={`sidebar closeS text-white fixed top-0 w-1/6 p-4 h-screen border-slate-300 border-2 rounded-lg ${showMore ? 'active' : ''}`} style={{ backgroundColor: '#030303' }}>
-                <button className="close-sidebar-button" onClick={handlemore}>
-                <i className="fa-solid fa-coins fa-xl text-yellow-600"></i>
-                </button>
-                {/* Rest of your sidebar content */}
-              </div>
+              </NavLink> */}
+
             </div>
           </section>
         </div>

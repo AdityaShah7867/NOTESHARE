@@ -14,6 +14,7 @@
 
   .sidebar {
     transform: translateX(0);
+    transform: translateY(0);
     transition: transform 0.3s ease;
     }
     
@@ -34,23 +35,28 @@
   
     @media (max-width: 1024px) {
       .sidebar {
-        transform: translateX(-100%);
-  
+        transform: translateX(-150%);
+        /* transform: translateY(200%); */
+        /* background-color: aqua; */
+        margin-top: 5%;
         width: 250px;
       }
       .closeS{
         position: fixed;
         margin-left: 0px;
-        height: 55px;
+        height: 150px;
         z-index: 10;
       }
     
       .sidebar.active {
-        transform: translateX(0);
+        transform: translateX(0%);
+        margin-top: 5%;
+        /* transform: translateY(200%); */
       }
     
       #sidebar-toggle-button {
-        display: block; /* Show the toggle button on mobile view */
+        display: block; 
+        /* Show the toggle button on mobile view */
         background-color: transparent;
         border: none;
         cursor: pointer;
