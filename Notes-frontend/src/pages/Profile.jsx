@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUserProfile, getUserSkills } from "../redux/user/userActions";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
+import { Helmet } from 'react-helmet';
+
 
 const Profile = () => {
 
@@ -21,6 +23,7 @@ const Profile = () => {
         dispatch(getUserSkills())
     }, [dispatch])
 
+   
 
 
     const [repositories, setRepositories] = useState([]);
@@ -93,6 +96,17 @@ const Profile = () => {
 
     return (
         <>
+         <Helmet>
+        <title>{`${user?.username}'s Profile`}</title> <meta name="description" content={user?.Bio} />
+
+        <meta name="description" content={`Noteshare is a students community`} />
+
+        <meta property="og:title" content={`${user?.username}'s Profile`}  />
+        <meta property="og:description" content={user?.Bio} />
+        <meta property="og:image" content={user?.profile} />
+        <meta property="og:url" content={`https://yourdomain.com/profile/${user?.username}`} />
+      </Helmet>
+
             <Alternates>
                 <div>
                     <div className="flex flex-col md:flex-row">

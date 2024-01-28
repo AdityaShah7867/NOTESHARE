@@ -20,7 +20,7 @@ export default function App() {
     <View style={styles.container}>
       <WebView
         ref={webViewRef}
-        source={{ uri: 'http://192.168.0.186:3000/' }}
+        source={{ uri: 'https://noteshare-snowy.vercel.app/' }}
         style={{ flex: 1 }}
         onNavigationStateChange={handleNavigationStateChange}
       />

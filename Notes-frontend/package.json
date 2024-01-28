@@ -19,6 +19,7 @@
     "pdfjs-dist": "^3.11.174",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-icons": "^4.10.1",
     "react-modal": "^3.16.1",
     "react-pdf": "^7.5.1",
