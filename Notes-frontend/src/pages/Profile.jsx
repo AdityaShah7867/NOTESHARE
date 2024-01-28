@@ -105,6 +105,13 @@ const Profile = () => {
         <meta property="og:description" content={user?.Bio} />
         <meta property="og:image" content={user?.profile} />
         <meta property="og:url" content={`https://yourdomain.com/profile/${user?.username}`} />
+
+        <meta property="whatsapp:title" content={`${user?.username}'s Profile`} />
+        <meta property="whatsapp:description" content={user?.Bio} />
+        <meta property="whatsapp:image" content={user?.profile} />
+
+
+
       </Helmet>
 
             <Alternates>
