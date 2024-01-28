@@ -96,7 +96,6 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/otp" element={<OtpForm />} />
-            <Route path="/profile/:username" element={<Profile />} />
 
             <Route
               path="/"
@@ -127,6 +126,8 @@ const App = () => {
               <Route path='/community-chat' element={<GrpChat />} />
               <Route path='/books' element={<GetBooks />} />
               <Route path='/gameslist' element={<GameList />} />
+              <Route path="/profile/:username" element={<Profile />} />
+
 
 
 
