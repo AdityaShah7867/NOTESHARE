@@ -25,6 +25,9 @@ const userSchema = mongoose.Schema(
         Department: {
             type: String
         },
+        year:{
+            type: String
+        },
         profile: {
             type: String,
             default: "https://safesiren.vercel.app/static/media/login.665ff9176f5ac11ac2e6.png"

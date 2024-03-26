@@ -40,7 +40,8 @@ export const register = createAsyncThunk(
                     username: data.username,
                     email: data.email,
                     password: data.password,
-                    Department: data.Department
+                    Department: data.Department,
+                    year: data.year,
                 }
             );
             if (response.status === 200) {

@@ -71,11 +71,11 @@ const initialCall = async (req, res) => {
 
 const registerUser = asyncHandler(async (req, res) => {
     try {
-        const { username, email, password, Department, role } = req.body;
+        const { username, email, password, Department, role,year } = req.body;
 
-        if (!username || !email || !password || !Department) {
+        if (!username || !email || !password || !Department || !year) {
             res.status(400).json({ message: "all fields are required" });
-            return;
+        return;
         }
 
         // if (!isEmailEdu(email)) {
@@ -102,6 +102,7 @@ const registerUser = asyncHandler(async (req, res) => {
             Department,
             password: hashedPassword,
             verificationToken,
+            year
         });
 
         await sendVerificationEmail(lowercaseEmail, verificationToken);
