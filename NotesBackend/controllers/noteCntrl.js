@@ -1,9 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const { Note } = require('../models/noteModel');
 const { User } = require('../models/userModel');
-const { Branch } = require('../models/branchModel')
 const { Subject } = require('../models/subjectModel')
 const { ModuleName } = require('../models/moduleModel')
+const { Branch } = require('../models/branchModel')
+const ObjectId=require('mongoose').Types.ObjectId;
 
 const fs = require('fs');
 const path = require('path')
@@ -55,6 +56,38 @@ const buyNote = async (req, res) => {
 }
 
 
+const getInitialNotesByBranch=async(req,res)=>{
+    try {
+        const userId=req.user.id;
+
+        const user=await User.findById(userId)
+
+        if(!user){
+            res.status(401).json({
+                message:"user not found"
+            })
+        }   
+        const branch=await Branch.find({
+            name:user.Department
+        });
+        // userYear=Number(user.year) 
+        userYear=4
+       const notes=await Note.find({
+        branch:new ObjectId(branch[0]._id),
+        year:userYear
+       }).populate('author', '-notesUploaded -notesBought').populate('subject')
+        res.status(200).json({
+            message:"notes of the user",
+            notes:notes
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message:"Internal server error"
+        })
+    }
+}
+
+
 
 
 const getAllNotes = asyncHandler(async (req, res) => {
@@ -85,11 +118,11 @@ const getNotesById = async (req, res) => {
 
 const addNotes = asyncHandler(async (req, res) => {
     try {
-        const { name, subject, module, desc, type } = req.body;
+        const { name, subject, module, desc, type,year,branch } = req.body;
 
 
         //add validation
-        if (!name || !subject || !module || !desc || !type) {
+        if (!name || !subject || !module || !desc || !type || !year || !branch) {
             return res.status(400).json({ message: "Please enter all the fields" })
         }
 
@@ -108,6 +141,8 @@ const addNotes = asyncHandler(async (req, res) => {
             author: req.user.id,
             file: req.file.path,
             fileMimeType: req.file.mimetype,
+            year,
+            branch:new ObjectId(branch)
         });
 
         const user = await User.findById(req.user.id);
@@ -195,6 +230,71 @@ const AcceptRejectNotes = async (req, res) => {
     }
 }
 
+
+const AcceptRejectNotesLocal = async (req, res) => {
+    const { NoteId } = req.params;
+    try {
+        const user = req.user.id;
+
+        const ExistingUser = await User.findById(user)
+        if (!ExistingUser) {
+            res.status(404).json({ message: "User not found" })
+        }
+
+        if (ExistingUser.role !== "superuser") {
+            return res.status(403).json({ message: "You are not authorized to access this route" });
+        }
+        const note = await Note.findById(NoteId);
+        if (!note) {
+            return res.status(404).json({ message: `No note found with id ${NoteId}` });
+        }
+
+        const Author = await User.findById(note.author);
+
+        if (note.acceptedStatus === false) {
+            note.acceptedStatus = true;
+            Author.coins += 50;
+            try {
+
+                // if (!note.uploadedToS3) {
+                //     const fileKey = `${note.name}-${note.file}`;
+                //     const filePath = note.file;
+
+                //     const params = {
+                //         Bucket: process.env.AWS_BUCKET_NAME,
+                //         Key: fileKey,
+                //         Body: fs.createReadStream(filePath),
+                //         ContentType: note.fileMimeType,
+                //     }
+
+
+                //     const s3Response = await s3.upload(params).promise();
+
+                //     note.file = s3Response.Location;
+                //     fs.unlinkSync(filePath);
+                //     note.uploadedToS3 = true;
+                // }
+
+                await note.save();
+                await Author.save();
+                return res.status(200).json({ message: "Note accepted successfully", note: note });
+            } catch (s3Error) {
+                console.error("Error uploading file to S3:", s3Error);
+                return res.status(500).json({ message: "Error uploading file to S3" });
+            }
+        } else {
+            note.acceptedStatus = false;
+            Author.coins -= 50;
+            await Author.save()
+            await note.save();
+            return res.status(200).json({ message: "Note rejected successfully", note: note });
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
 
 
 const deleteNote = asyncHandler(async (req, res) => {
@@ -429,6 +529,8 @@ const getFilterdFormData = async (req, res) => {
 
 }
 
+
+
 const filterNote = async (req, res) => {
     try {
         const { branch, subject, module, type } = req.query;
@@ -495,5 +597,5 @@ const getUserUploadedNotes = async (req, res) => {
     }
 }
 
-module.exports = { getUserUploadedNotes, filterNote, getBookMarkedNotes, getAllNotes, addNotes, deleteNote, getSingleNote, getNotesAdmin, AcceptRejectNotes, getFormData, buyNote, searchNote, bookMarkNotes, getFilterdFormData };
+module.exports = { getInitialNotesByBranch,AcceptRejectNotesLocal,getUserUploadedNotes, filterNote, getBookMarkedNotes, getAllNotes, addNotes, deleteNote, getSingleNote, getNotesAdmin, AcceptRejectNotes, getFormData, buyNote, searchNote, bookMarkNotes, getFilterdFormData };
 

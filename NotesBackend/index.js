@@ -21,7 +21,7 @@ const { socketCtrl } = require("./controllers/socketCntrl");
 require('dotenv').config();
 const axios = require('axios');
 const cheerio = require('cheerio');
-// const { client, checkConnection } = require('./redis-client')
+const { client, checkConnection } = require('./redis-client')
 
 
 
@@ -41,7 +41,7 @@ let server = app.listen(port, () => {
     console.log(`Mongo Connected MF!!!`)
 });
 
-// checkConnection();
+checkConnection();
 
 
 const io = new Server(server, {

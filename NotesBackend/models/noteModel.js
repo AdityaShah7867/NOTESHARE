@@ -64,6 +64,14 @@ const noteSchema = mongoose.Schema({
     uploadedToS3: {
         type: Boolean,
         default: false
+    },
+    year:{
+        type:Number,
+        required:true
+    },
+    branch:{
+        type:mongoose.Types.ObjectId,
+        required:true
     }
 });
 

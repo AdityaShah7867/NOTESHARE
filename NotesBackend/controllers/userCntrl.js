@@ -42,6 +42,7 @@ const userInfo = asyncHandler(async (req, res) => {
     const existingUser = await User.findById(user).select('-notesUploaded -notesBought -password ')
     if (!existingUser) {
         res.status(401).json({ message: "user not found" })
+        return
     }
     res.status(200).json({ message: 'Authentication successful', user: existingUser });
 });
@@ -235,7 +236,6 @@ const sendResetPasswordEmail = async (req, res) => {
             if (otpexist) {
                 await OTP.deleteMany({ email: req.body.email });
             }
-
             const expirationDate = new Date(Date.now() + 10 * 60 * 1000);
             const otpcode = generateOTP();
             const otpData = new OTP({
@@ -243,10 +243,8 @@ const sendResetPasswordEmail = async (req, res) => {
                 email: req.body.email,
                 expiration: expirationDate,
             });
-
             await otpData.save();
             await resetPasswordEmail(req.body.email, otpcode);
-
             res.status(200).json({ message: 'OTP sent successfully' });
         }
     } catch (error) {
@@ -259,11 +257,7 @@ const sendResetPasswordEmail = async (req, res) => {
 const resetPassword = async (req, res) => {
     const { email, otpCode, password } = req.body;
     try {
-
         let data = await OTP.findOne({ email, code: otpCode });
-
-
-
         if (!data) {
             return res.status(404).json({ message: 'Invalid OTP' });
         } else {
@@ -272,8 +266,6 @@ const resetPassword = async (req, res) => {
                 res.status(401).json({ message: "Token Expired" });
             } else {
                 let user = await User.findOne({ email });
-
-
                 if (!user) {
                     res.status(404).json({ message: "User does not exist" });
                 } else {
@@ -298,9 +290,7 @@ const getUserById = async (req, res) => {
         if (!user) {
             res.status(404).json({ message: "User not found" });
         }
-
         res.status(200).json({ message: "User found", user: user });
-
     } catch (error) {
         res.status(501).json({ message: error })
     }
@@ -338,12 +328,10 @@ const getUserInfo = async (req, res) => {
         const userId = req.user.id;
         const existingUser = await User.findById(userId);
         if (!existingUser) {
-            res.status(401).json({ message: "user not found" })
+          return res.status(401).json({ message: "user not found" })
         }
 
         const userRank = await getUserRank(userId);
-
-
 
         const totalLikesOfUser = await getTotalLikes(userId);
 
@@ -354,11 +342,8 @@ const getUserInfo = async (req, res) => {
             notesBought: existingUser.notesBought?.length || 0,
             notesBought: existingUser.notesBought?.length || 0,
             totalLikes: totalLikesOfUser || 0
-
         }
-
         res.status(200).json({ userDetails: userDetails })
-
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: error })
@@ -371,7 +356,6 @@ const getUsersLeaderBoard = async (req, res) => {
         if (!users) {
             return res.status(401).json({ message: "No users found" });
         }
-
         const usersLeaderBoard = users.map((user, index) => {
             return {
                 rank: index + 1,

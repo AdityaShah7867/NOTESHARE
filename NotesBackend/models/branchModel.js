@@ -7,7 +7,7 @@ const branchSchema = mongoose.Schema({
     },
     year: {
         type: Number,
-        required: [true, "Branch year must be provided"]
+        // required: [true, "Branch year must be provided"]
     },
     subjects: [
         {
