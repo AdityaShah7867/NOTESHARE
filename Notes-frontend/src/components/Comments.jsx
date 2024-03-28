@@ -35,9 +35,9 @@ const Comments = ({ note }) => {
                     <br />
 
                     <br />
-                    <h1 className="text-2xl font-bold">ADD COMMENTS</h1>
+                    <h1 className="text-2xl font-bold text-black">ADD COMMENTS</h1>
                     <br />
-                    <div className="relative flex h-10 w-full min-w-[200px] max-w-[34rem]">
+                    <div className="relative flex h-10 w-full min-w-[200px] max-w-[34rem] border-black">
                         <input
                             type="text"
                             className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-white-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
@@ -58,7 +58,7 @@ const Comments = ({ note }) => {
                 </form>
             </div>
             <br />
-            <div className="relative h-grow w-full min-w-[200px] max-w-[34rem] rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <div className="border border-black relative h-grow w-full min-w-[200px] max-w-[34rem] rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 {
                     commentsById.length === 0 ? (
                         <div className="flex flex-col justify-center items-center">

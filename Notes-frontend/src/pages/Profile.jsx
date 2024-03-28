@@ -29,6 +29,8 @@ const Profile = () => {
     const [repositories, setRepositories] = useState([]);
     const [loading, setLoading] = useState(true);
     const user = useSelector((state) => state?.userDetails?.userProfile)
+    const currentUser=useSelector((state)=>state?.user?.user)
+    
 
 
     const [githubLink, setGithubLink] = useState(
@@ -68,13 +70,13 @@ const Profile = () => {
     }
 
 
-
-
     useEffect(() => {
         dispatch(getUserProfile(username));
         fetchSkillsByUsername();
     }, [dispatch, username]);
 
+
+    console.log('username',currentUser.username , username , currentUser.username === username)
 
 
 
@@ -133,11 +135,17 @@ const Profile = () => {
                                             src={user?.profile}
                                             alt="Profile Image"
                                         />
-                                        <NavLink to='/setting'>
+                                         {
+                                            currentUser?.username === username && (
+                                                <NavLink to='/setting'>
                                             <p className="text-right border-2 bg-blue-500  text-white hover:bg-blue-700 p-2 px-4 rounded-lg">
                                                 <i class="bi bi-pencil-square mr-3 "></i>
                                                 EDIT</p>
-                                        </NavLink>
+                                        </NavLink> 
+                                            )
+                                        }
+
+                                       
                                     </div>
                                     <div className="text-left mt-2">
                                         <h2 className="text-xl font-semibold text-gray-800">

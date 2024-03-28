@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { filterdNotes, getFilteredFormData, getBookMarkedNotes, bookMarkNotes, searchNote, getNotes, getFormData, addNote, getNotesAdmin, AcceptRejectNotes, getSingleNote, deleteNote, buyNote } from "./noteActions";
+import { getInitialNotes,filterdNotes, getFilteredFormData, getBookMarkedNotes, bookMarkNotes, searchNote, getNotes, getFormData, addNote, getNotesAdmin, AcceptRejectNotes, getSingleNote, deleteNote, buyNote } from "./noteActions";
 
 const initialState = {
     notes: [],
@@ -244,6 +244,18 @@ export const noteSlice = createSlice({
             state.success = false;
         }
         )
+
+        builder.addCase(getInitialNotes.pending,(state,action)=>{
+            state.loading = true
+        }).addCase(getInitialNotes.fulfilled,(state,action)=>{
+            state.loading = false
+            state.success = true
+            state.notes = action.payload.notes
+        }).addCase(getInitialNotes.rejected,(state,action)=>{
+            state.loading = false;
+            state.error = action.payload;
+            state.success = false;
+        })
 
 
     }

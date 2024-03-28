@@ -31,6 +31,30 @@ export const filterdNotes = createAsyncThunk(
 )
 
 
+export const getInitialNotes=createAsyncThunk(
+    'notes/getinitialNotes',
+    async (_,{rejectWithValue})=>{
+        try {   
+            const response=await axios.get(`${host}/api/v1/notes/getInitialNotesByBranch`,{
+                headers:{
+                    Authorization:`Bearer ${authToken}`,
+                    'Content-Type':'application/json'
+                }
+            })
+            if(response.status === 200){
+                return response.data
+            }else{  
+                return rejectWithValue(response.data.message)
+            }
+            
+        } catch (error) {
+              
+            return rejectWithValue(error.response?.data?.message);  
+        }
+    }
+)
+
+
 export const getFilteredFormData = createAsyncThunk(
     'notes/getFilteredFormData',
     async (_, { rejectWithValue }) => {
