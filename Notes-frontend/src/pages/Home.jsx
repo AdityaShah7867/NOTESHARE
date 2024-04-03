@@ -8,7 +8,7 @@ import Search from '../components/Search';
 import QuickFilter from '../components/QuickFilter';
 import BookCardSkeletion from '../components/skeletons/BookCardSkeletion';
 import Alternate from '../components/Layout/HomeLay';
-import { getNotes, searchNote, getBookMarkedNotes } from '../redux/notes/noteActions';
+import { getNotes, searchNote, getBookMarkedNotes ,getInitialNotes} from '../redux/notes/noteActions';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -26,7 +26,8 @@ const Home = () => {
   const filteredNotes = filter === 'BookMarked' ? bookMarkedNotes : searchedNotes && filter !== 'ALL' ? searchedNotes : notes;
 
   useEffect(() => {
-    dispatch(getNotes());
+    // dispatch(getNotes());
+    dispatch(getInitialNotes())
   }, [dispatch, reRender]);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const Home = () => {
           <QuickFilter filter={filter} setFilter={setFilter} />
           <div className=' justify-center'>
             {
-              filter === 'BookMarked' ? <h1 className='text-black text-center text-2xl mb-10'>BookMarked Notes </h1> : null
+              filter === 'BookMarked' ? <h1 className='text-black text-center text-2xl mb-10'> </h1> : null
             }
           </div>
           <motion.div className='flex flex-wrap justify-center'

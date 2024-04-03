@@ -79,11 +79,11 @@ export const SideBar = () => {
               name="username"
               className="text-[15px] ml-4 w-full bg-transparent focus:outline-none"
               onChange={(e) => setUsername(e.target.value)}
-              onBlur={handleSearchBlur}
+              // onBlur={handleSearchBlur}
             />
           </div>
           <div className="my-2 bg-gray-600 h-[1px]" />
-          {searchedUser?.map((user) => (
+          {username.length > 0 &&  searchedUser?.map((user) => (
             <NavLink to={`/profile/${user?.username}`}>
               <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
                 <img
@@ -106,6 +106,18 @@ export const SideBar = () => {
               <i className="bi bi-house-door"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Home
+              </span>
+            </div>
+          </NavLink>
+
+          <NavLink to={"/dashboard"}>
+            <div
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/dashboard" ? "bg-blue-500" : ""
+                }`}
+            >
+              <i className="bi bi-clipboard-data text-white"></i>
+              <span className="text-[15px] ml-4 text-gray-200 font-bold">
+                Dashboard
               </span>
             </div>
           </NavLink>
@@ -181,17 +193,9 @@ export const SideBar = () => {
             </div>
           </NavLink>
 
-          <NavLink to={"/dashboard"}>
-            <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/dashboard" ? "bg-blue-500" : ""
-                }`}
-            >
-              <i className="bi bi-clipboard-data text-white"></i>
-              <span className="text-[15px] ml-4 text-gray-200 font-bold">
-                Dashboard
-              </span>
-            </div>
-          </NavLink>
+          <div className="my-4 bg-gray-600 h-[1px]" />
+
+          
           <NavLink to={`/profile/${user?.username}`}>
             <div
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === `/profile/${user?.username}`
@@ -240,7 +244,6 @@ export const SideBar = () => {
             </>
           )}
 
-          <div className="my-4 bg-gray-600 h-[1px]" />
 
           <div
             className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"

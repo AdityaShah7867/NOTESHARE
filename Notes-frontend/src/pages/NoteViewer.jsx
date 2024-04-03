@@ -66,37 +66,30 @@ const Nviewer = () => {
 
   return (
 
-    <div className="lg:flex md:flex-row -mt-16 bg-black" style={{ color: 'white' }}>
+    <div className="lg:flex md:flex-row -mt-16 bg-white" style={{ color: 'white' }}>
       <div className="lg:w-2/3 sm:w-full md:w-full bg-lightgray p-4">
-        <h1 className="text-3xl font-bold mt-16 text-left">{singlenote?.name} </h1>
-        <h3 className="text-3xl font-bold text-left">-by {singlenote?.author?.username}</h3>
+        <h1 className="text-3xl font-bold mt-16 text-left text-black uppercase text-center">{singlenote?.name} </h1>
+        <h3 className="text-xl font-bold  text-black text-center">-{singlenote?.author?.username}</h3>
 
         <iframe
           className="iframe mt-10 sm:min-w-full h-[35rem] lg:h-[50rem]"
-          src={singlenote?.file + `#toolbar=0`}
+          // src={'localhost:4000/'+singlenote?.file + `#toolbar=0`}
+          src={`${process.env.REACT_APP_API_HOST}/${singlenote.file}#toolbar=0`}
           width="100%"
-
         ></iframe>
       </div>
       <div className="lg:w-1/3 md:w-full bg-darkgray p-4 mt-10">
         <div className="flex">
-
-
           <button
             onClick={
               () => {
                 dispatch(bookMarkNotes(singlenote?._id))
-
               }
             }
-            className="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500"
-          >
+            className="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
             <i class="fa-regular fa-bookmark fa-2xl"></i>
-
           </button>
-
           <br />
-
           <button
             type="submit"
             className="text-red-700 border h-14 mx-2 border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800 dark:hover:bg-red-500"

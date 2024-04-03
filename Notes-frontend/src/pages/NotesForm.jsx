@@ -22,6 +22,7 @@ const NotesForm = () => {
     desc: "",
     branch: "",
     file: null,
+    year:0
   });
 
   const onChange = (e) => {
@@ -79,16 +80,19 @@ const NotesForm = () => {
       return;
     }
 
+
+    console.log(formdata)
     await dispatch(addNote(formdata));
-    setFormdata({
-      name: "",
-      subject: "",
-      module: "",
-      type: "",
-      desc: "",
-      branch: "",
-      file: null,
-    });
+    // setFormdata({
+    //   name: "",
+    //   subject: "",
+    //   module: "",
+    //   type: "",
+    //   desc: "",
+    //   branch: "",
+    //   file: null,
+    //   year:0
+    // });
     await dispatch(getNotes());
   };
 
@@ -107,6 +111,9 @@ const NotesForm = () => {
             <h2 className="mt-5 text-2xl font-bold text-gray-900">
               Add Notes & Contribute to the Community!!
             </h2>
+            <p className="mt-2 text-sm text-gray-500">
+              You're uploading notes in your respective year and branch.
+              </p>
           </div>
           <form className="mt-8 space-y-3" onSubmit={handlesubmit}>
             <div className="space-y-2">
@@ -161,6 +168,51 @@ const NotesForm = () => {
                 </select>
               </label>
             </div>
+            {/* branch */}
+
+            {/* <div className="space-y-2">
+              <label className="block text-sm font-bold text-gray-500 tracking-wide">
+                Branch
+                <select
+                  className="text-base w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                  value={formdata.branch}
+                  onChange={onChange}
+                  name="branch"
+                  required
+                >
+                  <option value="">Select Branch</option>
+
+                  {
+                   branches?.map((branch)=>(
+                    <option  key={branch.id} value={branch._id}  >{branch.name}</option>
+                   ))
+                  }
+               
+                </select>
+              </label>
+            </div> */}
+
+            {/* year */}
+            {/* <div className="space-y-2">
+              <label className="block text-sm font-bold text-gray-500 tracking-wide">
+                Year
+                <select
+                  className="text-base w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                  value={formdata.year}
+                  onChange={onChange}
+                  name="year"
+                  required
+                >
+                  <option value="">Select Module</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </label>
+            </div> */}
+
+
             <div className="space-y-2">
               <label className="block text-sm font-bold text-gray-500 tracking-wide">
                 Type

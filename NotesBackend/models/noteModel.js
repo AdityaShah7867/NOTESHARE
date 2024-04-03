@@ -64,6 +64,15 @@ const noteSchema = mongoose.Schema({
     uploadedToS3: {
         type: Boolean,
         default: false
+    },
+    year:{
+        type:String,
+        enum: ['FE','SE','TE','BE'],
+        required:true
+    },
+    branch:{
+        type:String,
+        required:true
     }
 });
 

@@ -22,6 +22,7 @@ const Register = () => {
     password: "",
     cpassword: "",
     Department: "",
+    year: "",
   });
 
   const [seepasword, setseepassword] = useState(false);
@@ -86,6 +87,7 @@ const Register = () => {
       // else {
       //
       dispatch(register(formdata));
+      // console.log(formdata)
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "User registration failed!";
@@ -193,6 +195,26 @@ const Register = () => {
                     <option value="CIVIL">AIDS</option>
                   </select>
                 </div>
+
+                <div>
+
+<select
+  onChange={onChange}
+  name="year"
+  id="year"
+  value={formdata.year}
+  className="bg-gray-50 border mt-4 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  required
+>
+  <option value="">Select Year</option>
+  <option value="FE">FE</option>
+  <option value="SE">SE</option>
+  <option value="TE">TE</option>
+  <option value="BE">BE</option>
+
+</select>
+</div>
+
 
                 <div className="pb-2 pt-4">
 

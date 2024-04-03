@@ -28,7 +28,8 @@ export const authSlice = createSlice({
         }).addCase(register.fulfilled, (state, action) => {
             state.loading = false
             state.success = true
-            state.user = action.payload
+            // state.user = action.payload  
+            // This is not needed because we are not storing the user in the state. We are redirecting to the login page after registration. Since the login page checks if the user exists in the state, but the user is not verified yet, we are not storing the user in the state.
         }).addCase(register.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema(
     {
         username: {
+            
             type: String,
             required: [true, "Please provide a username"],
             unique: true
@@ -24,6 +25,10 @@ const userSchema = mongoose.Schema(
         },
         Department: {
             type: String
+        },
+        year:{
+            type: String,
+            enum: ['FE','SE','TE','BE']
         },
         profile: {
             type: String,

@@ -13,12 +13,10 @@ const subjectSchema = mongoose.Schema({
     },
     Image: {
         type: String,
-
     },
     sem: {
         type: Number,
         required: [true, "Sem must be mentioned"]
-
     },
     module: [{
         type: mongoose.Types.ObjectId,

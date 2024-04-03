@@ -15,6 +15,7 @@ const likeRoutes = require('./routes/likeRoutes')
 const skillsRoutes = require('./routes/skillsRoutes')
 const communityRoutes = require('./routes/communityRoutes')
 const messageRoutes = require('./routes/messageRoutes')
+const googleAuthRoutes=require('./routes/googleAuthRoutes')
 const { Server } = require('socket.io')
 const cors = require('cors');
 const { socketCtrl } = require("./controllers/socketCntrl");
@@ -22,12 +23,26 @@ require('dotenv').config();
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { client, checkConnection } = require('./redis-client')
-
+const passport=require('passport')
+const cookieSession = require("cookie-session");
+const passportStrategy = require('./utils/passport');
 
 
 
 
 const app = express();
+
+app.use(
+	cookieSession({
+		name: "session",
+		keys: ["cyberwolve"],
+		maxAge: 24 * 60 * 60 * 100,
+	})
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 const port = process.env.PORT || 8000;
 app.use(express.json());
@@ -155,6 +170,7 @@ app.use('/api/v1/impDates', impDateRoutes);
 app.use('/api/v1/skills', skillsRoutes);
 app.use('/api/v1/community', communityRoutes);
 app.use('/api/v1/messages', messageRoutes);
+app.use('/api/v1/google',googleAuthRoutes)
 
 app.use(errorHandler);
 

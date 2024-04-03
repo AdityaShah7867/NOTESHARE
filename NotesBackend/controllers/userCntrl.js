@@ -42,6 +42,7 @@ const userInfo = asyncHandler(async (req, res) => {
     const existingUser = await User.findById(user).select('-notesUploaded -notesBought -password ')
     if (!existingUser) {
         res.status(401).json({ message: "user not found" })
+        return
     }
     res.status(200).json({ message: 'Authentication successful', user: existingUser });
 });
@@ -71,9 +72,9 @@ const initialCall = async (req, res) => {
 
 const registerUser = asyncHandler(async (req, res) => {
     try {
-        const { username, email, password, Department, role } = req.body;
+        const { username, email, password, Department, role, year } = req.body;
 
-        if (!username || !email || !password || !Department) {
+        if (!username || !email || !password || !Department || !year) {
             res.status(400).json({ message: "all fields are required" });
             return;
         }
@@ -102,6 +103,7 @@ const registerUser = asyncHandler(async (req, res) => {
             Department,
             password: hashedPassword,
             verificationToken,
+            year
         });
 
         await sendVerificationEmail(lowercaseEmail, verificationToken);
@@ -234,7 +236,6 @@ const sendResetPasswordEmail = async (req, res) => {
             if (otpexist) {
                 await OTP.deleteMany({ email: req.body.email });
             }
-
             const expirationDate = new Date(Date.now() + 10 * 60 * 1000);
             const otpcode = generateOTP();
             const otpData = new OTP({
@@ -242,10 +243,8 @@ const sendResetPasswordEmail = async (req, res) => {
                 email: req.body.email,
                 expiration: expirationDate,
             });
-
             await otpData.save();
             await resetPasswordEmail(req.body.email, otpcode);
-
             res.status(200).json({ message: 'OTP sent successfully' });
         }
     } catch (error) {
@@ -258,11 +257,7 @@ const sendResetPasswordEmail = async (req, res) => {
 const resetPassword = async (req, res) => {
     const { email, otpCode, password } = req.body;
     try {
-
         let data = await OTP.findOne({ email, code: otpCode });
-
-
-
         if (!data) {
             return res.status(404).json({ message: 'Invalid OTP' });
         } else {
@@ -271,8 +266,6 @@ const resetPassword = async (req, res) => {
                 res.status(401).json({ message: "Token Expired" });
             } else {
                 let user = await User.findOne({ email });
-
-
                 if (!user) {
                     res.status(404).json({ message: "User does not exist" });
                 } else {
@@ -297,9 +290,7 @@ const getUserById = async (req, res) => {
         if (!user) {
             res.status(404).json({ message: "User not found" });
         }
-
         res.status(200).json({ message: "User found", user: user });
-
     } catch (error) {
         res.status(501).json({ message: error })
     }
@@ -319,7 +310,13 @@ const getTotalLikes = async (userId) => {
 
 
 const getUserRank = async (userId) => {
-    const users = await User.find({ isVerified: true }).sort({ coins: -1 });
+
+    const current_user = await User.findById(userId);
+    const users = await User.find({ 
+        isVerified: true,
+        year: current_user.year,
+        Department: current_user.Department
+         }).sort({ coins: -1 });
     let rank = 0;
     users.forEach((user, index) => {
         if (user.id === userId) {
@@ -337,12 +334,10 @@ const getUserInfo = async (req, res) => {
         const userId = req.user.id;
         const existingUser = await User.findById(userId);
         if (!existingUser) {
-            res.status(401).json({ message: "user not found" })
+            return res.status(401).json({ message: "user not found" })
         }
 
         const userRank = await getUserRank(userId);
-
-
 
         const totalLikesOfUser = await getTotalLikes(userId);
 
@@ -353,11 +348,8 @@ const getUserInfo = async (req, res) => {
             notesBought: existingUser.notesBought?.length || 0,
             notesBought: existingUser.notesBought?.length || 0,
             totalLikes: totalLikesOfUser || 0
-
         }
-
         res.status(200).json({ userDetails: userDetails })
-
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: error })
@@ -366,7 +358,17 @@ const getUserInfo = async (req, res) => {
 
 const getUsersLeaderBoard = async (req, res) => {
     try {
-        const users = await User.find({ isVerified: true }).sort({ coins: -1 });
+        const current_user = await User.findById(req.user.id);
+        if (!current_user) {
+            return res.status(401).json({ message: "User not found" });
+        }
+        const users = await User.find(
+            {
+                isVerified: true,
+                year: current_user.year,
+                Department: current_user.Department
+
+            }).sort({ coins: -1 });
         if (!users) {
             return res.status(401).json({ message: "No users found" });
         }
@@ -400,7 +402,7 @@ const editProfile = async (req, res) => {
 
         // Upload the image to AWS if a file is provided
         if (req.file) {
-
+            console.log('file found')
             const fileKey = `${uuidv4()}-${req.file.originalname}`;
             const params = {
                 Bucket: process.env.AWS_BUCKET_NAME,
@@ -411,6 +413,7 @@ const editProfile = async (req, res) => {
             const data = await s3.upload(params).promise();
             user.profile = data.Location;
         } else {
+            console.log('file not found')
         }
 
         user.username = username ? username : user.username;
