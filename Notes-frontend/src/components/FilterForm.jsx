@@ -22,8 +22,8 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
         e.preventDefault()
         console.log(filterFormData)
 
-        const { branch, subject, module, type } = filterFormData;
-        const queryString = `?branch=${branch}&subject=${subject}&module=${module}&type=${type}`;
+        const { branch, subject, module, type, year } = filterFormData;
+        const queryString = `branch=${branch}&subject=${subject}&module=${module}&type=${type}&year=${year}`;
 
         http://localhost:4000/api/v1/notes/filterNote?type=Assignment?branch=&subject=&module=&type=Assignment
 
@@ -76,6 +76,30 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
                     >
                         <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
 
+                        <div className="mb-4">
+                                <label
+                                    htmlFor="module"
+                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                >
+                                    YEAR
+                                </label>
+                                <select
+                                    onChange={
+                                        onChange
+                                    }
+                                    id="module"
+                                    name='year'
+                                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+                                >
+                                    <option value="">Select Year</option>
+                                    <option value="FE">FE</option>
+                                    <option value="SE">SE</option>
+                                    <option value="TE">TE</option>
+                                    <option value="BE">BE</option>
+
+                                </select>
+                            </div>
+
                             <div className="mb-4">
                                 <label
                                     htmlFor="module"
@@ -112,7 +136,7 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
                                 <select
                                     id="module"
                                     onChange={onChange}
-                                    name='module'
+                                    name='subject'
                                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
                                 >
                                     {
@@ -146,7 +170,7 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
 
                             <div className="mb-4">
                                 <label
-                                    htmlFor="subject"
+                                    htmlFor="module"
                                     className="block text-gray-700 text-sm font-bold mb-2"
                                 >
                                     Module
@@ -154,7 +178,7 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
                                 <select
                                     id="subject"
                                     onChange={onChange}
-                                    name='subject'
+                                    name='module'
                                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
                                 >
                                     <option value="">Select Module</option>
@@ -209,7 +233,7 @@ const FilterForm = ({ closeFilterModal, isFilterModalOpen }) => {
                                     type="button"
                                     className="inline-flex justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
                                 >
-                                    Cancle
+                                    Cancel
                                 </button>
                             </div>
                         </div>

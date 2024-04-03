@@ -149,7 +149,7 @@ const Profile = () => {
                                     </div>
                                     <div className="text-left mt-2">
                                         <h2 className="text-xl font-semibold text-gray-800">
-                                            {user?.username}
+                                            {user?.username} <p className="text-sm text-gray-600 mt-3">({user?.year}/{user?.Department})</p>
                                         </h2>
                                         <p className="text-sm text-gray-600 mt-3">Email Address:</p>
                                         <p>{user?.email}</p>

@@ -26,7 +26,7 @@ const Setting = () => {
     bio: user?.Bio || "No Bio",
     profile: user?.profile || "No Profile",
     github: user?.githubUsername || "No GitHub",
-    department: user?.Department || "Add Department",
+    year: user?.year || "Add Department",
   });
 
 
@@ -198,27 +198,25 @@ const Setting = () => {
                       </div>
                       <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
-                          Department:
+                          Year:
                         </label>
                         {isEditable ? (
                           <select
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            name="department"
+                            name="year"
 
                             onChange={onChange}
-                            value={formData.department}
+                            value={formData.year}
                           >
-                            <option value="IT">IT</option>
-                            <option value="COMPS">COMPS</option>
-                            <option value="CSE">CSE</option>
-                            <option value="AIDS">AIDS</option>
-                            <option value="CIVIL">CIVIL</option>
-                            <option value="MECH">MECH</option>
-                            <option value="EXTC">EXTC</option>
+                            <option value="FE">FE</option>
+                            <option value="SE">SE</option>
+                            <option value="TE">TE</option>
+                            <option value="BE">BE</option>
+                
                           </select>
                         ) : (
                           <div className="border p-2 rounded bg-gray-100">
-                            {formData.department}
+                            {formData.year}
                           </div>
                         )}
                       </div>

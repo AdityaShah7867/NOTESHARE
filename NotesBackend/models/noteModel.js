@@ -66,7 +66,8 @@ const noteSchema = mongoose.Schema({
         default: false
     },
     year:{
-        type:Number,
+        type:String,
+        enum: ['FE','SE','TE','BE'],
         required:true
     },
     branch:{

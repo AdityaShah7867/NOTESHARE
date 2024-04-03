@@ -10,6 +10,7 @@ export const filterdNotes = createAsyncThunk(
     'notes/filterdNotes',
     async (queryString, { rejectWithValue }) => {
         try {
+            
             const response = await axios.get(`${host}/api/v1/notes/filterNote?${queryString}`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`,
@@ -166,7 +167,6 @@ export const getNotes = createAsyncThunk(
             });
 
             if (response.status === 200) {
-
                 return response.data;
             } else {
 

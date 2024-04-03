@@ -58,6 +58,8 @@ const buyNote = async (req, res) => {
 
 const getInitialNotesByBranch=async(req,res)=>{
     try {
+        
+
         const userId=req.user.id;
 
         const user=await User.findById(userId)
@@ -70,12 +72,14 @@ const getInitialNotesByBranch=async(req,res)=>{
         const branch=await Branch.find({
             name:user.Department
         });
-        // userYear=Number(user.year) 
-        userYear=4
+
+        console.log
+        
        const notes=await Note.find({
-        branch:new ObjectId(branch[0]._id),
-        year:userYear
+        branch: branch.name,
+        year: req.user.year
        }).populate('author', '-notesUploaded -notesBought').populate('subject')
+
        if(!notes){
               res.status(404).json({
                 message:"No notes found",
@@ -98,8 +102,14 @@ const getInitialNotesByBranch=async(req,res)=>{
 
 const getAllNotes = asyncHandler(async (req, res) => {
     try {
+        const user = req.user.id;
+        const ExistingUser = await User.findById(user);
+        if (!ExistingUser) {
+            res.status(404).json({ message: "User not found" })
+        }
 
-        const notes = await Note.find({ acceptedStatus: true }).populate('author', '-notesUploaded -notesBought').populate('subject')
+
+        const notes = await Note.find({ acceptedStatus: true, year: ExistingUser.year, branch: ExistingUser.Department  }).populate('author', '-notesUploaded -notesBought').populate('subject')
 
         res.status(200).json({ message: "Notes fetched successfully", data: notes });
     } catch (error) {
@@ -407,9 +417,14 @@ const getNotesAdmin = async (req, res) => {
 
 const getFormData = async (req, res) => {
     try {
+        const current_user = await User.findById(req.user.id);
+        if(!current_user){
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
         const getModules = await ModuleName.find();
-        const getSubjects = await Subject.find();
-        const getBranches = await Branch.find();
+        const getBranches = await Branch.find({name: current_user.Department});
+        const getSubjects = await Subject.find({branch: getBranches[0]._id});
 
         res.status(200).json({ message: "Data fetched successfully", data: { module: getModules, branches: getBranches, subject: getSubjects } });
 
@@ -424,7 +439,15 @@ const getFormData = async (req, res) => {
 const searchNote = async (req, res) => {
     try {
         const { search } = req.query;
-        const notes = await Note.find({ acceptedStatus: true }).populate('subject author')
+        const user = req.user.id;
+        const existingUser = await User.findById(user);
+        if (!existingUser) {
+
+            res.status(404).json({ message: "User not found" });
+            return;
+
+        }
+        const notes = await Note.find({ acceptedStatus: true, year: existingUser.year, branch: existingUser.Department  }).populate('subject author')
         if (!search) {
             return res.status(200).json({ message: "Please enter something to search", searchData: notes })
         }
@@ -545,49 +568,60 @@ const getFilterdFormData = async (req, res) => {
 }
 
 
-
 const filterNote = async (req, res) => {
     try {
-        const { branch, subject, module, type } = req.query;
-       
-        const notes = await Note.find({
-            acceptedStatus: true,
-        }).populate({ path: 'subject', populate: { path: 'branch', select: 'name' } });
+        const { branch, subject, module, type, year } = req.query;
 
+        console.log(branch, subject);
+
+        
+
+        let filteredNotes = await Note.find({ acceptedStatus: true }).populate({
+            path: 'subject',
+            populate: { path: 'branch' } // Populate the branch field inside the subject field
+        });
+        
+
+
+
+
+        if (!filteredNotes || filteredNotes.length === 0) {
+            return res.status(200).json({ searchData: [], qty: 0, message: "No notes found" });
+        }
+
+        if (subject) {
+            filteredNotes = filteredNotes.filter(note =>
+                note.subject.name.toLowerCase().includes(subject.toLowerCase())
+            );
+        }
+        
+        if (branch) {
+            filteredNotes = filteredNotes.filter(note =>
+                note.subject.branch.name.toLowerCase().includes(branch.toLowerCase())
+            );
+        }
+        
         if (type) {
-            const filterdData = notes.filter((note) => {
-                return (
-                    note?.type?.toLowerCase()?.includes(type?.toLowerCase() ?? '')
-                )
-            })
-            res.status(200).json({ message: "Notes fetched successfully", searchData: filterdData, qty: filterdData.length, notes: notes });
-            return;
+            filteredNotes = filteredNotes.filter(note =>
+                note.type.toLowerCase().includes(type.toLowerCase())
+            );
         }
-        if (branch && subject) {
-            const filterdData = notes.filter((note) => {
-                
-                return (
-                    note?.subject?.name?.toLowerCase()?.includes(subject?.toLowerCase() ?? '')
-                )
-            })
-            res.status(200).json({ message: "Notes fetched successfully", searchData: filterdData, qty: filterdData.length });
-            return;
-        } else {
-            const filterdData = notes.filter((note) => {
-                return (
-                    note?.subject?.name?.toLowerCase()?.includes(subject?.toLowerCase() ?? '') ||
-                    note?.subject?.branch?.name?.toLowerCase()?.includes(branch?.toLowerCase() ?? '') ||
-                    note?.type?.toLowerCase()?.includes(type?.toLowerCase() ?? '')
-                )
-            })
-            res.status(200).json({ message: "Notes fetched successfully", searchData: filterdData, qty: filterdData.length });
-            return;
-        }
+        
+        // if (year) {
+        //     filteredNotes = filteredNotes.filter(note =>
+        //         note?.year.toLowerCase().includes(year.toLowerCase())
+        //     );
+        // }
 
+      
+        res.status(200).json({
+            message: "Notes fetched successfully",
+            searchData: filteredNotes,
+            qty: filteredNotes.length
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal Server Error" });
-
     }
 }
 
