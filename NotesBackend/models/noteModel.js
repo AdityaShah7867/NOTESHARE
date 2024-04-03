@@ -70,7 +70,7 @@ const noteSchema = mongoose.Schema({
         required:true
     },
     branch:{
-        type:mongoose.Types.ObjectId,
+        type:String,
         required:true
     }
 });

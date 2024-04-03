@@ -111,6 +111,9 @@ const NotesForm = () => {
             <h2 className="mt-5 text-2xl font-bold text-gray-900">
               Add Notes & Contribute to the Community!!
             </h2>
+            <p className="mt-2 text-sm text-gray-500">
+              You're uploading notes in your respective year and branch.
+              </p>
           </div>
           <form className="mt-8 space-y-3" onSubmit={handlesubmit}>
             <div className="space-y-2">
@@ -167,7 +170,7 @@ const NotesForm = () => {
             </div>
             {/* branch */}
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <label className="block text-sm font-bold text-gray-500 tracking-wide">
                 Branch
                 <select
@@ -187,10 +190,10 @@ const NotesForm = () => {
                
                 </select>
               </label>
-            </div>
+            </div> */}
 
             {/* year */}
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <label className="block text-sm font-bold text-gray-500 tracking-wide">
                 Year
                 <select
@@ -207,7 +210,7 @@ const NotesForm = () => {
                   <option value={4}>4</option>
                 </select>
               </label>
-            </div>
+            </div> */}
 
 
             <div className="space-y-2">

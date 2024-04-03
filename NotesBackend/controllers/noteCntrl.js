@@ -76,6 +76,12 @@ const getInitialNotesByBranch=async(req,res)=>{
         branch:new ObjectId(branch[0]._id),
         year:userYear
        }).populate('author', '-notesUploaded -notesBought').populate('subject')
+       if(!notes){
+              res.status(404).json({
+                message:"No notes found",
+                notes:[]
+              })
+       }
         res.status(200).json({
             message:"notes of the user",
             notes:notes
@@ -118,11 +124,11 @@ const getNotesById = async (req, res) => {
 
 const addNotes = asyncHandler(async (req, res) => {
     try {
-        const { name, subject, module, desc, type,year,branch } = req.body;
+        const { name, subject, module, desc, type } = req.body;
 
 
         //add validation
-        if (!name || !subject || !module || !desc || !type || !year || !branch) {
+        if (!name || !subject || !module || !desc || !type ) {
             return res.status(400).json({ message: "Please enter all the fields" })
         }
 
@@ -131,6 +137,15 @@ const addNotes = asyncHandler(async (req, res) => {
             res.status(400).json({ message: "Please upload a file" });
             return;
         }
+
+        const currentUser = await User.findById(req.user.id);
+
+        if (!currentUser) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+
 
         const newNote = await Note.create({
             name,
@@ -141,8 +156,8 @@ const addNotes = asyncHandler(async (req, res) => {
             author: req.user.id,
             file: req.file.path,
             fileMimeType: req.file.mimetype,
-            year,
-            branch:new ObjectId(branch)
+            year : currentUser.year,
+            branch: currentUser.Department
         });
 
         const user = await User.findById(req.user.id);
@@ -190,24 +205,24 @@ const AcceptRejectNotes = async (req, res) => {
             Author.coins += 50;
             try {
 
-                if (!note.uploadedToS3) {
-                    const fileKey = `${note.name}-${note.file}`;
-                    const filePath = note.file;
+                // if (!note.uploadedToS3) {
+                //     const fileKey = `${note.name}-${note.file}`;
+                //     const filePath = note.file;
 
-                    const params = {
-                        Bucket: process.env.AWS_BUCKET_NAME,
-                        Key: fileKey,
-                        Body: fs.createReadStream(filePath),
-                        ContentType: note.fileMimeType,
-                    }
+                //     const params = {
+                //         Bucket: process.env.AWS_BUCKET_NAME,
+                //         Key: fileKey,
+                //         Body: fs.createReadStream(filePath),
+                //         ContentType: note.fileMimeType,
+                //     }
 
 
-                    const s3Response = await s3.upload(params).promise();
+                //     const s3Response = await s3.upload(params).promise();
 
-                    note.file = s3Response.Location;
-                    fs.unlinkSync(filePath);
-                    note.uploadedToS3 = true;
-                }
+                //     note.file = s3Response.Location;
+                //     fs.unlinkSync(filePath);
+                //     note.uploadedToS3 = true;
+                // }
 
                 await note.save();
                 await Author.save();

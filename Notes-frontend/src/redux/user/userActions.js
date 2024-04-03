@@ -152,7 +152,11 @@ export const getUsersLeaderBoard = createAsyncThunk(
     'user/getUsersLeaderBoard',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${host}/api/v1/users/getUsersLeaderBoard`)
+            const response = await axios.get(`${host}/api/v1/users/getUsersLeaderBoard`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authtoken')}`
+                }
+            })
 
             if (response.status === 200) {
 

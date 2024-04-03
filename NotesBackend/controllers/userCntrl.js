@@ -72,11 +72,11 @@ const initialCall = async (req, res) => {
 
 const registerUser = asyncHandler(async (req, res) => {
     try {
-        const { username, email, password, Department, role,year } = req.body;
+        const { username, email, password, Department, role, year } = req.body;
 
         if (!username || !email || !password || !Department || !year) {
             res.status(400).json({ message: "all fields are required" });
-        return;
+            return;
         }
 
         // if (!isEmailEdu(email)) {
@@ -310,7 +310,13 @@ const getTotalLikes = async (userId) => {
 
 
 const getUserRank = async (userId) => {
-    const users = await User.find({ isVerified: true }).sort({ coins: -1 });
+
+    const current_user = await User.findById(userId);
+    const users = await User.find({ 
+        isVerified: true,
+        year: current_user.year,
+        Department: current_user.Department
+         }).sort({ coins: -1 });
     let rank = 0;
     users.forEach((user, index) => {
         if (user.id === userId) {
@@ -328,7 +334,7 @@ const getUserInfo = async (req, res) => {
         const userId = req.user.id;
         const existingUser = await User.findById(userId);
         if (!existingUser) {
-          return res.status(401).json({ message: "user not found" })
+            return res.status(401).json({ message: "user not found" })
         }
 
         const userRank = await getUserRank(userId);
@@ -352,10 +358,21 @@ const getUserInfo = async (req, res) => {
 
 const getUsersLeaderBoard = async (req, res) => {
     try {
-        const users = await User.find({ isVerified: true }).sort({ coins: -1 });
+        const current_user = await User.findById(req.user.id);
+        if (!current_user) {
+            return res.status(401).json({ message: "User not found" });
+        }
+        const users = await User.find(
+            {
+                isVerified: true,
+                year: current_user.year,
+                Department: current_user.Department
+
+            }).sort({ coins: -1 });
         if (!users) {
             return res.status(401).json({ message: "No users found" });
         }
+
         const usersLeaderBoard = users.map((user, index) => {
             return {
                 rank: index + 1,
@@ -385,7 +402,7 @@ const editProfile = async (req, res) => {
 
         // Upload the image to AWS if a file is provided
         if (req.file) {
-
+            console.log('file found')
             const fileKey = `${uuidv4()}-${req.file.originalname}`;
             const params = {
                 Bucket: process.env.AWS_BUCKET_NAME,
@@ -396,6 +413,7 @@ const editProfile = async (req, res) => {
             const data = await s3.upload(params).promise();
             user.profile = data.Location;
         } else {
+            console.log('file not found')
         }
 
         user.username = username ? username : user.username;
