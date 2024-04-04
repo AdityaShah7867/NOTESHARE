@@ -22,6 +22,7 @@ require('dotenv').config();
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { client, checkConnection } = require('./redis-client')
+const books=require('./books.json')
 
 
 
@@ -98,7 +99,7 @@ app.get('/books', async (req, res) => {
 });
 
 
-app.get('/scrape', async (req, res) => {
+app.get('/scrapedata', async (req, res) => {
     try {
         const casheValue = await client.get('books')
         if (casheValue) {
@@ -108,7 +109,7 @@ app.get('/scrape', async (req, res) => {
         let numberOfPages = 83;
         let scrapedData = [];
         for (let i = 0; i < numberOfPages; i++) {
-            const url = `https://www.freetechbooks.com/topics?page=${i}`;
+            const url = `http://www.freetechbooks.com/topics?page=${i}`;
             const response = await axios.get(url);
 
             if (response.status === 200) {
@@ -139,6 +140,15 @@ app.get('/scrape', async (req, res) => {
     }
 });
 
+app.get('/scrape', async (req, res) => {
+    try {
+        res.status(200).json({ data: books, qty: books.length });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+);
 
 
 app.use('/uploads', express.static('uploads'));

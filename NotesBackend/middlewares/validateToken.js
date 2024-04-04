@@ -16,14 +16,15 @@ const validateToken = asyncHandler(async (req, res, next) => {
                 return res.status(401).json({ msg: "Token has expired" });
             }
             req.user = decoded;
-
             next();
         } catch (error) {
             res.status(401).json({ msg: "Token is not valid", error: error.message });
-            console.log("Error verifying token:", error);
+            console.log('error verifying the token',token)
+            return
+        
         }
     } catch (error) {
-        res.status(500).json({ msg: "Internal server error" });
+        return res.status(500).json({ msg: "Internal server error" });
         console.log("Unexpected error:", error);
     }
 });

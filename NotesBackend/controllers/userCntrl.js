@@ -398,27 +398,34 @@ const editProfile = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Upload the image to AWS if a file is provided
-        if (req.file) {
+        // // Upload the image to AWS if a file is provided
+        // if (req.file) {
 
-            const fileKey = `${uuidv4()}-${req.file.originalname}`;
-            const params = {
-                Bucket: process.env.AWS_BUCKET_NAME,
-                Key: fileKey,
-                Body: fs.createReadStream(req.file.path),
-                ContentType: req.file.mimetype
-            };
-            const data = await s3.upload(params).promise();
-            user.profile = data.Location;
-        } else {
+        //     const fileKey = `${uuidv4()}-${req.file.originalname}`;
+        //     const params = {
+        //         Bucket: process.env.AWS_BUCKET_NAME,
+        //         Key: fileKey,
+        //         Body: fs.createReadStream(req.file.path),
+        //         ContentType: req.file.mimetype
+        //     };
+        //     const data = await s3.upload(params).promise();
+        //     user.profile = data.Location;
+        // } else {
+        // }
+
+        if(req.file){
+            user.profile = req.file.path;
         }
 
         user.username = username ? username : user.username;
         user.githubUsername = githubUsername ? githubUsername : user.githubUsername;
         user.Bio = Bio ? Bio : user.Bio;
         user.Department = Department ? Department : user.Department;
+        
 
         await user.save();
+
+        console.log(user)
 
         res.status(200).json({ message: "Profile updated successfully", profile: user });
     } catch (error) {

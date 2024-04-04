@@ -1,6 +1,11 @@
 const { Comment } = require('../models/commentModel');
 const { Note } = require('../models/noteModel');
 const { User } = require('../models/userModel');
+const natural = require('natural');
+const tokenizer = new natural.WordTokenizer();
+const SentimentAnalyzer = require('natural').SentimentAnalyzer;
+const stemmer = require('natural').PorterStemmer;
+const analyzer = new SentimentAnalyzer('English', stemmer, 'afinn');
 
 
 
@@ -38,6 +43,12 @@ const createComment = async (req, res) => {
 }
 
 
+
+
+
+
+
+
 const getCommentsByNoteId = async (req, res) => {
     const { noteId } = req.params;
     try {
@@ -49,7 +60,16 @@ const getCommentsByNoteId = async (req, res) => {
         const comments = await Comment.find({ noteId: noteId }).populate('user').sort({ createdAt: -1 })
         const qty = comments.length
 
-        res.status(200).json({ message: "comments succesfully fetched", comments: comments, qty: qty })
+        let formattedCommnets=[];
+
+        for(let i=0;i<comments.length;i++){
+            const tokens = tokenizer.tokenize(comments[i].comment);
+            const sentiment = analyzer.getSentiment(tokens);
+            formattedCommnets.push({...comments[i]._doc,sentiment:sentiment})
+        }
+
+
+        res.status(200).json({ message: "comments succesfully fetched", comments: formattedCommnets, qty: qty })
     } catch (error) {
         res.status(401).json(error)
     }

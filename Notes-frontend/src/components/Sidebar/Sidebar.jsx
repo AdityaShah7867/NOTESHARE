@@ -54,7 +54,7 @@ export const SideBar = () => {
           <div className="text-gray-100 text-xl">
             <div className="p-2.5 mt-1 flex items-center">
               <img
-                src={user?.profile}
+                 src={`${process.env.REACT_APP_API_HOST}/`+ user?.profile}  
                 className="w-[40px] h-[40px] rounded-full border"
               />
               <h1 className="font-bold text-gray-200 text-[15px] ml-3">

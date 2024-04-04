@@ -77,6 +77,7 @@ const Comments = ({ note }) => {
                                 <div className="flex flex-col">
                                     <span className="text-sm font-semibold text-gray-700">{comment?.user?.username}</span>
                                     <span className="text-sm font-semibold text-gray-700">{comment?.comment}</span>
+                                    <span className='text-black' >Sentiment: <span className={`text-sm font-semibold ${comment.sentiment > 1 ? 'text-green-500' : 'text-red-500'}`} >{comment.sentiment}</span></span>
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-xs font-semibold text-gray-500">{new Date(comment?.createdAt).toLocaleDateString()}</span>

@@ -77,7 +77,7 @@ const BookCard = ({ note, setreRender }) => {
             </span>
 
             <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
-              <img className="h-6 rounded-full min-w-6" src={note.author.profile} alt="Profile" />
+              <img className="h-6 rounded-full min-w-6" src={`${process.env.REACT_APP_API_HOST}/`+note.author.profile} alt="Profile" />
               <span className="text-black"> {note.author.username}</span>
             </NavLink>
           </div>

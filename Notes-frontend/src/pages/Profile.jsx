@@ -130,9 +130,9 @@ const Profile = () => {
                                     <div className="flex justify-between">
                                         <img
                                             className="w-40 h-40 mt-4 rounded-full"
-                                            src={user?.profile}
-                                            alt="Profile Image"
-                                        />
+                                            src={`${process.env.REACT_APP_API_HOST}/`+ user?.profile}  />
+                                            
+                                        
                                         <NavLink to='/setting'>
                                             <p className="text-right border-2 bg-blue-500  text-white hover:bg-blue-700 p-2 px-4 rounded-lg">
                                                 <i class="bi bi-pencil-square mr-3 "></i>
