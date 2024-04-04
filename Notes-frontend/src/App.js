@@ -37,6 +37,7 @@ import Chatbot from './components/AiBot/ChatBot';
 import GameHomePage from './pages/GameHomePage';
 import GamePage from './pages/GamePage';
 import GameList from './pages/GameList';
+import ResumeReview from './pages/ResumeReview';
 
 
 
@@ -127,6 +128,7 @@ const App = () => {
               <Route path='/books' element={<GetBooks />} />
               <Route path='/gameslist' element={<GameList />} />
               <Route path="/profile/:username" element={<Profile />} />
+              <Route path="/resumeReview" element={<ResumeReview />} />
 
 
 

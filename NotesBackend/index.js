@@ -26,6 +26,12 @@ const { client, checkConnection } = require('./redis-client')
 const passport=require('passport')
 const cookieSession = require("cookie-session");
 const passportStrategy = require('./utils/passport');
+const books=require('./books.json')
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Tesseract = require('tesseract.js');
+const genAI = new GoogleGenerativeAI("AIzaSyCFxPpCbrpPvo1ePQrfieiQ09WO3JB8OAo");
+const {upload}=require('./middlewares/upload')
+
 
 
 
@@ -113,7 +119,7 @@ app.get('/books', async (req, res) => {
 });
 
 
-app.get('/scrape', async (req, res) => {
+app.get('/scrapedata', async (req, res) => {
     try {
         const casheValue = await client.get('books')
         if (casheValue) {
@@ -153,6 +159,45 @@ app.get('/scrape', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+app.get('/scrape', async (req, res) => {
+    try {
+        res.status(200).json({ data: books, qty: books.length });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+);
+
+app.post('/generate-content',upload.single('resume') ,async (req, res) => {
+    try {
+        const imageData = './image.jpg';
+
+
+        const tesseractResult = await Tesseract.recognize(imageData, 'eng');
+        const text = tesseractResult.data.text;
+
+        if (text.length > 0) {
+            const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+            const prompt = ` ${text} This is data of my resume and rate it out of 10.`;
+
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const generatedText = await response.text();
+
+            res.json({ success: true, generatedText });
+        } else {
+            res.json({ success: false, message: 'No text found in the image' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+
 
 
 

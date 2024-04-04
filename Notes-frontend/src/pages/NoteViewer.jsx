@@ -72,7 +72,7 @@ const Nviewer = () => {
         <h3 className="text-xl font-bold  text-black text-center">-{singlenote?.author?.username}</h3>
 
         <iframe
-          className="iframe mt-10 sm:min-w-full h-[35rem] lg:h-[50rem]"
+          className="iframe mt-10 sm:min-w-full h-[30rem] lg:h-[60rem]"
           // src={'localhost:4000/'+singlenote?.file + `#toolbar=0`}
           src={`${process.env.REACT_APP_API_HOST}/${singlenote.file}#toolbar=0`}
           width="100%"
