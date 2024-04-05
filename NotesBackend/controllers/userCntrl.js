@@ -391,7 +391,7 @@ const getUsersLeaderBoard = async (req, res) => {
 const editProfile = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { username, githubUsername, Bio, Department } = req.body;
+        const { username, githubUsername, Bio, year } = req.body;
         // if (!username) {
         //     return res.status(400).json({ message: "Username is required" })
         // }
@@ -422,7 +422,7 @@ const editProfile = async (req, res) => {
         user.username = username ? username : user.username;
         user.githubUsername = githubUsername ? githubUsername : user.githubUsername;
         user.Bio = Bio ? Bio : user.Bio;
-        user.Department = Department ? Department : user.Department;
+        user.year = year ? year : user.year;
         
 
         await user.save();

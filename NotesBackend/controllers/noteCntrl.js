@@ -8,7 +8,8 @@ const ObjectId=require('mongoose').Types.ObjectId;
 
 const fs = require('fs');
 const path = require('path')
-const AWS = require('aws-sdk')
+const AWS = require('aws-sdk');
+const { get } = require('http');
 require('dotenv').config();
 
 // aws confioguration
@@ -424,6 +425,7 @@ const getFormData = async (req, res) => {
         }
         const getModules = await ModuleName.find();
         const getBranches = await Branch.find({name: current_user.Department});
+        console.log(getBranches[0]);
         const getSubjects = await Subject.find({branch: getBranches[0]._id});
 
         res.status(200).json({ message: "Data fetched successfully", data: { module: getModules, branches: getBranches, subject: getSubjects } });
