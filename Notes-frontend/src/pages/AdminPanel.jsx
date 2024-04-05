@@ -74,12 +74,11 @@ const NotesTable = () => {
                         <tr>
                           <td className="p-2 whitespace-nowrap">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                              <div className="max-w-6 max-h-6 flex-shrink-0 mr-2 sm:mr-3">
                                 <img
-                                  className="rounded-full"
+                                  className="rounded-full w-6 h-6"
                                   src={`${process.env.REACT_APP_API_HOST}/`+note?.author?.profile}
-                                  width={40}
-                                  height={40}
+                                  
                                   alt="Alex Shatov"
                                 />
                               </div>
