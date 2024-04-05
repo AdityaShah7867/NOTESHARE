@@ -198,7 +198,7 @@ export const SideBar = () => {
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/games" ? "bg-blue-500" : ""
                 }`}
             >
-             <i class="bi bi-joystick text-white"></i>
+             <i class="bi bi-file-earmark-person text-white"></i>
               <span className="text-[15px] ml-4 text-gray-200 font-bold">
                 Resume Review
               </span>
