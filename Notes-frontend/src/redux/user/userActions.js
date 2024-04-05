@@ -217,7 +217,7 @@ export const editProfile = createAsyncThunk(
             formNew.append('username', formData.username);
             formNew.append('Bio', formData.bio);
             formNew.append('githubUsername', formData.github);
-            formNew.append('Department', formData.department);
+            formNew.append('year', formData.year);
 
             // Append the profile picture as 'profile' (matching the name attribute on the input)
             formNew.append('profile', formData.profile);

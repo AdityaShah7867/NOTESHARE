@@ -86,7 +86,7 @@ const Setting = () => {
                     <div className="md:flex-shrink-0">
                       <img
                         className=" h-64 w-full object-cover md:w-48 "
-                        src={p ? URL.createObjectURL(p) : user.profile}
+                        src={p ? URL.createObjectURL(p) : process.env.REACT_APP_API_HOST+'/'+user?.profile}
                         alt="Profile"
                       />
                     </div>
