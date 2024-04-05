@@ -12,7 +12,7 @@ const ResumeReview = () => {
     try {
         setreviewRegeneating(true)
 
-            const response=await axios.post('http://localhost:4000/generate-content');
+            const response=await axios.post(process.env.REACT_APP_API_HOST+'/'+'generate-content');
 
             if(response.status===200){
               console.log(response.data)
