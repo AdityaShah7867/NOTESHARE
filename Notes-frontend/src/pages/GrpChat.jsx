@@ -257,7 +257,7 @@ const deleteTheCommunity = async () => {
                           <div className="flex-shrink-0">
                             <img
                               className="h-10 w-10 rounded-full"
-                              src={msg.sender.profile}
+                              src={process.env.REACT_APP_API_HOST+'/'+msg?.sender?.profile}
                               alt="User avatar"
                             />
                           </div>
@@ -270,7 +270,7 @@ const deleteTheCommunity = async () => {
                         <div className="flex-shrink-0">
                           <img
                             className="h-10 w-10 rounded-full"
-                            src={msg.sender.profile}
+                            src={process.env.REACT_APP_API_HOST+'/'+msg?.sender?.profile}
                             alt="User avatar"
                           />
                         </div>
