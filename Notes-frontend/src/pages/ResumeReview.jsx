@@ -11,16 +11,18 @@ const ResumeReview = () => {
   const resumeReview=async()=>{
     try {
         setreviewRegeneating(true)
-            const response=await axios.post('http://localhost:4000/generate-content',{
-                resume:resumeImage
-            })
+
+            const response=await axios.post('http://localhost:4000/generate-content');
 
             if(response.status===200){
               console.log(response.data)
               setReview(response.data.generatedText)
+              setreviewRegeneating(false)
             }
     } catch (error) {
         console.log(error)
+        setreviewRegeneating(false)
+
     }
   }
 
@@ -59,7 +61,7 @@ const ResumeReview = () => {
               <img
                 src={resumeImage}
                 alt="Uploaded Resume"
-                className="max-w-full h-auto mb-4"
+                className="max-w-full h-96 mb-4"
               />
             )}
        
