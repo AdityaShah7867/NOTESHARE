@@ -8,10 +8,8 @@ import MainLayout from "../components/Layout/MainLayout";
 const NotesTable = () => {
   const dispatch = useDispatch();
   const notesAdmin = useSelector((state) => state.note.notesAdmin);
-  const noteAcceptStatusLoading = useSelector(
-    (state) => state.note.noteAcceptStatusLoading
-  );
-  const user = useSelector((state) => state?.user?.user)
+  const user = useSelector((state) => state?.user?.user);
+
   useEffect(() => {
     dispatch(getNotesAdmin());
   }, [dispatch]);
@@ -23,14 +21,12 @@ const NotesTable = () => {
           <h1 className="text-3xl font-bold text-gray-700">You are not authorized to view this page</h1>
         </div>
       </MainLayout>
-    )
-
+    );
   }
+
   return (
     <MainLayout>
-
-
-      <section className="antialiased  text-gray-600 h-screen px-4">
+      <section className="antialiased text-gray-600 h-screen px-4">
         <div className="flex flex-col mt-16">
           <div className="min-w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
             <header className="px-5 py-4 border-b border-gray-100">
@@ -48,9 +44,7 @@ const NotesTable = () => {
                         <div className="font-semibold text-left">Subject</div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">
-                          Note Uploaded
-                        </div>
+                        <div className="font-semibold text-left">Note Uploaded</div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-center">Coins</div>
@@ -59,27 +53,23 @@ const NotesTable = () => {
                         <div className="font-semibold text-center">Status</div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Actons</div>
+                        <div className="font-semibold text-center">Actions</div>
                       </th>
                     </tr>
                   </thead>
-
                   <tbody className="text-sm divide-y divide-gray-100">
                     {notesAdmin?.length === 0 ? (
-                      <>
-                        <AdminPanelSkeleton />
-                      </>
+                      <AdminPanelSkeleton />
                     ) : (
-                      notesAdmin?.map((note) => (
-                        <tr>
+                      notesAdmin && notesAdmin.map((note) => (
+                        <tr key={note._id}>
                           <td className="p-2 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="max-w-6 max-h-6 flex-shrink-0 mr-2 sm:mr-3">
                                 <img
                                   className="rounded-full w-6 h-6"
-                                  src={`${process.env.REACT_APP_API_HOST}/`+note?.author?.profile}
-                                  
-                                  alt="Alex Shatov"
+                                  src={`${process.env.REACT_APP_API_HOST}/` + note?.author?.profile}
+                                  alt="Profile"
                                 />
                               </div>
                               <div className="font-medium text-gray-800">
@@ -99,28 +89,15 @@ const NotesTable = () => {
                             <div className="text-lg text-center">{note?.author?.coins}</div>
                           </td>
                           <td className="py-3 px-6 text-center">
-                            <span
-                              className={`bg-${note?.acceptedStatus ? "green" : "red"
-                                }-200 text-${note?.acceptedStatus ? "green" : "red"
-                                }-600 py-1 px-3 rounded-full text-xs`}
-                            >
+                            <span className={`bg-${note?.acceptedStatus ? "green" : "red"}-200 text-${note?.acceptedStatus ? "green" : "red"}-600 py-1 px-3 rounded-full text-xs`}>
                               {note?.acceptedStatus ? "Accepted" : "Not Accepted"}
                             </span>
                           </td>
                           <td className="py-3 px-6 text-center">
                             <div className="flex gap-4 item-center justify-center">
-                              <ActionIcon icon="edit" note={note}
-
-                              />
-                              <ActionIcon icon="delete" note={note}
-
-                              />
-                              <ActionIcon
-                                icon="accept"
-                                status={note?.acceptedStatus}
-                                note={note}
-                                noteloading={noteAcceptStatusLoading}
-                              />
+                              <ActionIcon icon="edit" note={note} />
+                              <ActionIcon icon="delete" note={note} />
+                              <ActionIcon icon="accept" note={note} />
                             </div>
                           </td>
                         </tr>

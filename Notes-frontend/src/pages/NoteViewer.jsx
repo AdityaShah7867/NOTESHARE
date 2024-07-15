@@ -74,7 +74,8 @@ const Nviewer = () => {
         <iframe
           className="iframe mt-10 sm:min-w-full h-[30rem] lg:h-[60rem]"
           // src={'localhost:4000/'+singlenote?.file + `#toolbar=0`}
-          src={`${process.env.REACT_APP_API_HOST}/${singlenote.file}#toolbar=0`}
+          // src={`${process.env.REACT_APP_API_HOST}/${singlenote.file}#toolbar=0`}
+          src={`${singlenote.file}#toolbar=0`}
           width="100%"
         ></iframe>
       </div>
