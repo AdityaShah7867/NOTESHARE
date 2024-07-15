@@ -282,24 +282,25 @@ const AcceptRejectNotesLocal = async (req, res) => {
             Author.coins += 50;
             try {
 
-                // if (!note.uploadedToS3) {
-                //     const fileKey = `${note.name}-${note.file}`;
-                //     const filePath = note.file;
+                if (!note.uploadedToS3) {
+                    const fileKey = `${note.name}-${note.file}`;
+                    const filePath = note.file;
 
-                //     const params = {
-                //         Bucket: process.env.AWS_BUCKET_NAME,
-                //         Key: fileKey,
-                //         Body: fs.createReadStream(filePath),
-                //         ContentType: note.fileMimeType,
-                //     }
+                    const params = {
+                        Bucket: process.env.AWS_BUCKET_NAME,
+                        Key: fileKey,
+                        Body: fs.createReadStream(filePath),
+                        ContentType: note.fileMimeType,
+                    }
 
 
-                //     const s3Response = await s3.upload(params).promise();
-
-                //     note.file = s3Response.Location;
-                //     fs.unlinkSync(filePath);
-                //     note.uploadedToS3 = true;
-                // }
+                    const s3Response = await s3.upload(params).promise();
+                    console.log('uplaoding to the s3 bucket')
+                    note.file = s3Response.Location;
+                    console.log(note.file)
+                    fs.unlinkSync(filePath);
+                    note.uploadedToS3 = true;
+                }
 
                 await note.save();
                 await Author.save();

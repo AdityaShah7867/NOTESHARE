@@ -29,9 +29,8 @@ const passportStrategy = require('./utils/passport');
 const books=require('./books.json')
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Tesseract = require('tesseract.js');
-const genAI = new GoogleGenerativeAI("AIzaSyCFxPpCbrpPvo1ePQrfieiQ09WO3JB8OAo");
-const {upload}=require('./middlewares/upload')
-
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const {Resumeupload}=require('./middlewares/upload')
 
 
 
@@ -171,9 +170,11 @@ app.get('/scrape', async (req, res) => {
 }
 );
 
-app.post('/generate-content',upload.single('resume') ,async (req, res) => {
+app.post('/generate-content',Resumeupload.single('resume') ,async (req, res) => {
     try {
-        const imageData = './image.jpg';
+        const file=req.file;
+        const imageData = `./uploads/${file.filename}`
+       
 
 
         const tesseractResult = await Tesseract.recognize(imageData, 'eng');

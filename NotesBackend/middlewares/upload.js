@@ -19,6 +19,7 @@ var upload = multer({
             file.mimetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
             file.mimetype === 'application/zip' ||
             file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
         ) {
             cb(null, true);
         } else {
@@ -30,6 +31,14 @@ var upload = multer({
     }
 });
 
+
+var Resumeupload = multer({
+    storage: storage,
+
+    limits: {
+        fileSize: 1024 * 1024 * 40
+    }
+});
 
 
 
@@ -51,5 +60,6 @@ var profileUpload = multer({
 
 module.exports = {
     upload,
-    profileUpload
+    profileUpload,
+    Resumeupload    
 };
