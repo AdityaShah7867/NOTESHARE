@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import {createAsyncThunk} from '@reduxjs/toolkit'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const host = process.env.REACT_APP_API_HOST;
 
