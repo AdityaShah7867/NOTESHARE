@@ -22,7 +22,7 @@ const NotesForm = () => {
     desc: "",
     branch: "",
     file: null,
-    year:0
+    year: 0
   });
 
   const onChange = (e) => {
@@ -113,7 +113,8 @@ const NotesForm = () => {
             </h2>
             <p className="mt-2 text-sm text-gray-500">
               You're uploading notes in your respective year and branch.
-              </p>
+            </p>
+            <a href="/addsubject" className="text-blue-400 text-sm underline">Subject Not Listed??</a>
           </div>
           <form className="mt-8 space-y-3" onSubmit={handlesubmit}>
             <div className="space-y-2">

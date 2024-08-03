@@ -38,6 +38,7 @@ import GameHomePage from './pages/GameHomePage';
 import GamePage from './pages/GamePage';
 import GameList from './pages/GameList';
 import ResumeReview from './pages/ResumeReview';
+import Addsubject from './pages/Addsubject';
 
 
 
@@ -125,6 +126,7 @@ const App = () => {
               <Route path="/Communities" element={<Communitychat />} />
               <Route path="/DateForm" element={<DateForm />} />
               <Route path='/community-chat' element={<GrpChat />} />
+              <Route path='/addsubject' element={<Addsubject />} />
               <Route path='/books' element={<GetBooks />} />
               <Route path='/gameslist' element={<GameList />} />
               <Route path="/profile/:username" element={<Profile />} />

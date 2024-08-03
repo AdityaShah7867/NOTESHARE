@@ -33,7 +33,11 @@ const PrivateRoutes = () => {
 
   return (<div className='mt-10'>
 
-    {isAuthenticated ? <Outlet /> : <Navigate to="/login" />}
+    {isAuthenticated ?
+      <Outlet />
+      :
+      <Navigate to="/login" />
+    }
   </div>
 
   )

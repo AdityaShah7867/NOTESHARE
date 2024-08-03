@@ -11,9 +11,18 @@ const getAllSubjects = asyncHandler(async (req, res) => {
 const addSubjects = asyncHandler(async (req, res) => {
     try {
         const { name, branch, sem, teacher, Image } = req.body;
-        if (!name || !branch || !sem) {
+        console.log(name, branch, sem)
+        if (!name) {
             res.status(400);
-            throw new Error("All fields are mandatory");
+            throw new Error("Name fields are mandatory");
+        }
+        if (!sem) {
+            res.status(400);
+            throw new Error("Sem fields are mandatory");
+        }
+        if (!branch) {
+            res.status(400);
+            throw new Error("Branch fields are mandatory");
         }
 
         const existingSub = await Subject.findOne({ name: name });
@@ -22,16 +31,16 @@ const addSubjects = asyncHandler(async (req, res) => {
             throw new Error("Subject already exists");
         }
 
-        const branchModel = await Branch.findById(branch);
+        const branchModel = await Branch.findOne({ name: branch });
         if (!branchModel) {
             res.status(404);
             throw new Error("Such branch does not exist");
         }
         const newSub = await Subject.create({
             name,
-            branch,
+            branch: branchModel,
             sem,
-            Image
+            // Image
         });
 
         branchModel.subjects.push(newSub);
