@@ -38,6 +38,7 @@ import GameHomePage from './pages/GameHomePage';
 import GamePage from './pages/GamePage';
 import GameList from './pages/GameList';
 import ResumeReview from './pages/ResumeReview';
+import Leetcode from './pages/Leetcode';
 
 
 
@@ -123,6 +124,7 @@ const App = () => {
               <Route path="/admin" element={<NotesTable />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/Communities" element={<Communitychat />} />
+              <Route path="/leetcode" element={<Leetcode />} />
               <Route path="/DateForm" element={<DateForm />} />
               <Route path='/community-chat' element={<GrpChat />} />
               <Route path='/books' element={<GetBooks />} />
