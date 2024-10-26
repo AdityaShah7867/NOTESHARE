@@ -11,16 +11,22 @@ import { bookMarkNotes } from '../redux/notes/noteActions';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 import ReactMarkdown from 'react-markdown';
+import * as GoogleGenerativeAI from "@google/generative-ai";
 
 const Nviewer = () => {
   const user = useSelector((state) => state?.user?.user)
   const [loader, setloader] = useState(true)
   const [summary, setSummary] = useState('')
   const [summaryLoading, setSummaryLoading] = useState(false)
+  const [aiQuestions, setAiQuestions] = useState([])
+  const [aiExplanation, setAiExplanation] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { noteId } = useParams();
   const singlenote = useSelector((state) => state?.note?.singlenote)
+
+  const API_KEY = "AIzaSyDZJoW_njjcjEfkHtaPWF79QkI9YWscwXs";
 
   // Sanitize any user-generated content before rendering
   const sanitizeContent = (content) => {
@@ -68,6 +74,57 @@ const Nviewer = () => {
       toast.error('Error getting summary');
     }
     setSummaryLoading(false);
+  }
+
+  // New Gemini Integration Functions
+  const generateQuestions = async () => {
+    if (!summary) {
+      toast.error('Please generate summary first');
+      return;
+    }
+    
+    setAiLoading(true);
+    try {
+      const genAI = new GoogleGenerativeAI.GoogleGenerativeAI(API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      
+      const prompt = `Based on this summary of the note ${summary}
+      Generate 5 practice questions that would help test understanding of the material. Format as a JSON array of questions.`;
+      
+      const result = await model.generateContent(prompt);
+      const questions = JSON.parse(result.response.text());
+      setAiQuestions(questions);
+    } catch (error) {
+      toast.error('Error generating questions');
+      console.error(error);
+    }
+    setAiLoading(false);
+  }
+
+  const getDetailedExplanation = async (topic) => {
+    if (!summary) {
+      toast.error('Please generate summary first');
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const genAI = new GoogleGenerativeAI.GoogleGenerativeAI(API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      
+      const prompt = `Based on this summary:
+      
+      ${summary}
+      
+      Explain this topic in detail: "${topic}" from the note "${singlenote?.name}". Include key concepts and examples.`;
+      
+      const result = await model.generateContent(prompt);
+      setAiExplanation(result.response.text());
+    } catch (error) {
+      toast.error('Error getting explanation');
+      console.error(error);
+    }
+    setAiLoading(false);
   }
 
   if (!loader && !singlenote?.purchased?.includes(user?._id)) {
@@ -150,25 +207,68 @@ const Nviewer = () => {
                 </button>
               </div>
 
-              <div className="mb-6">
+              {/* AI Features Section */}
+              <div className="space-y-4 mb-6">
                 <button
                   onClick={getSummary}
                   disabled={summaryLoading}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200"
                 >
-                  {summaryLoading ? 'Getting Summary...' : 'Get Summary'}
+                  {summaryLoading ? 'Getting Summary...' : 'Get AI Summary'}
                 </button>
+
                 {summary && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-md prose max-w-none">
-                    <h3 className="font-medium mb-2">Summary:</h3>
-                    <ReactMarkdown className="text-gray-700">
-                      {summary}
-                    </ReactMarkdown>
-                  </div>
+                  <>
+                    {/* <button
+                      onClick={generateQuestions}
+                      disabled={aiLoading}
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200"
+                    >
+                      {aiLoading ? 'Generating...' : 'Generate Practice Questions'}
+                    </button> */}
+
+                    {/* <button
+                      onClick={() => getDetailedExplanation(singlenote?.name)}
+                      disabled={aiLoading}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200"
+                    >
+                      {aiLoading ? 'Generating...' : 'Get Detailed Explanation'}
+                    </button> */}
+                  </>
                 )}
               </div>
+
+              {/* AI Generated Content */}
+              {summary && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-md prose max-w-none">
+                  <h3 className="font-medium mb-2">AI Summary:</h3>
+                  <ReactMarkdown className="text-gray-700">
+                    {summary}
+                  </ReactMarkdown>
+                </div>
+              )}
+
+              {aiQuestions.length > 0 && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-md">
+                  <h3 className="font-medium mb-2">Practice Questions:</h3>
+                  <ul className="list-decimal pl-4 space-y-2">
+                    {aiQuestions.map((q, i) => (
+                      <li key={i} className="text-gray-700">{q}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {aiExplanation && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-md">
+                  <h3 className="font-medium mb-2">Detailed Explanation:</h3>
+                  <ReactMarkdown className="text-gray-700">
+                    {aiExplanation}
+                  </ReactMarkdown>
+                </div>
+              )}
               
-              <div className="bg-gray-50 rounded-md p-6">
+              <div className="bg-gray-50 rounded-md p-6 mt-6">
                 <Comments note={singlenote} />
               </div>
             </div>

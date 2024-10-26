@@ -154,103 +154,104 @@ const Dashboard = () => {
           </motion.div>
           <div>
             <div>
-              <motion.div className="flex flex-col justify-center  "
+              <motion.div className="flex flex-col justify-center"
                 initial='hidden'
                 whileInView={'show'}
                 viewport={{ once: true, amount: 0.3 }}
                 variants={fadeIn('up', 0.3)}>
                 {/* Table */}
-                <div className="w-full rounded-lg mx-auto bg-slate-100 shadow-lg border border-gray-200">
-                  <header className="px-5 border-b border-gray-100">
-                    <h2 className="font-semibold text-center text-gray-800 mt-2">
-                      LEADERBOARD
+                <div className="w-full max-w-4xl mx-auto rounded-xl bg-white shadow-lg border border-gray-200 overflow-hidden">
+                  <header className="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <h2 className="font-bold text-2xl text-center text-white">
+                      Leaderboard
                     </h2>
                   </header>
-                  <div className="p-3">
+                  <div className="p-6">
                     <div className="overflow-x-auto">
                       <table className="table-auto w-full">
-                        <thead className="text-xs font-semibold uppercase text-gray-400 bg-white">
+                        <thead className="text-sm font-semibold uppercase text-gray-600 bg-gray-50">
                           <tr>
-                            <th className="p-2 whitespace-nowrap">
+                            <th className="px-4 py-3 whitespace-nowrap">
                               <div className="font-semibold text-left">Rank</div>
                             </th>
-                            <th className="p-2 whitespace-nowrap">
+                            <th className="px-4 py-3 whitespace-nowrap">
                               <div className="font-semibold text-left">Name</div>
                             </th>
-                            <th className="p-2 whitespace-nowrap">
+                            <th className="px-4 py-3 whitespace-nowrap">
                               <div className="font-semibold text-left">Coins</div>
                             </th>
                           </tr>
                         </thead>
                         <tbody className="text-sm divide-y divide-gray-100">
                           {currentLeaderboardData.map((user, index) => {
+                            const rank = startIndex + index + 1;
                             return (
-                              <tr key={user.id}>
-                                <td>{startIndex + index + 1}</td>
-                                <td>
-                                  <NavLink to={`/profile/${user.username}`} className="cursor:pointer">
+                              <tr key={user.id} className="hover:bg-gray-50 transition duration-150">
+                                <td className="px-4 py-3">
+                                  <div className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-sm font-semibold
+                                    ${rank === 1 ? 'bg-yellow-100 text-yellow-800' : 
+                                      rank === 2 ? 'bg-gray-100 text-gray-800' :
+                                      rank === 3 ? 'bg-orange-100 text-orange-800' : ''}`}>
+                                    {rank}
+                                  </div>
+                                </td>
+                                <td className="px-4 py-3">
+                                  <NavLink 
+                                    to={`/profile/${user.username}`}
+                                    className="text-blue-600 hover:text-blue-800 hover:underline transition duration-150"
+                                  >
                                     {user.username}
                                   </NavLink>
                                 </td>
-                                <td>{user.coins}</td>
+                                <td className="px-4 py-3">
+                                  <div className="flex items-center">
+                                    <i className="bi bi-coin text-yellow-500 mr-1"></i>
+                                    {user.coins}
+                                  </div>
+                                </td>
                               </tr>
                             );
                           })}
                         </tbody>
-
                       </table>
-                      <div className="items-center flex justify-center">
 
-                        {
-                          startIndex === 0 ?
-                            null
-                            :
+                      <div className="flex items-center justify-between mt-6">
+                        <div className="flex space-x-2">
+                          {startIndex > 0 && (
                             <>
-
                               <button
                                 onClick={() => setCurrentPage(1)}
-                                disabled={startIndex === 0}
-                                className="mr-2 px-4 py-1 bg-black text-white rounded-md"
+                                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150"
                               >
                                 First
                               </button>
                               <button
                                 onClick={() => setCurrentPage(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                className="mr-2 px-4 py-1 bg-black text-white rounded-md"
+                                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150"
                               >
                                 Previous
                               </button>
                             </>
-                        }
+                          )}
+                        </div>
 
-
-                        {
-                          endIndex >= leaderBoard?.length ?
-                            null
-                            :
+                        <div>
+                          {endIndex < leaderBoard?.length && (
                             <button
                               onClick={() => setCurrentPage(currentPage + 1)}
-                              disabled={endIndex >= leaderBoard?.length}
-                              className="px-4 py-1 bg-black text-white rounded-md"
+                              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150"
                             >
                               Next
                             </button>
-                        }
-
+                          )}
+                        </div>
                       </div>
-                      <div className="items-center justify-center flex ">
-                        {
-                          endIndex >= leaderBoard?.length ? (
-                            <p className="text-gray-500">Showing {startIndex + 1} - {leaderBoard?.length} of {leaderBoard?.length} results</p>
-                          ) : (
-                            <p className="text-gray-500">Showing {startIndex + 1} - {endIndex} of {leaderBoard?.length} results</p>
-                          )
-                        }
+
+                      <div className="text-center mt-4 text-sm text-gray-600">
+                        Showing {startIndex + 1} - {Math.min(endIndex, leaderBoard?.length)} of {leaderBoard?.length} results
                       </div>
 
                     </div>
-
                   </div>
                 </div>
               </motion.div>

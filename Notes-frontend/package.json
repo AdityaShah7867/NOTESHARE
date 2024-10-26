@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@botpress/webchat": "^1.0.31",
+    "@google/generative-ai": "^0.21.0",
     "@mui/icons-material": "^5.15.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
@@ -20,6 +21,7 @@
     "natural": "^8.0.1",
     "pdfjs-dist": "^3.11.174",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.10.1",

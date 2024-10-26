@@ -132,6 +132,8 @@ const App = () => {
               <Route path="/profile/:username" element={<Profile />} />
               <Route path="/resumeReview" element={<ResumeReview />} />
 
+      
+
 
 
 
