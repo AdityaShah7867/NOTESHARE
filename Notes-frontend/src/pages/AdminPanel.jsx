@@ -17,8 +17,12 @@ const NotesTable = () => {
   if (user?.role === 'user') {
     return (
       <MainLayout>
-        <div className="flex flex-col items-center justify-center h-screen">
-          <h1 className="text-3xl font-bold text-gray-700">You are not authorized to view this page</h1>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+          <div className="p-8 bg-white rounded-lg shadow-lg text-center">
+            <i className="fas fa-lock text-5xl text-red-500 mb-4"></i>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Access Denied</h1>
+            <p className="text-gray-600">You are not authorized to view this page</p>
+          </div>
         </div>
       </MainLayout>
     );
@@ -26,85 +30,83 @@ const NotesTable = () => {
 
   return (
     <MainLayout>
-      <section className="antialiased text-gray-600 h-screen px-4">
+      <section className="antialiased  text-gray-600 min-h-screen p-4">
         <div className="flex flex-col mt-16">
-          <div className="min-w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
-            <header className="px-5 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-800">ADMIN PANEL</h2>
-            </header>
-            <div className="p-3">
-              <div className="overflow-x-auto">
-                <table className="table-auto w-full">
-                  <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
-                    <tr>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Name</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Subject</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Note Uploaded</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Coins</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Status</div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-center">Actions</div>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-sm divide-y divide-gray-100">
-                    {notesAdmin?.length === 0 ? (
-                      <AdminPanelSkeleton />
-                    ) : (
-                      notesAdmin && notesAdmin.map((note) => (
-                        <tr key={note._id}>
-                          <td className="p-2 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="max-w-6 max-h-6 flex-shrink-0 mr-2 sm:mr-3">
-                                <img
-                                  className="rounded-full w-6 h-6"
-                                  src={`${process.env.REACT_APP_API_HOST}/` + note?.author?.profile}
-                                  alt="Profile"
-                                />
+          <div className="max-w-6xl mx-auto w-full">
+            <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+              <header className="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <h2 className="text-2xl font-bold text-gray-800">ADMIN PANEL</h2>
+                <p className="text-sm text-gray-600 mt-1">Manage and monitor all notes</p>
+              </header>
+              
+              <div className="p-6">
+                <div className="overflow-x-auto">
+                  <table className="table-auto w-full">
+                    <thead>
+                      <tr className="bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        <th className="px-4 py-4 text-left">Name</th>
+                        <th className="px-4 py-4 text-left">Subject</th>
+                        <th className="px-4 py-4 text-left">Note Uploaded</th>
+                        <th className="px-4 py-4 text-center">Coins</th>
+                        <th className="px-4 py-4 text-center">Status</th>
+                        <th className="px-4 py-4 text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-sm divide-y divide-gray-100">
+                      {notesAdmin?.length === 0 ? (
+                        <AdminPanelSkeleton />
+                      ) : (
+                        notesAdmin && notesAdmin.map((note) => (
+                          <tr key={note._id} className="hover:bg-gray-50 transition duration-200">
+                            <td className="px-4 py-4">
+                              <div className="flex items-center">
+                                <div className="w-8 h-8 flex-shrink-0 mr-3">
+                                  <img
+                                    className="rounded-full w-full h-full object-cover border-2 border-gray-200"
+                                    src={`${process.env.REACT_APP_API_HOST}/` + note?.author?.profile}
+                                    alt="Profile"
+                                  />
+                                </div>
+                                <div className="font-medium text-gray-800">
+                                  {note?.author?.username}
+                                </div>
                               </div>
-                              <div className="font-medium text-gray-800">
-                                {note?.author?.username}
+                            </td>
+                            <td className="px-4 py-4 text-gray-600">
+                              {note?.subject?.name || "N/A"}
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="font-medium text-blue-600">
+                                {note?.name}
                               </div>
-                            </div>
-                          </td>
-                          <td className="p-2 whitespace-nowrap">
-                            <div className="text-left">{note?.subject?.name || ""}</div>
-                          </td>
-                          <td className="p-2 whitespace-nowrap">
-                            <div className="text-left font-medium text-green-500">
-                              {note?.name}
-                            </div>
-                          </td>
-                          <td className="p-2 whitespace-nowrap">
-                            <div className="text-lg text-center">{note?.author?.coins}</div>
-                          </td>
-                          <td className="py-3 px-6 text-center">
-                            <span className={`bg-${note?.acceptedStatus ? "green" : "red"}-200 text-${note?.acceptedStatus ? "green" : "red"}-600 py-1 px-3 rounded-full text-xs`}>
-                              {note?.acceptedStatus ? "Accepted" : "Not Accepted"}
-                            </span>
-                          </td>
-                          <td className="py-3 px-6 text-center">
-                            <div className="flex gap-4 item-center justify-center">
-                              <ActionIcon icon="edit" note={note} />
-                              <ActionIcon icon="delete" note={note} />
-                              <ActionIcon icon="accept" note={note} />
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="text-center font-semibold text-gray-700">
+                                {note?.author?.coins}
+                              </div>
+                            </td>
+                            <td className="px-4 py-4 text-center">
+                              <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
+                                note?.acceptedStatus 
+                                  ? "bg-green-100 text-green-700" 
+                                  : "bg-red-100 text-red-700"
+                              }`}>
+                                {note?.acceptedStatus ? "Accepted" : "Not Accepted"}
+                              </span>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="flex items-center justify-center gap-3">
+                                <ActionIcon icon="edit" note={note} />
+                                <ActionIcon icon="delete" note={note} />
+                                <ActionIcon icon="accept" note={note} />
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

@@ -42,39 +42,87 @@ const ResumeReview = () => {
 
   return (
     <Alternates>
-      <div className="flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8 min-h-screen">
-        <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8 border border-gray-300">
-          <h2 className="text-center text-2xl font-bold text-gray-900 mb-6">
-            Review Your Resume
-          </h2>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="mb-4 p-2 border border-gray-400 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {resumeImage && (
-            <img
-              src={URL.createObjectURL(resumeImage)}
-              alt="Uploaded Resume"
-              className="max-w-full h-64 object-contain rounded mb-4 border border-gray-300"
-            />
-          )}
-          <button
-            onClick={resumeReview}
-            className={`w-full text-white font-semibold py-2 rounded transition duration-200 ${
-              reviewGenerating ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
-            }`}
-            disabled={reviewGenerating}
-          >
-            {reviewGenerating ? 'Generating Review...' : 'Review'}
-          </button>
-          {review && (
-            <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-50">
-              <h3 className="font-semibold text-lg">Review:</h3>
-              <p className="text-gray-800">{review}</p>
+      <div className="min-h-screen bg-gradient-to-br  py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Resume Review Assistant</h1>
+            <p className="text-lg text-gray-600">Get professional feedback on your resume instantly</p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Upload Section */}
+              <div className="space-y-6">
+                <div className="relative">
+                  <label 
+                    htmlFor="resume-upload" 
+                    className="block text-lg font-medium text-gray-700 mb-4"
+                  >
+                    Upload Your Resume
+                  </label>
+                  <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-500 transition-colors duration-200">
+                    <input
+                      id="resume-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <div className="text-center">
+                      <i className="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                      <p className="text-gray-600">Drag and drop your resume here or click to browse</p>
+                    </div>
+                  </div>
+                </div>
+
+                {resumeImage && (
+                  <div className="border rounded-lg overflow-hidden bg-gray-50">
+                    <img
+                      src={URL.createObjectURL(resumeImage)}
+                      alt="Uploaded Resume"
+                      className="w-full h-auto max-h-[400px] object-contain"
+                    />
+                  </div>
+                )}
+
+                <button
+                  onClick={resumeReview}
+                  disabled={!resumeImage || reviewGenerating}
+                  className={`w-full py-4 px-6 rounded-lg text-white font-semibold text-lg transition-all duration-200 ${
+                    !resumeImage || reviewGenerating 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl'
+                  }`}
+                >
+                  {reviewGenerating ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                      Analyzing Resume...
+                    </div>
+                  ) : (
+                    'Get Review'
+                  )}
+                </button>
+              </div>
+
+              {/* Review Section */}
+              <div className={`transition-opacity duration-300 ${review ? 'opacity-100' : 'opacity-50'}`}>
+                <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-lg p-6 h-full">
+                  <h2 className="text-xl font-semibold text-gray-800 mb-4">Professional Review</h2>
+                  {review ? (
+                    <div className="prose prose-blue max-w-none">
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">{review}</p>
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <i className="far fa-file-alt text-4xl text-gray-400 mb-3"></i>
+                      <p className="text-gray-500">Upload your resume to get professional feedback</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </Alternates>
