@@ -134,6 +134,18 @@ export const SideBar = () => {
             </div>
           </NavLink>
 
+          <NavLink to={"/leetcode"}>
+            <div
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/leetcode" ? "bg-blue-500" : ""
+                }`}
+            >
+              <i className="bi bi-bell text-white"></i>
+              <span className="text-[15px] ml-4 font-bold text-gray-200">
+                DSA questions
+              </span>
+            </div>
+          </NavLink>
+
           <NavLink to={"/addnotes"}>
             <div
               className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/addnotes" ? "bg-blue-500" : ""
@@ -195,7 +207,7 @@ export const SideBar = () => {
 
           <NavLink to={"/resumeReview"}>
             <div
-              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/games" ? "bg-blue-500" : ""
+              className={`p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 ${location.pathname === "/resumeReview" ? "bg-blue-500" : ""
                 }`}
             >
              <i class="bi bi-file-earmark-person text-white"></i>

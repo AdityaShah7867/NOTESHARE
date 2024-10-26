@@ -16,6 +16,7 @@ const skillsRoutes = require('./routes/skillsRoutes')
 const communityRoutes = require('./routes/communityRoutes')
 const messageRoutes = require('./routes/messageRoutes')
 const googleAuthRoutes=require('./routes/googleAuthRoutes')
+const solveProblemRoutes = require('./routes/solvedproblemRoutes');
 const pdfRoutes = require('./routes/pdfRoutes')
 const { Server } = require('socket.io')
 const cors = require('cors');
@@ -218,6 +219,7 @@ app.use('/api/v1/skills', skillsRoutes);
 app.use('/api/v1/community', communityRoutes);
 app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/google',googleAuthRoutes)
+app.use('/api/v1/solveProblem', solveProblemRoutes);
 
 
 app.use('/api/v1/pdf',pdfRoutes)
