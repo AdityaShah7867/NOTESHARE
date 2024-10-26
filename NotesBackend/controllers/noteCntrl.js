@@ -283,7 +283,7 @@ const AcceptRejectNotesLocal = async (req, res) => {
             try {
 
                 if (!note.uploadedToS3) {
-                    const fileKey = `${note.name}-${note.file}`;
+                    const fileKey = `${note.file}`;
                     const filePath = note.file;
 
                     const params = {
