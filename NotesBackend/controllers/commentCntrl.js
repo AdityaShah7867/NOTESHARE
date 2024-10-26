@@ -3,6 +3,13 @@ const { Note } = require('../models/noteModel');
 const { User } = require('../models/userModel');
 
 
+const natural = require('natural');
+const tokenizer = new natural.WordTokenizer();
+const SentimentAnalyzer = require('natural').SentimentAnalyzer;
+const stemmer = require('natural').PorterStemmer;
+const analyzer = new SentimentAnalyzer('English', stemmer, 'afinn');
+
+
 
 const createComment = async (req, res) => {
     const { noteId } = req.params;
@@ -47,22 +54,29 @@ const getCommentsByNoteId = async (req, res) => {
         }
 
         const comments = await Comment.find({ noteId: noteId }).populate('user').sort({ createdAt: -1 })
+
+        const updatedComments = await Promise.all(comments.map(async (comment) => {
+            const tokens = tokenizer.tokenize(comment.comment);
+            const sentiment = analyzer.getSentiment(tokens);
+            return {
+                _id: comment._id,
+                noteId: comment.noteId,
+                comment: comment.comment,
+                user: comment.user,
+                createdAt: comment.createdAt,
+                updatedAt: comment.updatedAt,
+                sentiment: sentiment
+            };
+        }));
         const qty = comments.length
 
-        res.status(200).json({ message: "comments succesfully fetched", comments: comments, qty: qty })
+        res.status(200).json({ message: "comments succesfully fetched", comments: updatedComments, qty: qty })
     } catch (error) {
         res.status(401).json(error)
     }
 }
 
 
-const getAllComments = async (req, res) => {
-    try {
-
-    } catch (error) {
-
-    }
-}
 
 module.exports = {
     getCommentsByNoteId, createComment
