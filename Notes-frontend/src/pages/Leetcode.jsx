@@ -13,15 +13,17 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  BarElement
 } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut, Bar } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -41,6 +43,7 @@ const Leetcode = () => {
     const [showGraph, setShowGraph] = useState(true);
     const [cumulativeData, setCumulativeData] = useState(null);
     const [difficultyStats, setDifficultyStats] = useState(null);
+    const [weeklyStats, setWeeklyStats] = useState(null);
     const questionsPerPage = 50;
 
     const updatesolvequestion = async (questionId, problem, date) => {
@@ -76,30 +79,83 @@ const Leetcode = () => {
 
                 // Prepare progress data using actual dates
                 const sortedProblems = solvedData.solvedproblems.sort((a, b) => new Date(a.date) - new Date(b.date));
-                
-                // Get unique dates only for x-axis
-                const uniqueDates = [...new Set(sortedProblems.map(problem => 
-                    new Date(problem.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric'
-                    })
-                ))];
 
-                // Calculate cumulative totals
+                // Get last 30 days of data
+                const last30Days = [...new Set(sortedProblems
+                    .filter(problem => {
+                        const date = new Date(problem.date);
+                        const thirtyDaysAgo = new Date();
+                        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                        return date >= thirtyDaysAgo;
+                    })
+                    .map(problem => new Date(problem.date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        timeZone: 'UTC'
+                    })))];
+
+                // Count problems per day for last 30 days
+                const problemsPerDay = {};
+                sortedProblems.forEach(problem => {
+                    const date = new Date(problem.date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        timeZone: 'UTC'
+                    });
+                    problemsPerDay[date] = (problemsPerDay[date] || 0) + 1;
+                });
+
+                // Calculate weekly stats
+                const weeklyData = {};
+                const now = new Date();
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(now);
+                    date.setDate(date.getDate() - i);
+                    const dateStr = date.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        timeZone: 'UTC'
+                    });
+                    weeklyData[dateStr] = 0;
+                }
+
+                sortedProblems.forEach(problem => {
+                    const date = new Date(problem.date);
+                    if ((now - date) / (1000 * 60 * 60 * 24) <= 7) {
+                        const dayStr = date.toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            timeZone: 'UTC'
+                        });
+                        weeklyData[dayStr]++;
+                    }
+                });
+
+                setWeeklyStats({
+                    labels: Object.keys(weeklyData).reverse(),
+                    datasets: [{
+                        label: 'Problems Solved',
+                        data: Object.values(weeklyData).reverse(),
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderWidth: 1
+                    }]
+                });
+
+                // Convert to cumulative counts
                 let cumulative = 0;
-                const cumulativeCounts = uniqueDates.map(() => {
-                    cumulative++;
+                const cumulativeCounts = last30Days.map(date => {
+                    cumulative += (problemsPerDay[date] || 0);
                     return cumulative;
                 });
 
                 setCumulativeData({
-                    labels: uniqueDates,
+                    labels: last30Days,
                     datasets: [{
                         label: 'Total Problems Solved',
                         data: cumulativeCounts,
-                        fill: false,
+                        fill: true,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
+                        tension: 0.4
                     }]
                 });
 
@@ -122,9 +178,9 @@ const Leetcode = () => {
                     labels: ['Easy', 'Medium', 'Hard'],
                     datasets: [{
                         data: [difficulties.Easy, difficulties.Medium, difficulties.Hard],
-                        backgroundColor: ['#4ade80', '#facc15', '#f87171'],
-                        borderColor: ['#22c55e', '#eab308', '#ef4444'],
-                        borderWidth: 1
+                        backgroundColor: ['rgba(74, 222, 128, 0.8)', 'rgba(250, 204, 21, 0.8)', 'rgba(248, 113, 113, 0.8)'],
+                        borderColor: ['rgb(34, 197, 94)', 'rgb(234, 179, 8)', 'rgb(239, 68, 68)'],
+                        borderWidth: 2
                     }]
                 });
 
@@ -179,6 +235,11 @@ const Leetcode = () => {
     const handlePageChange = (page) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
+            // Scroll to top of the question list
+            window.scrollTo({
+                top: document.querySelector('.question-list-section').offsetTop,
+                behavior: 'smooth'
+            });
         }
     };
 
@@ -207,24 +268,24 @@ const Leetcode = () => {
 
     return (
         <Alternate>
-            <div className="py-6 px-4 lg:-ml-12 bg-gray-100 min-h-screen">
-                <h1 className="text-2xl font-bold mb-6 text-center">Question List</h1>
+            <div className="py-6 px-4 lg:px-8 xl:px-12 bg-gray-100 min-h-screen">
+        
 
                 {/* Progress Graphs */}
-                {cumulativeData && difficultyStats && (
-                    <div className="mb-6 bg-white p-4 rounded-lg shadow-md">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold">Your Progress</h2>
+                {cumulativeData && difficultyStats && weeklyStats && (
+                    <div className="mb-8 bg-white p-8 rounded-2xl shadow-xl">
+                        <div className="flex justify-between items-center mb-8">
+                            <h2 className="text-3xl font-bold text-gray-800">Your Progress</h2>
                             <button 
                                 onClick={() => setShowGraph(!showGraph)}
-                                className="text-blue-500 hover:text-blue-700"
+                                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                             >
                                 {showGraph ? 'Hide Graphs' : 'Show Graphs'}
                             </button>
                         </div>
                         {showGraph && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="h-64">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                                <div className="h-80 col-span-2 bg-gray-50 p-4 rounded-xl shadow-inner">
                                     <Line 
                                         data={cumulativeData}
                                         options={{
@@ -233,21 +294,53 @@ const Leetcode = () => {
                                             plugins: {
                                                 title: {
                                                     display: true,
-                                                    text: 'Progress Over Time'
+                                                    text: 'Progress Over Last 30 Days',
+                                                    font: {
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        family: "'Inter', sans-serif"
+                                                    },
+                                                    padding: 20
+                                                },
+                                                legend: {
+                                                    position: 'bottom',
+                                                    labels: {
+                                                        padding: 20,
+                                                        font: {
+                                                            size: 14
+                                                        }
+                                                    }
                                                 }
                                             },
                                             scales: {
                                                 x: {
+                                                    grid: {
+                                                        display: false
+                                                    },
                                                     ticks: {
                                                         maxRotation: 45,
-                                                        minRotation: 45
+                                                        minRotation: 45,
+                                                        font: {
+                                                            size: 12
+                                                        }
+                                                    }
+                                                },
+                                                y: {
+                                                    beginAtZero: true,
+                                                    grid: {
+                                                        color: 'rgba(0, 0, 0, 0.05)'
+                                                    },
+                                                    ticks: {
+                                                        font: {
+                                                            size: 12
+                                                        }
                                                     }
                                                 }
                                             }
                                         }}
                                     />
                                 </div>
-                                <div className="h-64">
+                                <div className="h-80 bg-gray-50 p-4 rounded-xl shadow-inner">
                                     <Doughnut 
                                         data={difficultyStats}
                                         options={{
@@ -256,7 +349,70 @@ const Leetcode = () => {
                                             plugins: {
                                                 title: {
                                                     display: true,
-                                                    text: 'Problems by Difficulty'
+                                                    text: 'Problems by Difficulty',
+                                                    font: {
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        family: "'Inter', sans-serif"
+                                                    },
+                                                    padding: 20
+                                                },
+                                                legend: {
+                                                    position: 'bottom',
+                                                    labels: {
+                                                        padding: 20,
+                                                        font: {
+                                                            size: 14
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }}
+                                    />
+                                </div>
+                                <div className="h-80 col-span-3 bg-gray-50 p-4 rounded-xl shadow-inner">
+                                    <Bar
+                                        data={weeklyStats}
+                                        options={{
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Problems Solved This Week',
+                                                    font: {
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        family: "'Inter', sans-serif"
+                                                    },
+                                                    padding: 20
+                                                },
+                                                legend: {
+                                                    display: false
+                                                }
+                                            },
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true,
+                                                    ticks: {
+                                                        stepSize: 1,
+                                                        font: {
+                                                            size: 12
+                                                        }
+                                                    },
+                                                    grid: {
+                                                        color: 'rgba(0, 0, 0, 0.05)'
+                                                    }
+                                                },
+                                                x: {
+                                                    grid: {
+                                                        display: false
+                                                    },
+                                                    ticks: {
+                                                        font: {
+                                                            size: 12
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }}
@@ -268,21 +424,19 @@ const Leetcode = () => {
                 )}
 
                 {/* Filter Section */}
-                <div className="mb-6 w-full flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-                    {/* Search Bar */}
+                <div className="mb-8 w-full flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
                     <input
                         type="text"
-                        placeholder="Search by title or number"
+                        placeholder="Search by title or number..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="p-2 border rounded-lg shadow-md w-full md:w-1/2"
+                        className="p-3 border rounded-xl shadow-md w-full md:w-1/2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     />
 
-                    {/* Filter by Difficulty */}
                     <select
                         value={difficultyFilter}
                         onChange={(e) => setDifficultyFilter(e.target.value)}
-                        className="p-2 border rounded-lg shadow-md w-full md:w-1/4"
+                        className="p-3 border rounded-xl shadow-md w-full md:w-1/4 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     >
                         <option value="">All Difficulties</option>
                         <option value="Easy">Easy</option>
@@ -290,67 +444,74 @@ const Leetcode = () => {
                         <option value="Hard">Hard</option>
                     </select>
 
-                    {/* Filter by Tag */}
                     <select
                         value={tagFilter}
                         onChange={(e) => setTagFilter(e.target.value)}
-                        className="p-2 border rounded-lg shadow-md w-full md:w-1/4"
+                        className="p-3 border rounded-xl shadow-md w-full md:w-1/4 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     >
                         <option value="">All Tags</option>
-                        {Array.from(new Set(data.flatMap(q => q.topicTags.map(tag => tag.name)))).map(tag => (
+                        {Array.from(new Set(data.flatMap(q => q.topicTags.map(tag => tag.name)))).sort().map(tag => (
                             <option key={tag} value={tag}>{tag}</option>
                         ))}
                     </select>
                 </div>
 
-                {/* Question List as a table */}
-                <div className="mb-6 overflow-x-auto">
-                    <table className="w-full bg-white shadow-md rounded-2xl table-auto">
+                {/* Question List Section */}
+                <div className="question-list-section mb-8 overflow-x-auto bg-white rounded-xl shadow-lg">
+                    <table className="w-full table-auto">
                         <thead>
-                            <tr className="bg-gray-200 text-sm">
-                                <th className="p-2 text-center whitespace-nowrap">TODO</th>
-                                <th className="p-2 text-center whitespace-nowrap">No.</th>
-                                <th className="p-2 text-left whitespace-nowrap">Title</th>
-                                <th className="p-2 text-center whitespace-nowrap">Difficulty</th>
-                                <th className="p-2 whitespace-nowrap text-center">Acceptance Rate</th>
-                                <th className="p-2 text-left whitespace-nowrap">Tags</th>
+                            <tr className="bg-gray-50 text-sm border-b">
+                                <th className="p-4 text-center">Status</th>
+                                <th className="p-4 text-center">No.</th>
+                                <th className="p-4 text-left">Title</th>
+                                <th className="p-4 text-center">Difficulty</th>
+                                <th className="p-4 text-center">Acceptance</th>
+                                <th className="p-4 text-left">Topics</th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentQuestions.map((question) => (
-                                <tr key={question.frontendQuestionId} className="border-b text-sm">
-                                    {/* TODO Column */}
-                                    <td className="p-2 text-center cursor-pointer" onClick={() => handleToggleComplete(question.frontendQuestionId, question.title)}>
-                                        <BsCheck2Circle className={`text-xl mx-auto ${completed.has(question.frontendQuestionId) ? 'text-green-500' : 'text-gray-200'}`} />
+                                <tr key={question.frontendQuestionId} className="border-b hover:bg-gray-50 transition duration-150">
+                                    <td className="p-4 text-center">
+                                        <button 
+                                            onClick={() => handleToggleComplete(question.frontendQuestionId, question.title)}
+                                            className="transition duration-200 hover:scale-110"
+                                        >
+                                            <BsCheck2Circle className={`text-2xl mx-auto ${completed.has(question.frontendQuestionId) ? 'text-green-500' : 'text-gray-200'}`} />
+                                        </button>
                                     </td>
-                                    <td className="p-2 whitespace-nowrap mx-auto text-center">{question.frontendQuestionId}</td>
-                                    <td className="p-2 whitespace-nowrap hover:text-blue-400">
-                                        <a href={`https://leetcode.com/problems/${question.titleSlug}/description/`} target='_blank'>
+                                    <td className="p-4 text-center font-medium">{question.frontendQuestionId}</td>
+                                    <td className="p-4">
+                                        <a 
+                                            href={`https://leetcode.com/problems/${question.titleSlug}/description/`} 
+                                            target='_blank'
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:text-blue-800 hover:underline"
+                                        >
                                             {question.title}
                                         </a>
                                     </td>
-                                    <td className="p-2 whitespace-nowrap text-center">
-                                        <span
-                                            className={`${question.difficulty === 'Easy'
-                                                ? 'text-green-500'
-                                                : question.difficulty === 'Medium'
-                                                    ? 'text-yellow-500'
-                                                    : 'text-red-500'
-                                                }`}
+                                    <td className="p-4 text-center">
+                                        <span className={`px-3 py-1 rounded-full text-sm font-medium
+                                            ${question.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                                              question.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                              'bg-red-100 text-red-700'}`}
                                         >
                                             {question.difficulty}
                                         </span>
                                     </td>
-                                    <td className="p-2 whitespace-nowrap text-center">{question.acRate.toFixed(2)}%</td>
-                                    <td className="p-2 whitespace-nowrap flex flex-wrap">
-                                        {question.topicTags.map((tag) => (
-                                            <span
-                                                key={tag.id}
-                                                className="px-1 mt-1 py-1 mr-2 bg-blue-200 text-blue-800 rounded-md text-xs"
-                                            >
-                                                {tag.name}
-                                            </span>
-                                        ))}
+                                    <td className="p-4 text-center">{question.acRate.toFixed(1)}%</td>
+                                    <td className="p-4">
+                                        <div className="flex flex-wrap gap-2">
+                                            {question.topicTags.map((tag) => (
+                                                <span
+                                                    key={tag.id}
+                                                    className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium"
+                                                >
+                                                    {tag.name}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -359,36 +520,39 @@ const Leetcode = () => {
                 </div>
 
                 {/* Pagination Controls */}
-                <div className="flex justify-center space-x-2">
+                <div className="flex justify-center items-center gap-3">
                     <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600 transition duration-200"
                     >
                         Previous
                     </button>
 
-                    {paginationRange().map((page, index) =>
-                        page === '...' ? (
-                            <span key={index} className="px-3 py-1">...</span>
-                        ) : (
-                            <button
-                                key={index}
-                                onClick={() => handlePageChange(page)}
-                                className={`px-3 py-1 rounded ${currentPage === page
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-gray-300 text-black'
-                                    }`}
-                            >
-                                {page}
-                            </button>
-                        )
-                    )}
+                    <div className="flex gap-2">
+                        {paginationRange().map((page, index) =>
+                            page === '...' ? (
+                                <span key={index} className="px-3 py-2">...</span>
+                            ) : (
+                                <button
+                                    key={index}
+                                    onClick={() => handlePageChange(page)}
+                                    className={`px-4 py-2 rounded-lg transition duration-200
+                                        ${currentPage === page
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        }`}
+                                >
+                                    {page}
+                                </button>
+                            )
+                        )}
+                    </div>
 
                     <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600 transition duration-200"
                     >
                         Next
                     </button>

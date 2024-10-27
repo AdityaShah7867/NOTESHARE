@@ -5,7 +5,7 @@ const { Subject } = require('../models/subjectModel')
 const { ModuleName } = require('../models/moduleModel')
 const { Branch } = require('../models/branchModel')
 const ObjectId=require('mongoose').Types.ObjectId;
-
+const {client}=require('../redis-client')
 const fs = require('fs');
 const path = require('path')
 const AWS = require('aws-sdk');
@@ -109,8 +109,18 @@ const getAllNotes = asyncHandler(async (req, res) => {
             res.status(404).json({ message: "User not found" })
         }
 
+        // Try to get cached notes
+        const cacheKey = `notes:${ExistingUser.year}:${ExistingUser.Department}`;
+        const cachedNotes = await client.get(cacheKey);
+
+        if (cachedNotes) {
+            return res.status(200).json({ message: "Notes fetched successfully", data: JSON.parse(cachedNotes) });
+        }
 
         const notes = await Note.find({ acceptedStatus: true, year: ExistingUser.year, branch: ExistingUser.Department  }).populate('author', '-notesUploaded -notesBought').populate('subject')
+
+        // Cache the notes for 1 hour
+        await client.setEx(cacheKey, 3600, JSON.stringify(notes));
 
         res.status(200).json({ message: "Notes fetched successfully", data: notes });
     } catch (error) {
@@ -178,6 +188,12 @@ const addNotes = asyncHandler(async (req, res) => {
         await newNote.save()
 
         await user.save();
+
+        // Delete all cached notes when a new note is added
+        const keys = await client.keys('notes:*');
+        if (keys.length > 0) {
+            await client.del(keys);
+        }
 
         res.status(201).json({
             message: "Note uploaded successfully",
@@ -650,4 +666,3 @@ const getUserUploadedNotes = async (req, res) => {
 }
 
 module.exports = { getInitialNotesByBranch,AcceptRejectNotesLocal,getUserUploadedNotes, filterNote, getBookMarkedNotes, getAllNotes, addNotes, deleteNote, getSingleNote, getNotesAdmin, AcceptRejectNotes, getFormData, buyNote, searchNote, bookMarkNotes, getFilterdFormData };
-

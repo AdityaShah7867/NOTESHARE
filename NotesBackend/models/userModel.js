@@ -64,6 +64,12 @@ const userSchema = mongoose.Schema(
                 ref: "Todo",
             },
         ],
+        urls: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: "Url",
+            },
+        ],
         coins: {
             type: Number,
             default: 100,

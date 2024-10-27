@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Alternates from "../components/Layout/MainLayout";
 import axios from "axios";
+import ReactMarkdown from 'react-markdown';
 
 const ResumeReview = () => {
   const [resumeImage, setResumeImage] = useState(null);
@@ -111,7 +112,9 @@ const ResumeReview = () => {
                   <h2 className="text-xl font-semibold text-gray-800 mb-4">Professional Review</h2>
                   {review ? (
                     <div className="prose prose-blue max-w-none">
-                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">{review}</p>
+                      <ReactMarkdown className="text-gray-700 leading-relaxed">
+                        {review}
+                      </ReactMarkdown>
                     </div>
                   ) : (
                     <div className="text-center py-12">

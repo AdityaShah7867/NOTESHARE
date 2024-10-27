@@ -17,6 +17,7 @@ const fs = require('fs');
 const Sensitive = require('../models/sensitiveModel');
 const axios = require('axios');
 const { get } = require('http');
+const {client} = require('../redis-client');
 
 
 const getPublicIP = async () => {
@@ -392,28 +393,11 @@ const editProfile = async (req, res) => {
     try {
         const userId = req.user.id;
         const { username, githubUsername, Bio, year } = req.body;
-        // if (!username) {
-        //     return res.status(400).json({ message: "Username is required" })
-        // }
+        
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
-        // // Upload the image to AWS if a file is provided
-        // if (req.file) {
-
-        //     const fileKey = `${uuidv4()}-${req.file.originalname}`;
-        //     const params = {
-        //         Bucket: process.env.AWS_BUCKET_NAME,
-        //         Key: fileKey,
-        //         Body: fs.createReadStream(req.file.path),
-        //         ContentType: req.file.mimetype
-        //     };
-        //     const data = await s3.upload(params).promise();
-        //     user.profile = data.Location;
-        // } else {
-        // }
 
         if(req.file){
             user.profile = req.file.path;
@@ -424,8 +408,10 @@ const editProfile = async (req, res) => {
         user.Bio = Bio ? Bio : user.Bio;
         user.year = year ? year : user.year;
         
-
         await user.save();
+
+        // Delete the cached profile after update
+        await client.del(`user:${user.username}`);
 
         console.log(user)
 
@@ -440,6 +426,17 @@ const editProfile = async (req, res) => {
 const getUserProfile = async (req, res) => {
     try {
         const { username } = req.params;
+
+        // Try to get cached profile
+        const cachedProfile = await client.get(`user:${username}`);
+        if (cachedProfile) {
+            return res.status(200).json({ 
+                message: "User found", 
+                user: JSON.parse(cachedProfile),
+                source: 'cache'
+            });
+        }
+
         const user = await User.findOne({ username: username })
             .select('-password -verificationToken ')
             .exec();
@@ -448,7 +445,14 @@ const getUserProfile = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        res.status(200).json({ message: "User found", user: user });
+        // Cache the profile for 1 hour
+        await client.setex(`user:${username}`, 3600, JSON.stringify(user));
+
+        res.status(200).json({ 
+            message: "User found", 
+            user: user,
+            source: 'database'
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json(error);
