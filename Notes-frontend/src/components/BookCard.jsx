@@ -7,7 +7,7 @@ import { likeUnlikeNote } from "../redux/likes/likeActions";
 import { getCommentsByNoteId } from "../redux/comments/commentActions";
 import Loader from "./Loader/Loader";
 
-const BookCard = ({ note, setreRender }) => {
+const BookCard = ({ note, setreRender, viewMode }) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const dispatch = useDispatch();
   const currentuser = useSelector((state) => state?.user?.user);
@@ -35,120 +35,178 @@ const BookCard = ({ note, setreRender }) => {
     await dispatch(getNotes());
   };
 
+  const handleViewClick = (noteId) => {
+    window.location.href = `/nviewer/${noteId}`;
+  };
+
   useEffect(() => {
     dispatch(getLogedinUser());
   }, [dispatch]);
 
   return (
-    <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4 ">
-      <div className="post-card  mt-6 w-80 rounded-lg shadow-md p-4 mx-2 ">
-        {/* <div className={`border-t-8 mx-2 ${note.purchased.includes(currentuser?._id) ? 'border-green-400' : 'border-red-500'}`}>
+    <>
+      {viewMode === 'grid' ? (
+        <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4 ">
+          <div className="post-card mt-6 w-80 rounded-lg shadow-md p-4 mx-2 ">
+            {/* <div className={`border-t-8 mx-2 ${note.purchased.includes(currentuser?._id) ? 'border-green-400' : 'border-red-500'}`}>
        */}
-        {/* Your content goes here */}
-        <div>
-          <div className="flex items-center mb-2 mt-2 ">
-            <h2 className="text-black text-xl font-semibold">{note?.name}</h2>
-          </div>
-          <div className="flex gap-4 mb-1">
-            <p className="text-gray-600 text-base">Subject: {note?.subject?.name}</p>
-            <p className="text-gray-600 text-base">Module: {note?.module}</p>
-          </div>
+            {/* Your content goes here */}
+            <div>
+              <div className="flex items-center mb-2 mt-2 ">
+                <h2 className="text-black text-xl font-semibold">{note?.name}</h2>
+              </div>
+              <div className="flex gap-4 mb-1">
+                <p className="text-gray-600 text-base">Subject: {note?.subject?.name}</p>
+                <p className="text-gray-600 text-base">Module: {note?.module}</p>
+              </div>
 
-          <p className="text-gray-700 text-lg">{note?.desc || "No description available."}</p>
-          <center>
-            {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
+              <p className="text-gray-700 text-lg">{note?.desc || "No description available."}</p>
+              <center>
+                {/* <div className="image-preview max-h-36 max-w-36 rounded-full mb-4 overflow-hidden">
           <img
             className="w-full h-full object-cover rounded-lg"
             src="https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"
             alt="Note Image"
           />
         </div> */}
-            <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4 ">
-              <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="max-w-58  max-h-40 rounded-lg" />
-              {/* <img src="https://tms-outsource.com/blog/wp-content/uploads/2023/04/android-ide.jpg" alt="image" className="max-w-58 max-h-44 rounded-lg" /> */}
+                <div className="image-preview max-h-36 max-w-full p-2 rounded-full mb-4 ">
+                  <img src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"} alt="image" className="max-w-58  max-h-40 rounded-lg" />
+                  {/* <img src="https://tms-outsource.com/blog/wp-content/uploads/2023/04/android-ide.jpg" alt="image" className="max-w-58 max-h-44 rounded-lg" /> */}
 
-            </div>
-          </center>
-          {/* <hr /> */}
-          {/* <hr /> */}
-          <div className="flex gap-16 items-center mb-1 mt-4 ">
-            <span className="datetime text-black">
-              {new Date(note?.uploadedAt).toLocaleDateString()}
-            </span>
-
-            <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
-              <img className="h-6 rounded-full min-w-6" src={`${process.env.REACT_APP_API_HOST}/`+note.author.profile}alt="Profile" />
-              <span className="text-black text-sm"> {note.author.username}</span>
-            </NavLink>
-          </div>
-          <hr />
-          <div className="comment-like flex justify-around items-center p-2">
-            <span
-              onClick={() => {
-                handlelike(note?._id);
-              }}
-              className="cursor-pointer h-40 w-50 p-4 flex items-center justify-center bg-black text-red-500 font-bold rounded-2xl bg-transparent hover:bg-purple-300 hover:p-2 transition duration-150 "
-            >
-              <i className="fa-regular fa-heart fa-xl mx-2"></i>
-              {note?.likes?.length || 0}
-            </span>
-            <span
-              onClick={handleCommentClick}
-              className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent text-black  hover:bg-purple-300 transition duration-150"
-            >
-              <i className="fa-regular fa-comment fa-xl mx-2"></i>
-              {note?.comments?.length || 0}
-            </span>
-
-            {note.purchased.includes(currentuser?._id) ? (
-              <NavLink to={`/nviewer/${note?._id}`}>
-                <button className="border  px-4 py-1 rounded-lg bg-green-500 text-white hover:bg-green-600  hover:border-white">
-                <i className="bi bi-eye mr-1"></i>
-                  View
-                </button>
-              </NavLink>
-            ) : (
-              <button
-                className=" border-black px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600  hover:border-white"
-                onClick={() => {
-                  setShowConfirmationModal(true);
-                }}
-              >
-                <i className="bi bi-wallet mr-1"></i>
-                {buyNotesLoading ? <Loader /> : "Buy"}
-              </button>
-            )}
-
-            {showConfirmationModal && (
-              <div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="bg-white p-8 border border-black rounded-lg shadow-md">
-                  <p className="text-lg font-semibold text-black">
-                    Confirm buy: {note.name}
-                  </p>
-
-                  <div className="flex justify-end mt-4">
-                    <button
-                      className="px-4 py-2 mr-2 border rounded-lg bg-red-500 text-white"
-                      onClick={() => setShowConfirmationModal(false)}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                      onClick={() => {
-                        handleBuyNote(note._id);
-                      }}
-                    >
-                      Confirm
-                    </button>
-                  </div>
                 </div>
+              </center>
+              {/* <hr /> */}
+              {/* <hr /> */}
+              <div className="flex gap-16 items-center mb-1 mt-4 ">
+                <span className="datetime text-black">
+                  {new Date(note?.uploadedAt).toLocaleDateString()}
+                </span>
+
+                <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
+                  <img className="h-6 rounded-full min-w-6" src={`${process.env.REACT_APP_API_HOST}/`+note.author.profile}alt="Profile" />
+                  <span className="text-black text-sm"> {note.author.username}</span>
+                </NavLink>
               </div>
-            )}
+              <hr />
+              <div className="comment-like flex justify-around items-center p-2">
+                <span
+                  onClick={() => {
+                    handlelike(note?._id);
+                  }}
+                  className="cursor-pointer h-40 w-50 p-4 flex items-center justify-center bg-black text-red-500 font-bold rounded-2xl bg-transparent hover:bg-purple-300 hover:p-2 transition duration-150 "
+                >
+                  <i className="fa-regular fa-heart fa-xl mx-2"></i>
+                  {note?.likes?.length || 0}
+                </span>
+                <span
+                  onClick={handleCommentClick}
+                  className="cursor-pointer h-40 w-50 p-3 flex items-center justify-center font-bold rounded-2xl bg-transparent text-black  hover:bg-purple-300 transition duration-150"
+                >
+                  <i className="fa-regular fa-comment fa-xl mx-2"></i>
+                  {note?.comments?.length || 0}
+                </span>
+
+                {note.purchased.includes(currentuser?._id) ? (
+                  <NavLink to={`/nviewer/${note?._id}`}>
+                    <button className="border  px-4 py-1 rounded-lg bg-green-500 text-white hover:bg-green-600  hover:border-white">
+                      <i className="bi bi-eye mr-1"></i>
+                      View
+                    </button>
+                  </NavLink>
+                ) : (
+                  <button
+                    className=" border-black px-4 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600  hover:border-white"
+                    onClick={() => {
+                      setShowConfirmationModal(true);
+                    }}
+                  >
+                    <i className="bi bi-wallet mr-1"></i>
+                    {buyNotesLoading ? <Loader /> : "Buy"}
+                  </button>
+                )}
+
+                
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <>
+          {/* Add table header row */}
+          
+          <tr className="border-b border-2 hover:bg-gray-50 flex items-center justify-between">
+            <td className="px-4 py-4 w-[300px]">
+              <div className="flex items-center">
+                <img 
+                  className="w-12 h-12 rounded-lg mr-3"
+                  src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"}
+                  alt="Subject"
+                />
+                <div>
+                  <div className="font-semibold text-base mb-1">{note?.name}</div>
+                  <div className="text-sm text-gray-600">
+                    Subject: {note?.subject?.name} &nbsp; Module: {note?.module}
+                  </div>
+                  
+                </div>
+              </div>
+            </td>
+            <td className="px-4 py-4 w-[300px]">
+            <div className="text-sm text-gray-500">{note?.desc}</div>
+            </td>
+            <td className="px-4 py-4 w-[200px]">
+              <div className="flex flex-col">
+                <div className="flex items-center mb-1">
+                  <img 
+                    className="h-6 w-6 rounded-full mr-2" 
+                    src={`${process.env.REACT_APP_API_HOST}/`+note.author.profile} 
+                    alt="Profile" 
+                  />
+                  <NavLink to={`/profile/${note.author.username}`} className="font-medium">
+                    {note.author.username}
+                  </NavLink>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {new Date(note?.uploadedAt).toLocaleDateString()}
+                </div>
+              </div>
+            </td>
+            <td className="px-4 py-4 w-[100px]">
+              <div className="flex flex-col gap-2">
+                <span className="flex items-center cursor-pointer" onClick={() => handlelike(note?._id)}>
+                  <i className="fa-regular fa-heart mr-2"></i>
+                  {note?.likes?.length || 0}
+                </span>
+                <span className="flex items-center cursor-pointer" onClick={handleCommentClick}>
+                  <i className="fa-regular fa-comment mr-2"></i>
+                  {note?.comments?.length || 0}
+                </span>
+              </div>
+            </td>
+            <td className="px-4 py-4 w-[120px]">
+              {note.purchased.includes(currentuser?._id) ? (
+                <button 
+                  className="w-full px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 flex items-center justify-center"
+                  onClick={() => handleViewClick(note._id)}
+                >
+                  <i className="bi bi-eye mr-2"></i>
+                  View
+                </button>
+              ) : (
+                <button
+                  className="w-full px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 flex items-center justify-center"
+                  onClick={() => setShowConfirmationModal(true)}
+                >
+                  <i className="bi bi-wallet mr-2"></i>
+                  {buyNotesLoading ? <Loader /> : "Buy"}
+                </button>
+              )}
+            </td>
+          </tr>
+        </>
+      )}
 
+      {/* Add comment modal */}
       {showCommentModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-white p-8 border border-black rounded-lg shadow-md w-1/2">
@@ -193,7 +251,34 @@ const BookCard = ({ note, setreRender }) => {
           </div>
         </div>
       )}
-    </div>
+      {showConfirmationModal && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white p-8 border border-black rounded-lg shadow-md">
+                      <p className="text-lg font-semibold text-black">
+                        Confirm buy: {note.name}
+                      </p>
+
+                      <div className="flex justify-end mt-4">
+                        <button
+                          className="px-4 py-2 mr-2 border rounded-lg bg-red-500 text-white"
+                          onClick={() => setShowConfirmationModal(false)}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                          onClick={() => {
+                            handleBuyNote(note._id);
+                          }}
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+      {/* ... existing confirmation modal ... */}
+    </>
   );
 };
 

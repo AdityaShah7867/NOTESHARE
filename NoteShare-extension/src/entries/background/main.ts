@@ -99,7 +99,7 @@ browser.tabs.onActivated.addListener(async (activeInfo) => {
       "defaultWorkspaceId",
       "userToken",
     ]);
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGVmZjdiMDE1MDc5ZWIyMTI5YTZmZCIsImVtYWlsIjoic2FoaWwuMjExNzE0MTAxQHZjZXQuZWR1LmluIiwicm9sZSI6InN1cGVydXNlciIsImlzVmVyaWZpZWQiOnRydWUsImlhdCI6MTcyOTk0MDU1NywiZXhwIjoxNzMwMDI2OTU3fQ.nHw48z1LvL_YVsI2VIXTd7rjl1S-iLH-PCLl0mv8BPQ';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGY4YTU1Y2RkMjk2Yzc3YmYwOTA1OSIsImVtYWlsIjoiYWRpdHlhLjIxMjEwNDEwMUB2Y2V0LmVkdS5pbiIsInJvbGUiOiJzdXBlcnVzZXIiLCJpc1ZlcmlmaWVkIjp0cnVlLCJpYXQiOjE3MzAwODc0NjgsImV4cCI6MTczMDE3Mzg2OH0.CkSzTGp92iedqJ7dndPnVNj38LGu3xLJ0UdtxwIKXpA';
     const url = tab.url;
     console.log("running");
 

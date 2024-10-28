@@ -143,7 +143,7 @@ const Leetcode = () => {
                 // Convert to cumulative counts
                 let cumulative = 0;
                 const cumulativeCounts = last30Days.map(date => {
-                    cumulative += (problemsPerDay[date] || 0);
+                    cumulative = (problemsPerDay[date] || 0);
                     return cumulative;
                 });
 
