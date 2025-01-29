@@ -102,7 +102,7 @@ const Home = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filteredNotes.map(note => (
+                          {filteredNotes?.map(note => (
                             <BookCard 
                               key={note._id} 
                               note={note} 

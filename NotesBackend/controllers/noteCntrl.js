@@ -562,9 +562,14 @@ const getBookMarkedNotes = async (req, res) => {
             return;
         }
 
+
+        const notesBookMarked = existingUser.notesBookMarked.filter(note => note.acceptedStatus === true);
+
+        console.log(notesBookMarked)
+
         res.status(200).json({
             message: 'Bookmarked notes fetched successfully',
-            notes: existingUser.notesBookMarked,
+            notes: notesBookMarked,
         });
     } catch (error) {
         console.error(error);
