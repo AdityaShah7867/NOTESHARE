@@ -14,13 +14,23 @@ const createSolvedproblems = async (req, res) => {
         if (!ExistingUSer) {
             res.status(401).json({ message: "user not found" })
         }
-        const newSolvedproblems = new Solvedproblems({
-            user: user,
-            problem: problem, // Add problem
-            date: date, // Add date
-            questionId: questionId
-        })
-        newSolvedproblems.save();
+        const alreadyExistingProblems = await Solvedproblems.findOne({ user: user, questionId: questionId });
+
+        let newSolvedproblems;
+        if(alreadyExistingProblems)
+            {
+                //delete the existing problem
+                await Solvedproblems.findOneAndDelete({ user: user, questionId: questionId });
+                console.log('object deleted')
+            }else{
+                 newSolvedproblems = new Solvedproblems({
+                    user: user,
+                    problem: problem, // Add problem
+                    date: date, // Add date
+                    questionId: questionId
+                })
+                newSolvedproblems.save();
+            }
         res.status(200).json({ message: "solvedproblems added succesfully", solvedproblems: newSolvedproblems })
     } catch (error) {
         console.log(error)
