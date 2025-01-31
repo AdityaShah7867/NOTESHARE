@@ -142,7 +142,7 @@ const Login = () => {
                 <NavLink to={'/otp'}>Forgot your password?</NavLink>
               </div>
               <div className="px-4 pb-2 pt-4">
-                <button className="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">
+                <button type='login' className="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">
                   {loading ? (
                     <div className="flex justify-center items-center space-x-2">
                       <div className="w-4 h-4 border-2 border-white rounded-full animate-spin" />
