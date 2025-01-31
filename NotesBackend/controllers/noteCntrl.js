@@ -120,7 +120,7 @@ const getAllNotes = asyncHandler(async (req, res) => {
         const notes = await Note.find({ acceptedStatus: true, year: ExistingUser.year, branch: ExistingUser.Department  }).populate('author', '-notesUploaded -notesBought').populate('subject')
 
         // Cache the notes for 1 hour
-        await client.setEx(cacheKey, 3600, JSON.stringify(notes));
+        // await client.setEx(cacheKey, 3600, JSON.stringify(notes));
 
         res.status(200).json({ message: "Notes fetched successfully", data: notes });
     } catch (error) {
@@ -562,9 +562,14 @@ const getBookMarkedNotes = async (req, res) => {
             return;
         }
 
+
+        const notesBookMarked = existingUser.notesBookMarked.filter(note => note.acceptedStatus === true);
+
+        console.log(notesBookMarked)
+
         res.status(200).json({
             message: 'Bookmarked notes fetched successfully',
-            notes: existingUser.notesBookMarked,
+            notes: notesBookMarked,
         });
     } catch (error) {
         console.error(error);

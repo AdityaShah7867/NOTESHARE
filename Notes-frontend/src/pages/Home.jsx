@@ -25,7 +25,9 @@ const Home = () => {
   const [viewMode, setViewMode] = useState('grid');
 
   // const filteredNotes = searchedNotes ? searchedNotes : notes;
-  const filteredNotes = filter === 'BookMarked' ? bookMarkedNotes : searchedNotes && filter !== 'ALL' ? searchedNotes : notes;
+  let  filteredNotes= filter === 'BookMarked' ? bookMarkedNotes : searchedNotes && filter !== 'ALL' ? searchedNotes : notes;
+
+
 
   useEffect(() => {
     // dispatch(getNotes());
@@ -43,7 +45,8 @@ const Home = () => {
       console.log('Bookmarked')
       dispatch(getBookMarkedNotes());
     } else if (filter === 'ALL') {
-      dispatch(searchNote(""));
+   
+      dispatch(getNotes());
     } else if (filter !== '') {
       dispatch(searchNote(filter));
     }
