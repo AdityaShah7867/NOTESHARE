@@ -8,7 +8,7 @@ const ChatBot = () => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const API_KEY = "AIzaSyDZJoW_njjcjEfkHtaPWF79QkI9YWscwXs";
+  const API_KEY = "AIzaSyDe3-CAtfRMnruIvg0whO7TvliZkYn4MP0";
 
   useEffect(() => {
     const startChat = async () => {

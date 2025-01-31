@@ -40,9 +40,10 @@ const Home = () => {
 
   useEffect(() => {
     if (filter === 'BookMarked') {
+      console.log('Bookmarked')
       dispatch(getBookMarkedNotes());
     } else if (filter === 'ALL') {
-      dispatch(getNotes());
+      dispatch(searchNote(""));
     } else if (filter !== '') {
       dispatch(searchNote(filter));
     }
@@ -61,7 +62,7 @@ const Home = () => {
           <div className='mb-4 flex items-center'>
             <button
               onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-              className='p-2  rounded-lg bg-white shadow hover:bg-gray-50'
+              className='p-2  rounded-lg bg-blue-400 text-white shadow hover:bg-blue-500'
             >
               {viewMode === 'grid' ? <div className='flex items-center gap-2'><BsList size={24} /> List</div> : <div className='flex items-center gap-2'><BsGrid size={24} /> Grid</div>}
             </button>
@@ -88,27 +89,7 @@ const Home = () => {
                 noteLoading ? <BookCardSkeletion /> : (
                   filteredNotes?.length === 0 ? <h1 className='text-white text-2xl'>No Notes To Display</h1> : (
                     viewMode === 'list' ? (
-                      <table>
-                        <thead>
-                          <tr className="bg-gray-50 border-b-2 flex items-center justify-between">
-                            <th className="px-4 py-3 w-[300px] text-left">Note Details</th>
-                            <th className="px-4 py-3 w-[300px] text-left">Description</th>
-                            <th className="px-4 py-3 w-[200px] text-left">Author</th>
-                            <th className="px-4 py-3 w-[100px] text-left">Stats</th>
-                            <th className="px-4 py-3 w-[120px] text-left">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredNotes.map(note => (
-                            <BookCard 
-                              key={note._id} 
-                              note={note} 
-                              setreRender={setreRender} 
-                              viewMode={viewMode} 
-                            />
-                          ))}
-                        </tbody>
-                      </table>
+                      <ResponsiveListView notes={filteredNotes} setreRender={setreRender} viewMode={viewMode} />
                     ) : (
                       // Grid view
                       filteredNotes.map(note => (
@@ -130,5 +111,26 @@ const Home = () => {
     </Alternate>
   );
 };
+
+// New responsive design for list view
+const ResponsiveListView = ({ notes, setreRender, viewMode }) => {
+  return (
+    <div className="w-full flex flex-col gap-4 items-center">
+      {notes.map(note => (
+        <div 
+          key={note._id} 
+          className="w-full max-w-7xl bg-white border rounded-lg shadow p-4"
+        >
+          <BookCard 
+            note={note} 
+            setreRender={setreRender} 
+            viewMode={viewMode} 
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 
 export default Home;

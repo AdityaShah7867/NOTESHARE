@@ -47,7 +47,7 @@ const BookCard = ({ note, setreRender, viewMode }) => {
     <>
       {viewMode === 'grid' ? (
         <div className="flex flex-row md:flex-row sm:flex-row flex-wrap ml-4 lg:ml-4 ">
-          <div className="post-card mt-6 w-80 rounded-lg shadow-md p-4 mx-2 ">
+          <div className="post-card mt-6 w-80 rounded-lg shadow-md p-4 mx-2  hover:scale-105">
             {/* <div className={`border-t-8 mx-2 ${note.purchased.includes(currentuser?._id) ? 'border-green-400' : 'border-red-500'}`}>
        */}
             {/* Your content goes here */}
@@ -82,9 +82,9 @@ const BookCard = ({ note, setreRender, viewMode }) => {
                   {new Date(note?.uploadedAt).toLocaleDateString()}
                 </span>
 
-                <NavLink to={`/profile/${note.author.username}`} className="flex gap-2">
-                  <img className="h-6 rounded-full min-w-6" src={`${process.env.REACT_APP_API_HOST}/`+note.author.profile}alt="Profile" />
-                  <span className="text-black text-sm"> {note.author.username}</span>
+                <NavLink to={`/profile/${note.author.username}`} className="flex gap-2 ">
+                  <img className="h-6 rounded-full min-w-6" src={`${process.env.REACT_APP_API_HOST}/` + note.author.profile} alt="Profile" />
+                  <span className="text-black text-sm hover:underline"> {note.author.username}</span>
                 </NavLink>
               </div>
               <hr />
@@ -93,7 +93,7 @@ const BookCard = ({ note, setreRender, viewMode }) => {
                   onClick={() => {
                     handlelike(note?._id);
                   }}
-                  className="cursor-pointer h-40 w-50 p-4 flex items-center justify-center bg-black text-red-500 font-bold rounded-2xl bg-transparent hover:bg-purple-300 hover:p-2 transition duration-150 "
+                  className="cursor-pointer h-40 w-50 p-4 flex items-center justify-center bg-black text-red-500 font-bold rounded-2xl bg-transparent hover:bg-purple-300 transition duration-150 "
                 >
                   <i className="fa-regular fa-heart fa-xl mx-2"></i>
                   {note?.likes?.length || 0}
@@ -125,7 +125,7 @@ const BookCard = ({ note, setreRender, viewMode }) => {
                   </button>
                 )}
 
-                
+
               </div>
             </div>
           </div>
@@ -133,11 +133,11 @@ const BookCard = ({ note, setreRender, viewMode }) => {
       ) : (
         <>
           {/* Add table header row */}
-          
+
           <tr className="border-b border-2 hover:bg-gray-50 flex items-center justify-between">
             <td className="px-4 py-4 w-[300px]">
               <div className="flex items-center">
-                <img 
+                <img
                   className="w-12 h-12 rounded-lg mr-3"
                   src={note?.subject?.Image || "https://images.shiksha.com/mediadata/shikshaOnline/mailers/2022/naukri-learning/what-is/What-is-Data-Structures-and-Algorithms.jpg"}
                   alt="Subject"
@@ -147,22 +147,20 @@ const BookCard = ({ note, setreRender, viewMode }) => {
                   <div className="text-sm text-gray-600">
                     Subject: {note?.subject?.name} &nbsp; Module: {note?.module}
                   </div>
-                  
+                  <div className="text-sm text-gray-500">{note?.desc}</div>
+
                 </div>
               </div>
-            </td>
-            <td className="px-4 py-4 w-[300px]">
-            <div className="text-sm text-gray-500">{note?.desc}</div>
             </td>
             <td className="px-4 py-4 w-[200px]">
               <div className="flex flex-col">
                 <div className="flex items-center mb-1">
-                  <img 
-                    className="h-6 w-6 rounded-full mr-2" 
-                    src={`${process.env.REACT_APP_API_HOST}/`+note.author.profile} 
-                    alt="Profile" 
+                  <img
+                    className="h-6 w-6 rounded-full mr-2"
+                    src={`${process.env.REACT_APP_API_HOST}/` + note.author.profile}
+                    alt="Profile"
                   />
-                  <NavLink to={`/profile/${note.author.username}`} className="font-medium">
+                  <NavLink to={`/profile/${note.author.username}`} className="font-medium hover:underline">
                     {note.author.username}
                   </NavLink>
                 </div>
@@ -171,7 +169,7 @@ const BookCard = ({ note, setreRender, viewMode }) => {
                 </div>
               </div>
             </td>
-            <td className="px-4 py-4 w-[100px]">
+            <td className="px-4 py-4 max-w-[100px]">
               <div className="flex flex-col gap-2">
                 <span className="flex items-center cursor-pointer" onClick={() => handlelike(note?._id)}>
                   <i className="fa-regular fa-heart mr-2"></i>
@@ -185,7 +183,7 @@ const BookCard = ({ note, setreRender, viewMode }) => {
             </td>
             <td className="px-4 py-4 w-[120px]">
               {note.purchased.includes(currentuser?._id) ? (
-                <button 
+                <button
                   className="w-full px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 flex items-center justify-center"
                   onClick={() => handleViewClick(note._id)}
                 >
@@ -252,31 +250,31 @@ const BookCard = ({ note, setreRender, viewMode }) => {
         </div>
       )}
       {showConfirmationModal && (
-                  <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white p-8 border border-black rounded-lg shadow-md">
-                      <p className="text-lg font-semibold text-black">
-                        Confirm buy: {note.name}
-                      </p>
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white p-8 border border-black rounded-lg shadow-md">
+            <p className="text-lg font-semibold text-black">
+              Confirm buy: {note.name}
+            </p>
 
-                      <div className="flex justify-end mt-4">
-                        <button
-                          className="px-4 py-2 mr-2 border rounded-lg bg-red-500 text-white"
-                          onClick={() => setShowConfirmationModal(false)}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                          onClick={() => {
-                            handleBuyNote(note._id);
-                          }}
-                        >
-                          Confirm
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+            <div className="flex justify-end mt-4">
+              <button
+                className="px-4 py-2 mr-2 border rounded-lg bg-red-500 text-white"
+                onClick={() => setShowConfirmationModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                onClick={() => {
+                  handleBuyNote(note._id);
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* ... existing confirmation modal ... */}
     </>
   );

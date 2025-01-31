@@ -192,10 +192,10 @@ const Nviewer = () => {
               <div className="flex gap-4 mb-6">
                 <button
                   onClick={() => dispatch(bookMarkNotes(singlenote?._id))}
-                  className="flex-1 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-md transition-colors duration-200"
+                  className={`flex-1 flex items-center justify-center gap-2 ${user?.notesBookMarked?.includes(noteId) ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-100 hover:bg-gray-200'} text-gray-700 font-medium py-3 px-4 rounded-md transition-colors duration-200`}
                 >
                   <i className="fa-regular fa-bookmark text-lg"></i>
-                  <span>Save</span>
+                  {user?.notesBookMarked?.includes(noteId) ? <span> Unsave </span> : <span>Save</span>}
                 </button>
                 
                 <button
