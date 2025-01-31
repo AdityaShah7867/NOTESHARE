@@ -44,6 +44,7 @@ const Leetcode = () => {
     const [cumulativeData, setCumulativeData] = useState(null);
     const [difficultyStats, setDifficultyStats] = useState(null);
     const [weeklyStats, setWeeklyStats] = useState(null);
+    const [statsUpading, setStatsUpdating] = useState(false);
     const questionsPerPage = 50;
 
     const updatesolvequestion = async (questionId, problem, date) => {
@@ -62,137 +63,139 @@ const Leetcode = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchSolvedQuestions = async () => {
-            try {
-                setData(leetcodeProblems.data.problemsetQuestionList.questions);
+    const fetchSolvedQuestions = async () => {
+        try {
+            setData(leetcodeProblems.data.problemsetQuestionList.questions);
 
-                const response = await axios.get(`${host}/api/v1/solveProblem/getSolvedproblemsByUserId`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('authtoken')}`
-                    }
+            const response = await axios.get(`${host}/api/v1/solveProblem/getSolvedproblemsByUserId`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authtoken')}`
+                }
+            });
+            
+            const solvedData = response.data;
+            const solvedQuestionIds = new Set(solvedData.solvedproblems.map(problem => problem.questionId));
+            setCompleted(solvedQuestionIds);
+
+            // Prepare progress data using actual dates
+            const sortedProblems = solvedData.solvedproblems.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            // Get last 30 days of data
+            const last30Days = [...new Set(sortedProblems
+                .filter(problem => {
+                    const date = new Date(problem.date);
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    return date >= thirtyDaysAgo;
+                })
+                .map(problem => new Date(problem.date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    timeZone: 'UTC'
+                })))];
+
+            // Count problems per day for last 30 days
+            const problemsPerDay = {};
+            sortedProblems.forEach(problem => {
+                const date = new Date(problem.date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    timeZone: 'UTC'
                 });
-                
-                const solvedData = response.data;
-                const solvedQuestionIds = new Set(solvedData.solvedproblems.map(problem => problem.questionId));
-                setCompleted(solvedQuestionIds);
+                problemsPerDay[date] = (problemsPerDay[date] || 0) + 1;
+            });
 
-                // Prepare progress data using actual dates
-                const sortedProblems = solvedData.solvedproblems.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                // Get last 30 days of data
-                const last30Days = [...new Set(sortedProblems
-                    .filter(problem => {
-                        const date = new Date(problem.date);
-                        const thirtyDaysAgo = new Date();
-                        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                        return date >= thirtyDaysAgo;
-                    })
-                    .map(problem => new Date(problem.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        timeZone: 'UTC'
-                    })))];
-
-                // Count problems per day for last 30 days
-                const problemsPerDay = {};
-                sortedProblems.forEach(problem => {
-                    const date = new Date(problem.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        timeZone: 'UTC'
-                    });
-                    problemsPerDay[date] = (problemsPerDay[date] || 0) + 1;
+            // Calculate weekly stats
+            const weeklyData = {};
+            const now = new Date();
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    timeZone: 'UTC'
                 });
+                weeklyData[dateStr] = 0;
+            }
 
-                // Calculate weekly stats
-                const weeklyData = {};
-                const now = new Date();
-                for (let i = 0; i < 7; i++) {
-                    const date = new Date(now);
-                    date.setDate(date.getDate() - i);
-                    const dateStr = date.toLocaleDateString('en-US', {
+            sortedProblems.forEach(problem => {
+                const date = new Date(problem.date);
+                if ((now - date) / (1000 * 60 * 60 * 24) <= 7) {
+                    const dayStr = date.toLocaleDateString('en-US', {
                         weekday: 'short',
                         timeZone: 'UTC'
                     });
-                    weeklyData[dateStr] = 0;
+                    weeklyData[dayStr]++;
                 }
+            });
 
-                sortedProblems.forEach(problem => {
-                    const date = new Date(problem.date);
-                    if ((now - date) / (1000 * 60 * 60 * 24) <= 7) {
-                        const dayStr = date.toLocaleDateString('en-US', {
-                            weekday: 'short',
-                            timeZone: 'UTC'
-                        });
-                        weeklyData[dayStr]++;
-                    }
-                });
+            setWeeklyStats({
+                labels: Object.keys(weeklyData).reverse(),
+                datasets: [{
+                    label: 'Problems Solved',
+                    data: Object.values(weeklyData).reverse(),
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1
+                }]
+            });
 
-                setWeeklyStats({
-                    labels: Object.keys(weeklyData).reverse(),
-                    datasets: [{
-                        label: 'Problems Solved',
-                        data: Object.values(weeklyData).reverse(),
-                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                        borderColor: 'rgb(75, 192, 192)',
-                        borderWidth: 1
-                    }]
-                });
+            // Convert to cumulative counts
+            let cumulative = 0;
+            const cumulativeCounts = last30Days.map(date => {
+                cumulative = (problemsPerDay[date] || 0);
+                return cumulative;
+            });
 
-                // Convert to cumulative counts
-                let cumulative = 0;
-                const cumulativeCounts = last30Days.map(date => {
-                    cumulative = (problemsPerDay[date] || 0);
-                    return cumulative;
-                });
+            setCumulativeData({
+                labels: last30Days,
+                datasets: [{
+                    label: 'Total Problems Solved',
+                    data: cumulativeCounts,
+                    fill: true,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.4
+                }]
+            });
 
-                setCumulativeData({
-                    labels: last30Days,
-                    datasets: [{
-                        label: 'Total Problems Solved',
-                        data: cumulativeCounts,
-                        fill: true,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.4
-                    }]
-                });
+            // Calculate difficulty distribution
+            const difficulties = {
+                Easy: 0,
+                Medium: 0,
+                Hard: 0
+            };
 
-                // Calculate difficulty distribution
-                const difficulties = {
-                    Easy: 0,
-                    Medium: 0,
-                    Hard: 0
-                };
+            solvedData.solvedproblems.forEach(problem => {
+                const questionData = leetcodeProblems.data.problemsetQuestionList.questions
+                    .find(q => q.frontendQuestionId === problem.questionId);
+                if (questionData) {
+                    difficulties[questionData.difficulty]++;
+                }
+            });
 
-                solvedData.solvedproblems.forEach(problem => {
-                    const questionData = leetcodeProblems.data.problemsetQuestionList.questions
-                        .find(q => q.frontendQuestionId === problem.questionId);
-                    if (questionData) {
-                        difficulties[questionData.difficulty]++;
-                    }
-                });
+            setDifficultyStats({
+                labels: ['Easy', 'Medium', 'Hard'],
+                datasets: [{
+                    data: [difficulties.Easy, difficulties.Medium, difficulties.Hard],
+                    backgroundColor: ['rgba(74, 222, 128, 0.8)', 'rgba(250, 204, 21, 0.8)', 'rgba(248, 113, 113, 0.8)'],
+                    borderColor: ['rgb(34, 197, 94)', 'rgb(234, 179, 8)', 'rgb(239, 68, 68)'],
+                    borderWidth: 2
+                }]
+            });
 
-                setDifficultyStats({
-                    labels: ['Easy', 'Medium', 'Hard'],
-                    datasets: [{
-                        data: [difficulties.Easy, difficulties.Medium, difficulties.Hard],
-                        backgroundColor: ['rgba(74, 222, 128, 0.8)', 'rgba(250, 204, 21, 0.8)', 'rgba(248, 113, 113, 0.8)'],
-                        borderColor: ['rgb(34, 197, 94)', 'rgb(234, 179, 8)', 'rgb(239, 68, 68)'],
-                        borderWidth: 2
-                    }]
-                });
+        } catch (error) {
+            console.error("Error fetching solved questions:", error);
+            setCompleted(new Set());
+        }
+    };
 
-            } catch (error) {
-                console.error("Error fetching solved questions:", error);
-                setCompleted(new Set());
-            }
-        };
+    useEffect(() => {
+       
         fetchSolvedQuestions();
     }, []);
 
-    const handleToggleComplete = (questionId, problem) => {
+    const handleToggleComplete =async (questionId, problem) => {
         const date = new Date().toISOString();
         setCompleted(prev => {
             const newCompleted = new Set(prev);
@@ -203,7 +206,10 @@ const Leetcode = () => {
             }
             return newCompleted;
         });
-        updatesolvequestion(questionId, problem, date);
+        setStatsUpdating(true); 
+        await updatesolvequestion(questionId, problem, date);
+        await fetchSolvedQuestions()
+        setStatsUpdating(false);
     };
 
     if (!data || !completed) {
@@ -419,6 +425,14 @@ const Leetcode = () => {
                                     />
                                 </div>
                             </div>
+                        )}
+
+                        {statsUpading && (
+                            <div className="flex justify-center items-center mt-8">
+                                  Stats Updating...
+                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500">  
+                                </div>
+                                </div>
                         )}
                     </div>
                 )}
