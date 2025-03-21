@@ -12,7 +12,7 @@ import { Helmet } from "react-helmet";
 const Profile = () => {
     const [showLoader, setShowLoader] = useState(true);
     const [skills, setSkills] = useState([]);
-    const [activeTab, setActiveTab] = useState("repositories");
+    const [activeTab, setActiveTab] = useState("overview");
     const dispatch = useDispatch();
     const { username } = useParams();
     const [repositories, setRepositories] = useState([]);
@@ -80,6 +80,17 @@ const Profile = () => {
         return <Loader />;
     }
 
+    // Generate random contribution data for the activity graph
+    const generateContributionData = () => {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return months.map(month => ({
+            month,
+            value: Math.floor(Math.random() * 70) + 10
+        }));
+    };
+
+    const contributionData = generateContributionData();
+
     return (
         <>
             <Helmet>
@@ -98,302 +109,510 @@ const Profile = () => {
             </Helmet>
 
             <Alternates>
-                <div className="min-h-screen bg-gray-50">
-                    {/* Top Banner */}
-                    <div className="h-48 bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-600"></div>
-
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        {/* Profile Header */}
-                        <div className="relative -mt-24">
-                            <motion.div
-                                className="bg-white rounded-xl shadow-xl overflow-hidden"
-                                initial="hidden"
-                                whileInView="show"
-                                viewport={{ once: true, amount: 0.3 }}
-                                variants={fadeIn("up", 0.3)}
-                            >
-                                <div className="p-6 sm:p-8 flex flex-col sm:flex-row">
-                                    <div className="flex-shrink-0 mb-6 sm:mb-0">
-                                        <div className="relative">
-                                            <img
-                                                src={`${process.env.REACT_APP_API_HOST}/` + user?.profile}
-                                                alt="Profile"
-                                                className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white shadow-lg object-cover"
-                                            />
-                                            {currentUser?.username === username && (
-                                                <NavLink
-                                                    to="/setting"
-                                                    className="absolute bottom-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg hover:bg-indigo-700 transition duration-200"
-                                                >
-                                                    <i className="bi bi-pencil-square"></i>
-                                                </NavLink>
-                                            )}
+                <div className="min-h-screen bg-gray-900 text-gray-100">
+                    {/* Purple Gradient Header */}
+                    <div className="bg-gradient-to-br from-indigo-700 via-purple-600 to-indigo-800 py-10 px-6 rounded-b-3xl">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                                {/* Profile Picture with Edit Button */}
+                                <div className="relative">
+                                    <div className="w-36 h-36 rounded-full border-4 border-white/30 overflow-hidden">
+                                        <img 
+                                            src={`${process.env.REACT_APP_API_HOST}/` + user?.profile} 
+                                            alt={user?.username}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    {currentUser?.username === username && (
+                                        <button className="absolute bottom-1 right-1 bg-white p-2 rounded-full shadow-lg">
+                                            <i className="bi bi-pencil-fill text-purple-600 text-xs"></i>
+                                        </button>
+                                    )}
+                                </div>
+                                
+                                {/* User Info */}
+                                <div className="flex-1 text-center md:text-left">
+                                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                                        {user?.username?.toUpperCase()}
+                                    </h1>
+                                    
+                                    <div className="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-6 text-white/80 mb-6">
+                                        <div className="flex items-center">
+                                            <i className="bi bi-envelope mr-2"></i>
+                                            <span>{user?.email}</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <i className="bi bi-github mr-2"></i>
+                                            <span>{user?.githubUsername}</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <i className="bi bi-geo-alt mr-2"></i>
+                                            <span>{user?.city || "Mumbai, India"}</span>
                                         </div>
                                     </div>
+                                    
+                                    {/* Department/Year Pills */}
+                                    <div className="flex gap-2 justify-center md:justify-start mb-7">
+                                        <span className="px-4 py-1 bg-indigo-600/40 rounded-full text-white/90 backdrop-blur-sm">
+                                            {user?.Department || "IT"}
+                                        </span>
+                                        <span className="px-4 py-1 bg-indigo-600/40 rounded-full text-white/90 backdrop-blur-sm">
+                                            {user?.year || "TE"}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Stats */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+                                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+                                    <div className="text-2xl font-bold text-white">12</div>
+                                    <div className="text-sm text-white/70">Notes</div>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+                                    <div className="text-2xl font-bold text-white">128</div>
+                                    <div className="text-sm text-white/70">Contributions</div>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+                                    <div className="text-2xl font-bold text-white">45</div>
+                                    <div className="text-sm text-white/70">Followers</div>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+                                    <div className="text-2xl font-bold text-white">32</div>
+                                    <div className="text-sm text-white/70">Following</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    <div className="flex-1 sm:ml-8">
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-                                            <div>
-                                                <h1 className="text-3xl font-bold text-gray-900">
-                                                    {user?.username}
-                                                </h1>
-                                                <p className="text-indigo-600 font-medium text-lg">
-                                                    {user?.year}/{user?.Department}
-                                                </p>
-                                            </div>
+                    {/* Main Navigation Tabs */}
+                    <div className="border-b border-gray-800">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <div className="flex space-x-8">
+                                <button
+                                    onClick={() => setActiveTab("overview")}
+                                    className={`py-4 px-1 ${
+                                        activeTab === "overview"
+                                            ? "border-b-2 border-indigo-500 text-indigo-400"
+                                            : "text-gray-400 hover:text-gray-300"
+                                    } flex items-center`}
+                                >
+                                    <i className="bi bi-grid-1x2 mr-2"></i>
+                                    Overview
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("repositories")}
+                                    className={`py-4 px-1 ${
+                                        activeTab === "repositories"
+                                            ? "border-b-2 border-indigo-500 text-indigo-400"
+                                            : "text-gray-400 hover:text-gray-300"
+                                    } flex items-center`}
+                                >
+                                    <i className="bi bi-github mr-2"></i>
+                                    Repositories
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("statistics")}
+                                    className={`py-4 px-1 ${
+                                        activeTab === "statistics"
+                                            ? "border-b-2 border-indigo-500 text-indigo-400"
+                                            : "text-gray-400 hover:text-gray-300"
+                                    } flex items-center`}
+                                >
+                                    <i className="bi bi-bar-chart mr-2"></i>
+                                    Statistics
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("notes")}
+                                    className={`py-4 px-1 ${
+                                        activeTab === "notes"
+                                            ? "border-b-2 border-indigo-500 text-indigo-400"
+                                            : "text-gray-400 hover:text-gray-300"
+                                    } flex items-center`}
+                                >
+                                    <i className="bi bi-sticky mr-2"></i>
+                                    Notes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                                            {currentUser?.username === username && (
-                                                <NavLink to="/setting">
-                                                    <button className="mt-3 sm:mt-0 inline-flex items-center px-5 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition duration-200 shadow-md">
-                                                        <i className="bi bi-pencil-square mr-2"></i>
-                                                        Edit Profile
-                                                    </button>
-                                                </NavLink>
-                                            )}
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                                            <div>
-                                                <div className="space-y-3">
-                                                    <div className="flex items-center">
-                                                        <i className="bi bi-envelope text-gray-500 text-xl mr-3"></i>
-                                                        <div>
-                                                            <h3 className="text-sm font-medium text-gray-500">
-                                                                Email
-                                                            </h3>
-                                                            <p className="text-gray-900 font-medium">
-                                                                {user?.email}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex items-center">
-                                                        <i className="bi bi-github text-gray-500 text-xl mr-3"></i>
-                                                        <div>
-                                                            <h3 className="text-sm font-medium text-gray-500">
-                                                                GitHub
-                                                            </h3>
-                                                            <a
-                                                                href={`https://github.com/${user?.githubUsername}`}
-                                                                className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                @{user?.githubUsername}
-                                                            </a>
-                                                        </div>
-                                                    </div>
+                    <div className="max-w-7xl mx-auto px-4 py-8">
+                        {/* Overview Tab */}
+                        {activeTab === "overview" && (
+                            <div className="space-y-8">
+                                {/* About Me Section */}
+                                <div className="rounded-lg border border-gray-800">
+                                    <div className="p-6">
+                                        <h2 className="text-xl font-bold flex items-center mb-4">
+                                            <i className="bi bi-person-badge mr-2"></i> About Me
+                                        </h2>
+                                        <div className="bg-gray-800 rounded-lg p-6">
+                                            <p className="text-gray-300">{user?.Bio || "No bio available."}</p>
+                                            
+                                            <div className="mt-4 flex items-center text-gray-400">
+                                                <div className="flex items-center mr-6">
+                                                    <i className="bi bi-geo-alt mr-2"></i>
+                                                    <span>{user?.city || "Mumbai, India"}</span>
                                                 </div>
-                                            </div>
-
-                                            <div>
-                                                <h3 className="text-sm font-medium text-gray-500 mb-2">
-                                                    Bio
-                                                </h3>
-                                                <p className="text-gray-800 line-clamp-3">{user?.Bio}</p>
+                                                <div className="flex items-center">
+                                                    <i className="bi bi-mortarboard mr-2"></i>
+                                                    <span>{user?.Department || "IT"}, {user?.year || "TE"}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </motion.div>
-                        </div>
 
-                        {/* Tabs Navigation */}
-                        <motion.div
-                            className="mt-8"
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true, amount: 0.3 }}
-                            variants={fadeIn("up", 0.4)}
-                        >
-                            <div className="border-b border-gray-200">
-                                <nav className="flex space-x-8" aria-label="Tabs">
-                                    <button
-                                        onClick={() => setActiveTab("repositories")}
-                                        className={`${
-                                            activeTab === "repositories"
-                                                ? "border-indigo-600 text-indigo-600"
-                                                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                                    >
-                                        <i className="bi bi-github mr-2"></i>
-                                        Repositories
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveTab("skills")}
-                                        className={`${
-                                            activeTab === "skills"
-                                                ? "border-indigo-600 text-indigo-600"
-                                                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                                    >
-                                        <i className="bi bi-lightning-charge-fill mr-2"></i>
-                                        Skills
-                                    </button>
-                                </nav>
-                            </div>
-                        </motion.div>
-
-                        {/* Tab Content */}
-                        <div className="py-8">
-                            {/* Repositories Tab */}
-                            {activeTab === "repositories" && (
-                                <motion.div
-                                    initial="hidden"
-                                    whileInView="show"
-                                    viewport={{ once: true, amount: 0.3 }}
-                                    variants={fadeIn("up", 0.5)}
-                                >
-                                    {loading ? (
-                                        <div className="flex justify-center py-12">
-                                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
-                                        </div>
-                                    ) : repositories?.length > 0 ? (
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                            {repositories.map((repo) => (
-                                                <div
-                                                    key={repo.id}
-                                                    className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden border border-gray-100"
-                                                >
-                                                    <div className="p-6">
-                                                        <div className="flex items-start mb-4">
-                                                            <div className="flex-1">
-                                                                <h3 className="text-xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors">
-                                                                    {repo.name}
-                                                                </h3>
-                                                                <div className="flex items-center mt-1 text-sm">
-                                                                    <span className="flex items-center text-gray-500">
-                                                                        <span
-                                                                            className={`inline-block w-3 h-3 rounded-full mr-1 ${
-                                                                                repo.language === "JavaScript"
-                                                                                    ? "bg-yellow-400"
-                                                                                    : repo.language === "TypeScript"
-                                                                                    ? "bg-blue-500"
-                                                                                    : repo.language === "Python"
-                                                                                    ? "bg-green-500"
-                                                                                    : repo.language === "Java"
-                                                                                    ? "bg-orange-500"
-                                                                                    : repo.language === "HTML"
-                                                                                    ? "bg-red-500"
-                                                                                    : repo.language === "CSS"
-                                                                                    ? "bg-purple-500"
-                                                                                    : "bg-gray-500"
-                                                                            }`}
-                                                                        ></span>
-                                                                        {repo.language || "No language detected"}
-                                                                    </span>
-                                                                    <span className="mx-2 text-gray-300">•</span>
-                                                                    <span className="text-gray-500">
-                                                                        Updated{" "}
-                                                                        {new Date(
-                                                                            repo.updated_at
-                                                                        ).toLocaleDateString()}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
+                                {/* Skills & Expertise */}
+                                <div className="rounded-lg border border-gray-800">
+                                    <div className="p-6">
+                                        <h2 className="text-xl font-bold flex items-center mb-4">
+                                            <i className="bi bi-code-slash mr-2"></i> Skills & Expertise
+                                        </h2>
+                                        {skills?.length > 0 ? (
+                                            <div className="bg-gray-800 rounded-lg p-6">
+                                                <div className="flex flex-wrap gap-3">
+                                                    {skills.map((skill, index) => (
+                                                        <div 
+                                                            key={index}
+                                                            className="px-4 py-2 rounded-full bg-gray-700 text-indigo-300 flex items-center"
+                                                        >
+                                                            <span className="mr-2">•</span> {skill}
                                                         </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-gray-800 rounded-lg p-6 text-center">
+                                                <p className="text-gray-400">No skills added yet.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
 
-                                                        <p className="text-gray-600 text-sm mb-4 line-clamp-2 h-10">
-                                                            {repo.description ||
-                                                                "No description for this repository."}
+                                {/* Featured Projects */}
+                                <div className="rounded-lg border border-gray-800">
+                                    <div className="p-6">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h2 className="text-xl font-bold flex items-center">
+                                                <i className="bi bi-star mr-2"></i> Featured Projects
+                                            </h2>
+                                            <button 
+                                                onClick={() => setActiveTab("repositories")}
+                                                className="text-indigo-400 hover:text-indigo-300 text-sm flex items-center"
+                                            >
+                                                View all <i className="bi bi-arrow-right ml-1"></i>
+                                            </button>
+                                        </div>
+                                        {loading ? (
+                                            <div className="flex justify-center py-12">
+                                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+                                            </div>
+                                        ) : repositories?.length > 0 ? (
+                                            <div className="bg-gray-800 rounded-lg">
+                                                {repositories.slice(0, 2).map((repo) => (
+                                                    <div
+                                                        key={repo.id}
+                                                        className="p-6 border-b border-gray-700 last:border-0"
+                                                    >
+                                                        <div className="flex items-center mb-2">
+                                                            <i className="bi bi-github text-gray-400 mr-2"></i>
+                                                            <h3 className="text-lg font-semibold text-indigo-300">{repo.name}</h3>
+                                                        </div>
+                                                        <p className="text-gray-400 mb-4">
+                                                            {repo.description || "No description available."}
                                                         </p>
-
-                                                        <div className="flex items-center justify-between mt-4">
+                                                        <div className="flex items-center justify-between">
                                                             <div className="flex items-center space-x-4">
-                                                                <div className="flex items-center text-gray-600">
-                                                                    <i className="bi bi-star-fill mr-1 text-amber-400"></i>
-                                                                    <span className="text-sm font-medium">
+                                                                <div className="flex items-center text-gray-400">
+                                                                    <span
+                                                                        className={`inline-block w-3 h-3 rounded-full mr-1 ${
+                                                                            repo.language === "JavaScript"
+                                                                                ? "bg-yellow-400"
+                                                                                : repo.language === "TypeScript"
+                                                                                ? "bg-blue-500"
+                                                                                : repo.language === "Python"
+                                                                                ? "bg-green-500"
+                                                                                : repo.language === "Java"
+                                                                                ? "bg-orange-500"
+                                                                                : repo.language === "HTML"
+                                                                                ? "bg-red-500"
+                                                                                : repo.language === "CSS"
+                                                                                ? "bg-purple-500"
+                                                                                : "bg-gray-500"
+                                                                        }`}
+                                                                    ></span>
+                                                                    {repo.language || "No language"}
+                                                                </div>
+                                                                <div className="flex items-center text-gray-400">
+                                                                    <i className="bi bi-star mr-1"></i>
+                                                                    <span className="text-sm">
                                                                         {repo.stargazers_count}
                                                                     </span>
                                                                 </div>
-                                                                <div className="flex items-center text-gray-600">
-                                                                    <i className="bi bi-diagram-2 mr-1 text-indigo-400"></i>
-                                                                    <span className="text-sm font-medium">
+                                                                <div className="flex items-center text-gray-400">
+                                                                    <i className="bi bi-diagram-2 mr-1"></i>
+                                                                    <span className="text-sm">
                                                                         {repo.forks_count}
                                                                     </span>
                                                                 </div>
-                                                                <div className="flex items-center text-gray-600">
-                                                                    <i className="bi bi-eye-fill mr-1 text-green-400"></i>
-                                                                    <span className="text-sm font-medium">
-                                                                        {repo.watchers_count}
+                                                                <div className="flex items-center text-gray-400">
+                                                                    <span className="text-xs">
+                                                                        Updated {new Date(repo.updated_at).toLocaleDateString()}
                                                                     </span>
                                                                 </div>
                                                             </div>
-
-                                                            <a
-                                                                href={repo.html_url}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="inline-flex items-center px-3 py-1.5 text-sm rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-200"
-                                                            >
-                                                                <i className="bi bi-github mr-1"></i>
-                                                                View
-                                                            </a>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-12 bg-white rounded-xl shadow-md">
-                                            <i className="bi bi-github text-5xl text-gray-300 mb-4"></i>
-                                            <h3 className="text-lg font-medium text-gray-900 mb-1">
-                                                No repositories found
-                                            </h3>
-                                            <p className="text-gray-500">
-                                                {user?.githubUsername
-                                                    ? `${user.githubUsername} doesn't have any public repositories yet.`
-                                                    : "No GitHub username provided."}
-                                            </p>
-                                        </div>
-                                    )}
-                                </motion.div>
-                            )}
-
-                            {/* Skills Tab */}
-                            {activeTab === "skills" && (
-                                <motion.div
-                                    initial="hidden"
-                                    whileInView="show"
-                                    viewport={{ once: true, amount: 0.3 }}
-                                    variants={fadeIn("up", 0.5)}
-                                    className="bg-white rounded-xl shadow-md p-8"
-                                >
-                                    <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-                                        <i className="bi bi-lightning-charge-fill text-indigo-500 mr-2"></i>
-                                        Technical Skills
-                                    </h3>
-
-                                    {skills?.length > 0 ? (
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                                            {skills.map((skill, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="flex items-center p-3 rounded-lg bg-indigo-50 border border-indigo-100"
-                                                >
-                                                    <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
-                                                    <span className="text-indigo-900 font-medium">
-                                                        {skill}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-8">
-                                            <i className="bi bi-lightning-charge text-4xl text-gray-300 mb-3"></i>
-                                            <h3 className="text-lg font-medium text-gray-900 mb-1">
-                                                No skills added yet
-                                            </h3>
-                                            {currentUser?.username === username && (
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="bg-gray-800 rounded-lg p-8 text-center">
+                                                <i className="bi bi-github text-4xl text-gray-600 mb-3"></i>
+                                                <h3 className="text-lg font-medium text-gray-300 mb-1">
+                                                    No repositories found
+                                                </h3>
                                                 <p className="text-gray-500">
-                                                    Add your skills to showcase your expertise to others.
+                                                    {user?.githubUsername
+                                                        ? `${user.githubUsername} doesn't have any public repositories yet.`
+                                                        : "No GitHub username provided."}
                                                 </p>
-                                            )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Repositories Tab */}
+                        {activeTab === "repositories" && (
+                            <div>
+                                <div className="mb-8">
+                                    <h1 className="text-2xl font-bold mb-4">All Repositories</h1>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="Search repositories..."
+                                            className="w-full p-3 pl-10 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+                                        <i className="bi bi-search absolute left-3 top-3.5 text-gray-500"></i>
+                                    </div>
+                                </div>
+                                
+                                {loading ? (
+                                    <div className="flex justify-center py-12">
+                                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+                                    </div>
+                                ) : repositories?.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {repositories.map((repo) => (
+                                            <div
+                                                key={repo.id}
+                                                className="p-6 bg-gray-800 border border-gray-700 rounded-lg"
+                                            >
+                                                <div className="flex items-start justify-between">
+                                                    <div>
+                                                        <div className="flex items-center">
+                                                            <h3 className="text-lg font-semibold text-blue-300 mr-2">{repo.name}</h3>
+                                                            <span className="text-xs px-2 py-1 rounded-full bg-gray-700 text-gray-300">Public</span>
+                                                        </div>
+                                                        <p className="text-gray-400 mt-2 mb-4">
+                                                            {repo.description || "No description available."}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex space-x-2">
+                                                        <button className="text-gray-400 hover:text-gray-200">
+                                                            <i className="bi bi-bookmark"></i>
+                                                        </button>
+                                                        <button className="text-gray-400 hover:text-gray-200">
+                                                            <i className="bi bi-star"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center space-x-4 mt-2">
+                                                    <div className="flex items-center text-gray-400">
+                                                        <span
+                                                            className={`inline-block w-3 h-3 rounded-full mr-1 ${
+                                                                repo.language === "JavaScript"
+                                                                    ? "bg-yellow-400"
+                                                                    : repo.language === "TypeScript"
+                                                                    ? "bg-blue-500"
+                                                                    : repo.language === "Python"
+                                                                    ? "bg-green-500"
+                                                                    : repo.language === "Java"
+                                                                    ? "bg-orange-500"
+                                                                    : repo.language === "HTML"
+                                                                    ? "bg-red-500"
+                                                                    : repo.language === "CSS"
+                                                                    ? "bg-purple-500"
+                                                                    : "bg-gray-500"
+                                                            }`}
+                                                        ></span>
+                                                        {repo.language || "No language"}
+                                                    </div>
+                                                    <div className="flex items-center text-gray-400">
+                                                        <i className="bi bi-star mr-1"></i>
+                                                        <span className="text-sm">
+                                                            {repo.stargazers_count}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center text-gray-400">
+                                                        <i className="bi bi-diagram-2 mr-1"></i>
+                                                        <span className="text-sm">
+                                                            {repo.forks_count}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center text-gray-400">
+                                                        <span className="text-xs">
+                                                            Updated {new Date(repo.updated_at).toLocaleDateString()}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-gray-800 rounded-lg p-8 text-center">
+                                        <i className="bi bi-github text-4xl text-gray-600 mb-3"></i>
+                                        <h3 className="text-lg font-medium text-gray-300 mb-1">
+                                            No repositories found
+                                        </h3>
+                                        <p className="text-gray-500">
+                                            {user?.githubUsername
+                                                ? `${user.githubUsername} doesn't have any public repositories yet.`
+                                                : "No GitHub username provided."}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Statistics Tab */}
+                        {activeTab === "statistics" && (
+                            <div className="space-y-8">
+                                <h1 className="text-2xl font-bold">Activity Overview</h1>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Contribution Activity */}
+                                    <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                                        <h2 className="text-xl font-semibold mb-4">Contribution Activity</h2>
+                                        <div className="h-64 flex items-end space-x-2">
+                                            {contributionData.map((item, index) => (
+                                                <div key={index} className="flex flex-col items-center flex-1">
+                                                    <div 
+                                                        className="w-full bg-indigo-500/30 hover:bg-indigo-500/50 transition-all cursor-pointer rounded-t"
+                                                        style={{ height: `${item.value}%` }}
+                                                    ></div>
+                                                    <span className="text-xs text-gray-500 mt-2">{item.month}</span>
+                                                </div>
+                                            ))}
                                         </div>
-                                    )}
-                                </motion.div>
-                            )}
-                        </div>
+                                    </div>
+                                    
+                                    {/* Notes Statistics */}
+                                    <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                                        <h2 className="text-xl font-semibold mb-4">Notes Statistics</h2>
+                                        <div className="flex flex-col items-center">
+                                            <div className="relative w-48 h-48 mb-6">
+                                                <svg className="w-full h-full" viewBox="0 0 100 100">
+                                                    <circle 
+                                                        cx="50" cy="50" r="40" 
+                                                        fill="transparent" 
+                                                        stroke="#374151" 
+                                                        strokeWidth="8"
+                                                    />
+                                                    <circle 
+                                                        cx="50" cy="50" r="40" 
+                                                        fill="transparent" 
+                                                        stroke="#a78bfa" 
+                                                        strokeWidth="8"
+                                                        strokeDasharray="251.2"
+                                                        strokeDashoffset="62.8"
+                                                        transform="rotate(-90 50 50)"
+                                                    />
+                                                </svg>
+                                                <div className="absolute inset-0 flex items-center justify-center flex-col">
+                                                    <span className="text-4xl font-bold text-white">75%</span>
+                                                    <span className="text-sm text-gray-400">Engagement</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 gap-4 w-full">
+                                                <div className="bg-gray-700/50 rounded-lg p-4 text-center">
+                                                    <div className="text-2xl font-bold text-indigo-300">12</div>
+                                                    <div className="text-sm text-gray-400">Notes Shared</div>
+                                                </div>
+                                                <div className="bg-gray-700/50 rounded-lg p-4 text-center">
+                                                    <div className="text-2xl font-bold text-purple-300">45</div>
+                                                    <div className="text-sm text-gray-400">Followers</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Activity Feed */}
+                                <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                                    <h2 className="text-xl font-semibold mb-4">Activity Feed</h2>
+                                    <div className="space-y-6">
+                                        <div className="flex">
+                                            <div className="mr-4 mt-1">
+                                                <div className="bg-indigo-600/20 p-2 rounded-lg">
+                                                    <i className="bi bi-github text-indigo-400"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="text-gray-300 mb-1">
+                                                    Updated repository <span className="text-indigo-400">algorithms-visualization</span>
+                                                </div>
+                                                <div className="text-gray-500 text-sm mb-2">
+                                                    Added new visualization for sorting algorithms
+                                                </div>
+                                                <div className="text-gray-600 text-xs">
+                                                    2 days ago
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex">
+                                            <div className="mr-4 mt-1">
+                                                <div className="bg-purple-600/20 p-2 rounded-lg">
+                                                    <i className="bi bi-sticky text-purple-400"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="text-gray-300 mb-1">
+                                                    Published new note <span className="text-purple-400">Introduction to Data Structures</span>
+                                                </div>
+                                                <div className="text-gray-500 text-sm mb-2">
+                                                    Shared with TE/IT students
+                                                </div>
+                                                <div className="text-gray-600 text-xs">
+                                                    5 days ago
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {/* Notes Tab */}
+                        {activeTab === "notes" && (
+                            <div>
+                                <h1 className="text-2xl font-bold mb-6">My Notes</h1>
+                                <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
+                                    <i className="bi bi-journals text-4xl text-gray-600 mb-3"></i>
+                                    <h3 className="text-lg font-medium text-gray-300 mb-1">
+                                        Notes feature coming soon
+                                    </h3>
+                                    <p className="text-gray-500">
+                                        We're working on building a better notes experience.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </Alternates>
