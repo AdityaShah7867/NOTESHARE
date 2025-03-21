@@ -1,13 +1,11 @@
-
-
 @media screen and (max-width: 1023px) {
-    .sideParent{
+    .sideParent {
         display: none;
     }
 }
 
 @media (min-width: 1023px) {
     .MobileBtm {
-      display: none; /* This will hide the element on screens with a width of 769px or more (desktop devices) */
+        display: none;
     }
-  }
+}

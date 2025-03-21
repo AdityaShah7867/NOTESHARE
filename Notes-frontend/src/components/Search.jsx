@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import FilterForm from "./FilterForm";
 
 const Search = ({ search, setSearch }) => {
-
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const openFilterModal = () => {
@@ -13,40 +12,28 @@ const Search = ({ search, setSearch }) => {
     setIsFilterModalOpen(false);
   };
 
-
-
-
   return (
-    <div>
-      <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl ">
-        <div class="md:flex">
-          <div class="w-full p-3">
-            <div class="relative">
-              <i class="absolute fa fa-search text-gray-400 top-5 left-4"></i>
-              <input
-                type=""
-                id="default-search"
-                placeholder="Search Notes.."
-                autoComplete="off"
-                onChange={(e) => setSearch(e.target.value)}
-                class="bg-white h-14 w-full px-12 rounded-lg focus:outline-none border-2 border-gray-400 hover:border-blue-500 hover:border-4 hover:cursor-pointer"
-                name="search"
-                value={search}
-              />
-
-              {/* <button class="absolute top-4 right-16 border-l pl-4"
-                type="submit">
-                <i class="fa fa-paper-plane text-gray-500 hover:text-green-500 hover:cursor-pointer"></i>
-              </button> */}
-
-              <span className="absolute top-4 right-5 border-l pl-4">
-                <i
-                  className="fa fa-filter text-gray-500 hover:text-green-500 hover:cursor-pointer"
-                  onClick={openFilterModal}
-                ></i>
-              </span>
-
-            </div>
+    <div className="w-full">
+      <div className="relative max-w-3xl mx-auto">
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i className="fa fa-search text-gray-400"></i>
+          </div>
+          <input
+            type="text"
+            placeholder="Search for notes, subjects, modules..."
+            autoComplete="off"
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            className="bg-gray-800 w-full pl-12 pr-16 py-3.5 rounded-xl border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none placeholder-gray-500 text-gray-200 shadow-lg transition-all duration-200"
+          />
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+            <button 
+              onClick={openFilterModal}
+              className="text-gray-400 hover:text-blue-400 transition-colors p-1.5 rounded-lg hover:bg-gray-700/50"
+            >
+              <i className="fa fa-filter text-xl"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -57,7 +44,6 @@ const Search = ({ search, setSearch }) => {
           closeFilterModal={closeFilterModal}
         />
       )}
-
     </div>
   );
 };
