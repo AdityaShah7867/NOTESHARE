@@ -16,12 +16,12 @@ const likeUnlikeNote = async (req, res) => {
                 user: user
             })
 
-            note.likes.push(newLike._id);
+            note.likes.push(user);
             await note.save();
             res.status(200).json({ message: "liked", like: newLike })
         } else {
             await Like.findByIdAndDelete(like._id);
-            note.likes.pull(like._id)
+            note.likes.pull(user);
             await note.save();
             res.status(200).json({ message: "unliked" })
 

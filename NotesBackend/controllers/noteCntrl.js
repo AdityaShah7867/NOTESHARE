@@ -117,7 +117,9 @@ const getAllNotes = asyncHandler(async (req, res) => {
             return res.status(200).json({ message: "Notes fetched successfully", data: JSON.parse(cachedNotes) });
         }
 
-        const notes = await Note.find({ acceptedStatus: true, year: ExistingUser.year, branch: ExistingUser.Department  }).populate('author', '-notesUploaded -notesBought').populate('subject')
+        const notes = await Note.find({ acceptedStatus: true  }).populate('author', '-notesUploaded -notesBought').populate('subject')
+
+        console.log('notes', notes)
 
         // Cache the notes for 1 hour
         // await client.setEx(cacheKey, 3600, JSON.stringify(notes));
@@ -416,6 +418,7 @@ const fetchUserById = async (authorID) => {
 const getNotesAdmin = async (req, res) => {
     try {
         const user = req.user;
+        console.log(user)
 
         if (user.role === "superuser") {
             const notes = await Note.find().populate('author', '-notesUploaded -notesBought').populate('subject')

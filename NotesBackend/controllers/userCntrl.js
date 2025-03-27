@@ -64,7 +64,12 @@ const s3 = new AWS.S3();
 
 const initialCall = async (req, res) => {
     try {
-        res.status(200).json({ message: "server started" })
+        const user = await User.findById(req.user.id);
+        if(!user){
+            return res.status(401).json({ message: "user not found" })
+        }
+        res.status(200).json({ message: "server started", user: user })
+
     } catch (error) {
         console.log(error)
     }

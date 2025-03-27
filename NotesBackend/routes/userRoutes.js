@@ -16,7 +16,7 @@ router.route('/getUserInfo').get(validateToken, getUserInfo)
 router.route('/editProfile').post(validateToken, profileUpload.single('profile'), editProfile)
 router.route('/getUserProfile/:username').get(getUserProfile)
 router.route('/searchUser').get(searchUser)
-router.route('/initialCall').get(initialCall)
+router.route('/initialCall').get(validateToken, initialCall)
 
 
 module.exports = router;
