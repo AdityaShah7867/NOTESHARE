@@ -62,9 +62,11 @@ export const SideBar = () => {
                   <p>
                     {" "}
                     {user?.username} &nbsp;{" "}
+                    <div>
                     <i className="fa-solid fa-coins fa-xl text-yellow-600"></i>
                     &nbsp; &nbsp;
                     {user?.coins}
+                    </div>
                   </p>
                 </div>
               </h1>
