@@ -19,6 +19,7 @@ const googleAuthRoutes=require('./routes/googleAuthRoutes')
 const solveProblemRoutes = require('./routes/solvedproblemRoutes');
 const pdfRoutes = require('./routes/pdfRoutes')
 const urlRoutes = require('./routes/urlRoutes')
+const reportRoutes = require('./routes/reportRoutes')
 const { Server } = require('socket.io')
 const cors = require('cors');
 const { socketCtrl } = require("./controllers/socketCntrl");
@@ -226,8 +227,7 @@ app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/google',googleAuthRoutes)
 app.use('/api/v1/solveProblem', solveProblemRoutes);
 app.use('/api/v1/urls', urlRoutes);
-
-
+app.use('/api/v1/report', reportRoutes);
 app.use('/api/v1/pdf',pdfRoutes)
 
 app.use(errorHandler);
