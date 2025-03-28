@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema(
     {
         username: {
-            
             type: String,
             required: [true, "Please provide a username"],
             unique: true
@@ -33,6 +32,14 @@ const userSchema = mongoose.Schema(
         profile: {
             type: String,
             default: "https://safesiren.vercel.app/static/media/login.665ff9176f5ac11ac2e6.png"
+        },
+        lastActive: {
+            type: Date,
+            default: Date.now
+        },
+        lastReport: {
+            content: String,
+            generatedAt: Date
         },
         notesUploaded: [
             {

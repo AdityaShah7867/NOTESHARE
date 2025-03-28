@@ -368,13 +368,7 @@ const getUsersLeaderBoard = async (req, res) => {
         if (!current_user) {
             return res.status(401).json({ message: "User not found" });
         }
-        const users = await User.find(
-            {
-                isVerified: true,
-                year: current_user.year,
-                Department: current_user.Department
-
-            }).sort({ coins: -1 });
+        const users = await User.find().sort({ coins: -1 });
         if (!users) {
             return res.status(401).json({ message: "No users found" });
         }

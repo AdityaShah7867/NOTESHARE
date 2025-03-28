@@ -379,7 +379,6 @@ app.post(
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const generatedText = response.text();
-
       // Clean up uploaded file after processing
       fs.unlink(file.path, (err) => {
         if (err) console.error("Error deleting file:", err);
@@ -423,5 +422,6 @@ app.use("/api/v1/urls", urlRoutes);
 app.use("/meet", meetRoutes);
 meetCntrl(server);
 app.use("/api/v1/pdf", pdfRoutes);
+app.use('/api/v1/report', reportRoutes);
 
 app.use(errorHandler);
