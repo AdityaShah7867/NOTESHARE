@@ -110,7 +110,7 @@ const generateUserReport = async (req, res) => {
         };
 
         // Initialize Gemini AI
-        const genAI = new GoogleGenerativeAI("AIzaSyAvtYxbcwqMyUUFQInWXtw_ppK_GqaxeXY");
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         // Generate comprehensive prompt

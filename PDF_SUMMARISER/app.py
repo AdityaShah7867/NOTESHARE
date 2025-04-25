@@ -5,6 +5,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import redis
 import json
+from report_api import generate_user_report
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -71,6 +73,40 @@ def summarize_pdf():
         redis_client.setex(pdf_url, CACHE_EXPIRATION, summary)
 
         return jsonify({"summary": summary})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/generate-report/', methods=['POST'])
+def generate_report():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    
+    if not user_id:
+        return jsonify({"error": "User ID is required."}), 400
+        
+    try:
+        # Get user data from Redis cache
+        user_key = f"user:{user_id}"
+        cached_user_data = redis_client.get(user_key)
+        
+        if not cached_user_data:
+            return jsonify({"error": "User data not found."}), 404
+            
+        user_data = json.loads(cached_user_data)
+        
+        # Add current timestamp for last active
+        user_data['last_active'] = datetime.now().isoformat()
+        
+        # Generate report using Gemini
+        report = generate_user_report(user_data)
+        
+        # Cache the report
+        report_key = f"report:{user_id}:{datetime.now().strftime('%Y%m%d')}"
+        redis_client.setex(report_key, CACHE_EXPIRATION, json.dumps(report))
+        
+        return jsonify(report)
+        
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

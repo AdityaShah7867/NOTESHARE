@@ -44,6 +44,7 @@ const fs = require("fs");
 const FileDownloader = require("nodejs-file-downloader");
 const pdfParse = require("pdf-parse");
 const mammoth = require("mammoth");
+const reportRoutes = require("./routes/reportRoutes");
 
 const app = express();
 
